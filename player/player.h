@@ -17,6 +17,7 @@ class Player {
 	Block* current;
 	
 	public:
+	// add ctrs & Big 5 as needed
 	void turn();
 	void print(int);
 	void setEffect(Game::Effect);
