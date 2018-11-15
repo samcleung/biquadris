@@ -18,7 +18,7 @@ class Game {
 	bool loadHighScore();
 	bool saveHighScore();
 	void setSeed(int);
-	unsigned int addPlayer(const std::string&, const std::string);
+	unsigned int addPlayer(const std::string&, const std::string&);
 	void setStartLevel(int level);
 };
 
