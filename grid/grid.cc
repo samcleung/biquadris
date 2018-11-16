@@ -1,6 +1,6 @@
 #include <iostream>
 #include "grid.h"
-
+#include "../block/block.h"
 
 bool Grid::addBlock(Block& block) {
 	// todo
