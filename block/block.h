@@ -6,24 +6,19 @@
 #include "../cell/cell.h"
 
 class Block {
-	protected:
-	// enums
-	enum Translation { left = 0, up, right, down };
-        enum Rotation { clockwise = 4, counterclockwise };
+	enum class Translation { Left = 0, Up, Right, Down };
+	enum class Rotation { Clockwise = 4, Counterclockwise };
+	bool rotate(Rotation);
+	bool translate(Translation);
 
-	// properties
-	bool isHeavy;
-	unsigned int dropBy;
-	Grid* grid;
+	protected:
+	unsigned int dropBy = 0;
+	Grid* grid = nullptr;
 	vector<Cell*> cells;
 
-	// methods
-	virtual bool rotate(Rotation r);
-	virtual bool translate(Translation t);
-
 	public:
-	// add ctrs & Big 5 as needed
-	bool makeMove(const std::string&);
+	bool transform(const std::string&);
+	void drop();
 };
 
 #endif
