@@ -2,7 +2,9 @@
 #define __LEVEL3_H__
 
 class Level3 {
-	// todo
+public:
+	Vector <Block *> createBlock() override;
+	Level3(int seed); 
 };
 
 #endif
