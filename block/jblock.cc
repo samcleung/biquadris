@@ -3,7 +3,7 @@
 #include "jblock.h"
 #include "../cell/jcell.h"
 
-JBlock::JBlock(int x, int y) {
+JBlock::JBlock(int x, int y) : Block{3} {
 	cells.emplace_back(new JCell{this, x, y});
 	cells.emplace_back(new JCell{this, x, y + 1});
 	cells.emplace_back(new JCell{this, x + 1, y});

@@ -16,7 +16,7 @@ const string DROP = "drop";
 
 
 bool Block::rotate(Block::Rotation r) {
-	Block temp{*this};
+	Block temp{*this}; // todo - implement copy contructor
 
 	unsigned int originX = -1;
 	unsigned int originY = -1;
@@ -58,7 +58,7 @@ bool Block::rotate(Block::Rotation r) {
 
 
 bool Block::translate(Block::Translation t) {
-	Block temp{*this};
+	Block temp{*this}; // todo - implement copy contructor
 	
 	// translate cells
 	for (auto &cell: cells) {

@@ -3,7 +3,7 @@
 #include "zblock.h"
 #include "../cell/zcell.h"
 
-ZBlock::ZBlock(int x, int y) {
+ZBlock::ZBlock(int x, int y) : Block{3} {
 	cells.emplace_back(new ZCell{x + 1, y});
 	cells.emplace_back(new ZCell{x, y + 1});
 	cells.emplace_back(new ZCell{x + 1, y + 1});

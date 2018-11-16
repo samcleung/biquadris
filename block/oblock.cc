@@ -3,7 +3,7 @@
 #include "oblock.h"
 #include "../cell/ocell.h"
 
-OBlock::OBlock(int x, int y) {
+OBlock::OBlock(int x, int y) : Block{2} {
 	cells.emplace_back(new OCell{this, x, y});
 	cells.emplace_back(new OCell{this, x + 1, y});
 	cells.emplace_back(new OCell{this, x, y + 1});

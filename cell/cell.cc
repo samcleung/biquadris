@@ -12,8 +12,8 @@ string Cell::print() {
 	ostringstream oss;
 	oss << "\033[";
 	int x = color;
-	if (x < 0) oss << "2;" << color * -1;
-	else oss << "22;" << color;
+	if (x < 0) oss << "2;" << x * -1;
+	else oss << "22;" << x;
 	oss << "m" << value << "\033[0m";
 	return oss.str();
 }

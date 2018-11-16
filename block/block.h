@@ -13,10 +13,12 @@ class Block {
 
 	protected:
 	unsigned int dropBy = 0;
+	const unsigned int size;
 	Grid* grid = nullptr;
 	vector<Cell*> cells;
 
 	public:
+	Block(unsigned int);
 	bool transform(const std::string&);
 	void drop();
 };
