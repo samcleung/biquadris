@@ -1,11 +1,12 @@
+#include <iostream>
+#include "grid.h"
 
 
-
-bool addBlock(Block& block) {
+bool Grid::addBlock(Block& block) {
 	// todo
 }
 
-bool updateBlock(Block& oldBlock, const Block* newBlock) {
+bool Grid::updateBlock(Block& oldBlock, const Block* newBlock) {
 	// todo
 }
 
@@ -18,5 +19,5 @@ void Grid::drop(Block&) {
 }
 
 void Grid::print(int row) {
-	for (auto& cell : cells[row]) cell->print();
+	for (auto& cell : cells[row]) cout << cell;
 }
