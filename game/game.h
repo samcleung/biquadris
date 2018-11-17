@@ -1,6 +1,7 @@
 #ifndef __GAME_H__
 #define __GAME_H__
-
+#include <vector>
+#include "../player/player.h"
 class Game {
 	const std::string name;
 	const std::string scriptFile;
