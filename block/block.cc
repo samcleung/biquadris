@@ -14,70 +14,79 @@ const string COUNTERCLOCKWISE = "counterclockwise";
 // block actions
 const string DROP = "drop";
 
+Block::Block(unsigned int size) : size{size} {}
+
+vector<Cell> Block::copyCells() {
+	vector<Cell> copy;
+	for (auto cell : cells) {
+		copy.emplace_back(cell);
+	}
+	return copy;
+}
 
 bool Block::rotate(Block::Rotation r) {
-	Block temp{*this}; // todo - implement copy contructor
+	vector<Cell> copy = copyCells();
 
 	unsigned int originX = -1;
 	unsigned int originY = -1;
 	
 	// get x and y of origin of block in grid
 	for (auto &cell: cells) {
-		if (originX < 0 || cell->x > originX) x = cell->x;
-		if (originY < 0 || cell->y > originY) y = cell->y;
+		if (originX < 0 || cell->x < originX) x = cell->x;
+		if (originY < 0 || cell->y < originY) y = cell->y;
 	}
 	
 	int minX = size;
 	int minY = size;
 
 	// rotate around (0,0) in a size*size grid
-	for (auto &cell: temp.cells) {
-		int temp = cell->y;
+	for (auto &cell: copy) {
+		int temp = cell.y;
 		switch(r) {
 			case Block::Rotation::CounterClockwise:
-				cell->y = (cell->x - originX);
-				cell->x = size - (temp - originY);
+				cell.y = (cell.x - originX);
+				cell.x = size - (temp - originY);
 				break;
 			default: // Block::Rotation::Clockwise
-				cell->y = size - (cell->x - originX);
-				cell->x = (temp - originY);
+				cell.y = size - (cell.x - originX);
+				cell.x = (temp - originY);
 		}
 	
-		if (cell->y < minY) minY = cell->y;
-		if (cell->x < minX) minX = cell->x;
+		if (cell.y < minY) minY = cell.y;
+		if (cell.x < minX) minX = cell.x;
 	}
 
 	// convert back to actual grid position
-	for (auto &cell: temp.cells) {
-		cell->x += originX - minX;
-		cell->y = += originY - minY;
+	for (auto &cell: copy) {
+		cell.x += originX - minX;
+		celly = += originY - minY;
 	}
 	
-	return grid->updateBlock(*this, temp);
+	return grid->updateBlock(*this, copy);
 }
 
 
 bool Block::translate(Block::Translation t) {
-	Block temp{*this}; // todo - implement copy contructor
+	vector<Cell> copy = copyCells();
 	
 	// translate cells
-	for (auto &cell: cells) {
+	for (auto &cell: copy) {
 		switch(t) {
 			case Block::Translation::Left:
-				cell->x += 1;
+				copy.x += 1;
 				break;
 			case Block::Translation::Up:
-				cell->y += 1;
+				copy.y += 1;
 				break;
 			case Block::Translation::Right:
-				cell->x -= 1;
+				copy.x -= 1;
 				break;
 			default: // Block::Translation::Down
-				cell->y -= 1;
+				copy.y -= 1;
 		}
 	}
 
-	return grid->updateBlock(*this, temp);
+	return grid->updateBlock(*this, copy);
 }
 
 
@@ -101,5 +110,15 @@ bool Block::transform(const string& command) {
 }
 
 void Block::drop() {
-	grid->drop(*this);
+	grid->drop(cells);
+}
+
+bool addToGrid(Grid* g) {
+	if (g->isValid(cells)) {
+		g->addBlock(*this);
+		g->addCells(cells);
+		return true;
+	}
+
+	return false;
 }
