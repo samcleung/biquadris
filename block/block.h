@@ -10,7 +10,7 @@ class Grid;
 
 class Block {
 	enum class Translation { Left = 0, Up, Right, Down };
-	enum class Rotation { Clockwise = 4, Counterclockwise };
+	enum class Rotation { Clockwise = 4, CounterClockwise };
 	bool rotate(Rotation);
 	bool translate(Translation);
 	std::vector<Cell> copyCells();

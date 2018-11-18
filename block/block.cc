@@ -27,13 +27,13 @@ vector<Cell> Block::copyCells() {
 bool Block::rotate(Block::Rotation r) {
 	vector<Cell> copy = copyCells();
 
-	unsigned int originX = -1;
-	unsigned int originY = -1;
+	int originX = -1;
+	int originY = -1;
 	
 	// get x and y of origin of block in grid
 	for (auto &cell: cells) {
-		if (originX < 0 || cell->x < originX) x = cell->x;
-		if (originY < 0 || cell->y < originY) y = cell->y;
+		if (originX < 0 || cell.x < originX) originX = cell.x;
+		if (originY < 0 || cell.y < originY) originY = cell.y;
 	}
 	
 	int minX = size;
@@ -59,10 +59,11 @@ bool Block::rotate(Block::Rotation r) {
 	// convert back to actual grid position
 	for (auto &cell: copy) {
 		cell.x += originX - minX;
-		celly = += originY - minY;
+		cell.y += originY - minY;
 	}
 	
-	return grid->updateBlock(*this, copy);
+	//return grid->updateBlock(*this, copy);
+	return false;
 }
 
 
@@ -73,20 +74,21 @@ bool Block::translate(Block::Translation t) {
 	for (auto &cell: copy) {
 		switch(t) {
 			case Block::Translation::Left:
-				copy.x += 1;
+				cell.x += 1;
 				break;
 			case Block::Translation::Up:
-				copy.y += 1;
+				cell.y += 1;
 				break;
 			case Block::Translation::Right:
-				copy.x -= 1;
+				cell.x -= 1;
 				break;
 			default: // Block::Translation::Down
-				copy.y -= 1;
+				cell.y -= 1;
 		}
 	}
 
-	return grid->updateBlock(*this, copy);
+	//return grid->updateBlock(*this, copy);
+	return false;
 }
 
 
@@ -102,7 +104,7 @@ bool Block::transform(const string& command) {
 		return translate(Block::Translation::Down);
 	} else if (command == CLOCKWISE) {
 		return rotate(Block::Rotation::Clockwise);
-	} else if (command == COUNTERCLOCKWISE)
+	} else if (command == COUNTERCLOCKWISE) {
 		return rotate(Block::Rotation::CounterClockwise);
 	}
 
@@ -114,11 +116,11 @@ void Block::drop() {
 }
 
 bool addToGrid(Grid* g) {
-	if (g->isValid(cells)) {
-		g->addBlock(*this);
-		g->addCells(cells);
-		return true;
-	}
+	//if (g->isValid(cells)) {
+	//	g->addBlock(*this);
+	//	g->addCells(cells);
+	//	return true;
+	//}
 
 	return false;
 }

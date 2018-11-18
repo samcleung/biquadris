@@ -6,7 +6,7 @@
 
 class Block;
 struct Cell {
-	std::string print(int, int);
+	std::string print(int, int) const;
 	enum class Color { Brown = -31, Red = 31, Green, Yellow, Magenta = 35, Cyan = 36, Default, Blue = 94 };
 	Cell(char, Block*, int x = 0, int y = 0, Color c = Color::Default);
 

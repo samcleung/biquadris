@@ -18,4 +18,8 @@ unsigned int Game::addPlayer(const string& playerName, const string& scriptFile)
 	return players.size();
 }
 
+void Game::play() {
+	// todo
+}
+
 // todo rest

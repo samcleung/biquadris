@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Werror -g -MMD
-EXEC = main
+EXEC = program
 OBJECTS = main.o game/game.o player/player.o grid/grid.o block/block.o cell/cell.o level/level.o
 DEPENDS = ${OBJECTS:.o=.d}
 
