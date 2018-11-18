@@ -5,15 +5,15 @@
 #include "../cell/cell.h"
 
 class Grid {
-	vector<Block> onBoard;
-	vector<vector<Cell*>> cells;
+	std::vector<Block> onBoard;
+	std::vector<std::vector<Cell*>> cells = std::vector<std::vector<Cell*>>(15, std::vector<Cell*>(11, nullptr));
 	
 	public:
-	// add ctrs & Big 5 as needed
-	bool addBlock(Block&);
-	bool updateBlock(Block*, Block&);
-	bool isValid(Block*);
-	void drop(Block&);
+	void addBlock(const Block&);
+	void addCells(const std::vector<Cell>&);
+	void updateCells(std::vector<Cell>&, const std::vector<Cell>&);
+	bool isValid(const std::vector<Cell>&);
+	void drop(std::vector<Cell>&);
 	void print(int);
 };
 
