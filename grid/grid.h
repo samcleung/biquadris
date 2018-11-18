@@ -6,14 +6,14 @@
 
 class Grid {
 	std::vector<Block> onBoard;
-	std::vector<vector<Cell*>> cells(15, std::vector<Cell*>(11, nullptr));
+	std::vector<std::vector<Cell*>> cells = std::vector<std::vector<Cell*>>(15, std::vector<Cell*>(11, nullptr));
 	
 	public:
-	bool addBlock(const Block&);
-	bool addCells(const vector<Cell>&);
-	bool updateCells(const vector<Cell>&, const vector<Cell>&);
-	bool isValid(const vector<Cell>&);
-	void drop(Block&);
+	void addBlock(const Block&);
+	void addCells(const std::vector<Cell>&);
+	void updateCells(std::vector<Cell>&, const std::vector<Cell>&);
+	bool isValid(const std::vector<Cell>&);
+	void drop(std::vector<Cell>&);
 	void print(int);
 };
 

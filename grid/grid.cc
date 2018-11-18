@@ -10,11 +10,11 @@ void Grid::addBlock(const Block& block) {
 
 void Grid::addCells(const vector<Cell>& cells) {
 	for (auto cell : cells)
-		vector[cell.y][cell.x] = &cell;
+		this->cells[cell.y][cell.x] = &cell;
 }
 
 void Grid::updateCells(vector<Cell>& oldCells, const vector<Cell>& newCells) {
-	for (int i = 0; i < oldCells.size(); ++i) {
+	for (unsigned int i = 0; i < oldCells.size(); ++i) {
 		cells[oldCells[i].y][oldCells[i].x] = nullptr; // remove old cell
 		oldCells[i].x = newCells[i].x; // update old cell x to new x
                 oldCells[i].y = newCells[i].y; // update old cell y to new y

@@ -5,11 +5,15 @@
 #include "../grid/grid.h"
 #include "../level/level.h"
 #include "../block/block.h"
+#include "../common/enums.h"
+
+// forward declaration, fix circular includes
+class Game;
 
 class Player {
 	std::string name;
 	std::string scriptFile;
-	Game::Effect effect = Game::Effect::None;
+	Effect effect = Effect::None;
 	unsigned int score = 0;
 	Game* game;
 	Grid* grid;
@@ -17,10 +21,10 @@ class Player {
 	Block* current;
 	
 	public:
-	// add ctrs & Big 5 as needed
+	Player(const std::string&, const std::string&);	
 	void turn();
 	void print(int);
-	void setEffect(Game::Effect);
+	void setEffect(Effect);
 };
 
 #endif
