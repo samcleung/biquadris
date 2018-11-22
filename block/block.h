@@ -5,25 +5,27 @@
 #include "../grid/grid.h"
 #include "../cell/cell.h"
 
+// forward declarations (otherwise, circular includes)
+class Grid;
+
 class Block {
+	enum class Translation { Left = 0, Up, Right, Down };
+	enum class Rotation { Clockwise = 4, CounterClockwise };
+	bool rotate(Rotation);
+	bool translate(Translation);
+	std::vector<Cell> copyCells();
+	
 	protected:
-	// enums
-	enum Translation { left = 0, up, right, down };
-        enum Rotation { clockwise = 4, counterclockwise };
-
-	// properties
-	bool isHeavy;
-	unsigned int dropBy;
-	Grid* grid;
-	vector<Cell*> cells;
-
-	// methods
-	virtual bool rotate(Rotation r);
-	virtual bool translate(Translation t);
+	unsigned int dropBy = 0;
+	const unsigned int size;
+	Grid* grid = nullptr;
+	std::vector<Cell> cells;
 
 	public:
-	// add ctrs & Big 5 as needed
-	bool makeMove(const std::string&);
+	Block(unsigned int);
+	bool transform(const std::string&);
+	void drop();
+	bool addToGrid(Grid* g); // todo
 };
 
 #endif

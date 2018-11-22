@@ -1,17 +1,23 @@
 #ifndef __GAME_H__
 #define __GAME_H__
+#include <vector>
+#include "../player/player.h"
+#include "../common/enums.h"
+
+class Player;
 
 class Game {
 	const std::string name;
 	const std::string scriptFile;
-	vector<Player> players;
+	std::vector<Player> players;
 	int seed;
 	bool isSeeded = false;
+	int startLevel = 0;
 	
 	public:
 	bool isTextOnly = false;
-
-	enum Effect { None, Blind, Force, Heavy };
+	
+	void play();
 	void restart();
 	void print();
 	void setEffect(Player&, Effect);

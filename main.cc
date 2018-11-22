@@ -15,7 +15,7 @@ const string SCRIPTFILE = "-scriptfile";
 // default script file constants
 const string DEFAULTSF1 = "sequence1.txt";
 const string DEFAULTSF2 = "sequence2.txt";
-const string DEFAUKTSFN = "sequenceN.txt";
+const string DEFAULTSFN = "sequenceN.txt";
 
 // if command is "-scriptfileN" (for some positive int N) returns N, otherwise 0
 int scriptFile(const string& command) {
@@ -26,7 +26,7 @@ int scriptFile(const string& command) {
 			istringstream iss{command.substr(x)};
 			if (iss >> x) return x;
 		}
-	} catch {}
+	} catch (...) {}
 	
 	return 0;
 }
@@ -38,8 +38,8 @@ int main(int argc, char *argv[]) {
 	// create a map of players and scriptFiles
 	//   (set P1 & P2 scriptFiles to defaults)
 	map<int,string> scriptFiles;
-	map[1] = DEFAULTSF1;
-	map[2] = DEFAULTSF2;
+	scriptFiles[1] = DEFAULTSF1;
+	scriptFiles[2] = DEFAULTSF2;
 	
 	// setup game settings
 	for (int i = 1; i < argc; ++i) {
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
 		cout << "Invalid player count." << endl;
 		cout << prompt.str();
 	}
-	cout << end;
+	cout << endl;
 	
 	// add players to game
 	for (int i = 0; i < playerCount; ++i) {

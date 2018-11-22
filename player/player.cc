@@ -1,6 +1,7 @@
 #include <string>
 #include "player.h"
 
+<<<<<<< HEAD
 using namespace std;
 
 // Basic Constructor
@@ -108,3 +109,6 @@ void Player::print(int n) {
 void Player::setEffect(Game::Effect effect) {
     this->effect = effect;
 }
+=======
+Player::Player(const std::string& name, const std::string& scriptFile) : name{name}, scriptFile{scriptFile} {}
+>>>>>>> master
