@@ -14,81 +14,99 @@ const string COUNTERCLOCKWISE = "counterclockwise";
 // block actions
 const string DROP = "drop";
 
-Block::Block(unsigned int size) : size{size} {}
+Block::Block(int level, unsigned int size) : level{level}, size{size} {}
 
-vector<Cell> Block::copyCells() {
-	vector<Cell> copy;
-	for (auto cell : cells) {
-		copy.emplace_back(cell);
+Block::Block(const Block& other) : level{other.level}, size{other.size}, grid{other.grid} {
+	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
+}
+
+vector<Coord>&& Block::getCellCoords() {
+	vector<Coord> coords;
+	for (const auto& cell: cells) {
+		if (cell.isValid()) coords.emplace_back(cell.getCoord());
 	}
-	return copy;
+	//return coords;
+	return move(coords);
 }
 
 bool Block::rotate(Block::Rotation r) {
-	vector<Cell> copy = copyCells();
+	vector<Coord> newCoords; //= getCellCoords();
 
-	int originX = -1;
-	int originY = -1;
+	bool isOriginXSet = false;
+	unsigned int originX;
+	bool isOriginYSet = false;
+	unsigned int originY;
 	
-	// get x and y of origin of block in grid
-	for (auto &cell: cells) {
-		if (originX < 0 || cell.x < originX) originX = cell.x;
-		if (originY < 0 || cell.y < originY) originY = cell.y;
+	// make cell coordinate copies for transformation, get x and y of origin of block in grid
+	for (const auto& cell: cells) {
+		if (cell.isValid()) {
+			newCoords.emplace_back(cell.getCoord());
+			const Coord& coord = newCoords.rbegin()[0];
+			if (!isOriginXSet || coord.x < originX) {
+				isOriginXSet = true;
+				originX = coord.x;
+			}
+			if (!isOriginYSet || coord.y < originY) {
+				isOriginYSet = true;
+				originY = coord.y;
+			}
+		}
 	}
 	
-	int minX = size;
-	int minY = size;
+	unsigned int minX = size;
+	unsigned int minY = size;
 
 	// rotate around (0,0) in a size*size grid
-	for (auto &cell: copy) {
-		int temp = cell.y;
+	for (auto &coord: newCoords) {
+		int temp = coord.y;
 		switch(r) {
 			case Block::Rotation::CounterClockwise:
-				cell.y = (cell.x - originX);
-				cell.x = size - (temp - originY);
+				coord.y = (coord.x - originX);
+				coord.x = size - (temp - originY);
 				break;
 			default: // Block::Rotation::Clockwise
-				cell.y = size - (cell.x - originX);
-				cell.x = (temp - originY);
+				coord.y = size - (coord.x - originX);
+				coord.x = (temp - originY);
 		}
 	
-		if (cell.y < minY) minY = cell.y;
-		if (cell.x < minX) minX = cell.x;
+		if (coord.y < minY) minY = coord.y;
+		if (coord.x < minX) minX = coord.x;
 	}
 
 	// convert back to actual grid position
-	for (auto &cell: copy) {
-		cell.x += originX - minX;
-		cell.y += originY - minY;
+	for (auto &coord: newCoords) {
+		coord.x += originX - minX;
+		coord.y += originY - minY;
 	}
-	
-	//return grid->updateBlock(*this, copy);
-	return false;
+	return grid->moveCells(getCellCoords(), newCoords);
+	//return grid->moveCells(getCellCoords(), move(newCoords));
 }
 
 
 bool Block::translate(Block::Translation t) {
-	vector<Cell> copy = copyCells();
+	vector<Coord> newCoords;
 	
 	// translate cells
-	for (auto &cell: copy) {
+	for (const auto& cell: cells) {
+		Coord coord = cell.getCoord();
 		switch(t) {
 			case Block::Translation::Left:
-				cell.x += 1;
+				coord.x += 1;
 				break;
 			case Block::Translation::Up:
-				cell.y += 1;
+				coord.y += 1;
 				break;
 			case Block::Translation::Right:
-				cell.x -= 1;
+				coord.x -= 1;
 				break;
 			default: // Block::Translation::Down
-				cell.y -= 1;
+				coord.y -= 1;
 		}
+		newCoords.emplace_back(coord);
+		//newCoords.emplace_back(move(coord));
 	}
-
-	//return grid->updateBlock(*this, copy);
-	return false;
+	return grid->moveCells(getCellCoords(), newCoords);
+	//return grid->moveCells(getCellCoords(), move(newCoords));
 }
 
 
@@ -112,15 +130,27 @@ bool Block::transform(const string& command) {
 }
 
 void Block::drop() {
-	grid->drop(cells);
+	grid->drop(getCellCoords());
 }
 
-bool addToGrid(Grid* g) {
-	//if (g->isValid(cells)) {
-	//	g->addBlock(*this);
-	//	g->addCells(cells);
-	//	return true;
-	//}
+bool Block::addToGrid(Grid* g) {
+	vector<Cell*> addresses;
+	for (auto& cell: cells) addresses.emplace_back(&cell);
+	
+	grid = g;
+	if (grid->addCells(addresses)) {
+		grid->addBlock(*this);
+		return true;
+	}
 
 	return false;
+}
+
+int Block::getPoints() const {
+	int score = 0;
+	for (const auto& cell: cells) {
+		if (cell.isValid()) return score;
+	}
+	score = level + 1;
+	return score * score;
 }

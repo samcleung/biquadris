@@ -3,9 +3,9 @@
 #include "tblock.h"
 #include "../cell/cell.h"
 
-TBlock::TBlock(int x, int y) : Block{3} {
-	cells.emplace_back({'T', this, x + 1, y, Cell::Color::Default});
-	cells.emplace_back({'T', this, x, y + 1, Cell::Color::Default});
-	cells.emplace_back({'T', this, x + 1, y + 1, Cell::Color::Default});
-	cells.emplace_back({'T', this, x + 2, y + 1, Cell::Color::Default});
+TBlock::TBlock(const Coord& coord, int level) : Block{level, 3} {
+	cells.emplace_back({'T', this, coord.x + 1, coord.y, Cell::Color::Default});
+	cells.emplace_back({'T', this, coord.x, coord.y + 1, Cell::Color::Default});
+	cells.emplace_back({'T', this, coord.x + 1, coord.y + 1, Cell::Color::Default});
+	cells.emplace_back({'T', this, coord.x + 2, coord.y + 1, Cell::Color::Default});
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include "../grid/grid.h"
 #include "../cell/cell.h"
+#include "../coord/coord.h"
 
 // forward declarations (otherwise, circular includes)
 class Grid;
@@ -11,21 +12,26 @@ class Grid;
 class Block {
 	enum class Translation { Left = 0, Up, Right, Down };
 	enum class Rotation { Clockwise = 4, CounterClockwise };
+
+	int level = 0;
+
 	bool rotate(Rotation);
 	bool translate(Translation);
-	std::vector<Cell> copyCells();
+	std::vector<Coord>&& getCellCoords();
 	
 	protected:
 	unsigned int dropBy = 0;
-	const unsigned int size;
+	unsigned int size;
 	Grid* grid = nullptr;
 	std::vector<Cell> cells;
 
 	public:
-	Block(unsigned int);
-	bool transform(const std::string&);
+	Block(int level, unsigned int size);
+	Block(const Block& other);
+	bool transform(const std::string& command);
 	void drop();
-	bool addToGrid(Grid* g); // todo
+	bool addToGrid(Grid* g);
+	int getPoints() const;
 };
 
 #endif

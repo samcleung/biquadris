@@ -3,9 +3,9 @@
 #include "oblock.h"
 #include "../cell/cell.h"
 
-OBlock::OBlock(int x, int y) : Block{2} {
-	cells.emplace_back({'O', this, x, y, Cell::Color::Magenta});
-	cells.emplace_back({'O', this, x + 1, y, Cell:Color::Magenta});
-	cells.emplace_back({'O', this, x, y + 1, Cell::Color::Magenta});
-	cells.emplace_back({'O', this, x + 1, y + 1, Cell::Color::Magenta});
+OBlock::OBlock(const Coord& coord, int level) : Block{level, 2} {
+	cells.emplace_back({'O', this, coord.x, coord.y, Cell::Color::Magenta});
+	cells.emplace_back({'O', this, coord.x + 1, coord.y, Cell:Color::Magenta});
+	cells.emplace_back({'O', this, coord.x, coord.y + 1, Cell::Color::Magenta});
+	cells.emplace_back({'O', this, coord.x + 1, coord.y + 1, Cell::Color::Magenta});
 }
