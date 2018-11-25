@@ -2,7 +2,8 @@
 #include "block.h"
 #include "starblock.h"
 #include "../cell/cell.h"
+#include "../coord/coord.h"
 
-StarBlock::StarBlock(int x, int y) : Block{1} {
-	cells.emplace_back(new Cell{'*', this, x, y, Cell::Color::Brown});
+StarBlock::StarBlock(const Coord& coord, int level) : Block{level, 1} {
+	cells.emplace_back(Cell{'*', this, coord, Cell::Color::Brown});
 }
