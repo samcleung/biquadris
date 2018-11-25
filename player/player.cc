@@ -1,12 +1,13 @@
-#include <string>
+#include <iostream>
+//#include <string>
+#include <vector>
 #include "player.h"
 
-<<<<<<< HEAD
 using namespace std;
 
-// Basic Constructor
-//Player::Player() :
-//    {}
+Player::Player(const std::string& name, const std::string& scriptFile) : name{name}, scriptFile{scriptFile} {}
+
+
 // what to do with brown block
 
 // Read in all the commands
@@ -18,21 +19,21 @@ void Player::turn() {
     vector<int> indices;
     
     // Get block
-    vector<Block> blocks = level->getBlock();
-    current = &blocks.at(0);
+//    vector<Block> blocks = level->getBlock();
+//    current = &blocks.at(0);
     
     // Read input
-    while((!(cin >> command) && !cin.eof())) {
+    while(((cin >> command) && !cin.eof())) {
         int index = 0;
         int multiplier;
-        int size = command.size(); // May have to change this to type size_t
+        int size = command.size();
         
         // Extract multiplier from the command
-        for (int i = 0; i < size, ++i){
+        for(int i = 0; i < size; ++i) {
             if(!((command.at(i) >= '0') && (command.at(i) <= '9'))) {
+                index = i;
                 break;
             }
-            index = i;
         }
         
         if(index == 0) {
@@ -41,17 +42,18 @@ void Player::turn() {
         } else {
             multiplier = stoi(command.substr(0,index));
         }
-        string call = command.substr(index+1);
+        string call = command.substr(index);
         
         int commandIndex = -1;
         int callSize = call.size();
-        for(int j = 0; j < callSize; ++j) {
+        for(int j = 1; j < callSize+1; ++j) {
             int k = 0;
             for(auto &c: commands) {
+                int cSize = c.size();
                 if(call == c) {
                     commandIndex = k;
                     break;
-                } else if((callSize < c.size()) && (call == c.substr(0,j))) {
+                } else if((callSize <= cSize) && (call == c.substr(0,j))) {
                     indices.emplace_back(k);
                 }
                 k++;
@@ -67,11 +69,13 @@ void Player::turn() {
             indices.clear(); // More than one match for command, use next letter
         }
         
+        // Finished reading in command
+        
         if(commandIndex != -1) {
             // It was a valid command
             // Check commands that do not require multipliers first
             if((commandIndex >= 16) && (commandIndex <= 18)) {
-                switch (commandIndex) {
+                switch(commandIndex) {
                     case 16: { // norandom
 
                     } case 17: { // random
@@ -82,12 +86,34 @@ void Player::turn() {
                 }
             } else {
                 // Commmands with multipliers
-                for(int i = 0; i < multiplier, ++i) {
+                for(int i = 0; i < multiplier; ++i) {
                     // Covers all transformations
                     if((commandIndex >=0) && (commandIndex <= 5)) {
                         current->transform(commands.at(commandIndex));
                     } else {
-
+                        switch(commandIndex) {
+                            case 6: { // drop
+                                break;
+                            } case 7: { // levelup
+                                break;
+                            } case 8: { // leveldown
+                                break;
+                            } case 9: { // I-block, change current block to this
+                                break;
+                            } case 10: { // J-block
+                                break;
+                            } case 11: { // L-block
+                                break;
+                            } case 12: { // O-block
+                                break;
+                            } case 13: { // S-block
+                                break;
+                            } case 14: { // Z-block
+                                break;
+                            } case 15: { // T-block
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -106,9 +132,6 @@ void Player::print(int n) {
     
 }
 
-void Player::setEffect(Game::Effect effect) {
-    this->effect = effect;
-}
-=======
-Player::Player(const std::string& name, const std::string& scriptFile) : name{name}, scriptFile{scriptFile} {}
->>>>>>> master
+//void Player::setEffect(Game::Effect effect) {
+//    this->effect = effect;
+//}
