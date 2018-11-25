@@ -1,9 +1,10 @@
 #ifndef __OBLOCK_H__
 #define __OBLOCK_H__
 #include "block.h"
+#include "../coord/coord.h"
 
-class OBlock : Block {
-	OBlock(int x = 0, int y = 0);
+struct OBlock : public Block {
+	OBlock(const Coord& coord = Coord::blockStart(), int level = 0);
 };
 
 #endif

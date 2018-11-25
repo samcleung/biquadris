@@ -1,9 +1,10 @@
 #ifndef __IBLOCK_H__
 #define __IBLOCK_H__
 #include "block.h"
+#include "../coord/coord.h"
 
-struct IBlock : Block {
-	IBlock(int x = 0, int y = 0);
+struct IBlock : public Block {
+	IBlock(const Coord& coord = Coord::blockStart(), int level = 0);
 };
 
 #endif
