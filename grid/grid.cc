@@ -139,5 +139,8 @@ void Grid::drop(const vector<Coord>& coords) {
 }
 
 void Grid::print(unsigned int row) {
-	for (const auto& cell : cells[row]) cout << cell;
+	for (const auto& cell : cells[row]) {
+		if (cell) cout << cell;
+		else cout << ' ';
+	};
 }

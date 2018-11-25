@@ -23,7 +23,7 @@ class Grid {
 	bool moveCell(const Coord&, const Coord&);
 
 	public:
-	Grid(int, int);
+	Grid(int width, int height);
 
 	void addBlock(const Block& blocks); // adds a block to the grid
 	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful

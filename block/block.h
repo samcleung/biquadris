@@ -24,9 +24,9 @@ class Block {
 	unsigned int size;
 	Grid* grid = nullptr;
 	std::vector<Cell> cells;
+	Block(int level, unsigned int size);
 
 	public:
-	Block(int level, unsigned int size);
 	Block(const Block& other);
 	bool transform(const std::string& command);
 	void drop();
