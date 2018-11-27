@@ -20,13 +20,13 @@ Block::Block(const Block& other) : level{other.level}, size{other.size}, grid{ot
 	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
 }
 
-vector<Coord>&& Block::getCellCoords() {
+vector<Coord> Block::getCellCoords() {
 	vector<Coord> coords;
 	for (const auto& cell: cells) {
 		if (cell.isValid()) coords.emplace_back(cell.getCoord());
 	}
-	//return coords;
-	return move(coords);
+	return coords;
+	//return move(coords);
 }
 
 bool Block::rotate(Block::Rotation r) {
@@ -85,26 +85,29 @@ bool Block::rotate(Block::Rotation r) {
 
 bool Block::translate(Block::Translation t) {
 	vector<Coord> newCoords;
-	
+		
 	// translate cells
 	for (const auto& cell: cells) {
 		Coord coord = cell.getCoord();
 		switch(t) {
 			case Block::Translation::Left:
-				coord.x += 1;
+				if (coord.x < 1) return false; // cannot go below 0
+				coord.x -= 1;
 				break;
 			case Block::Translation::Up:
 				coord.y += 1;
 				break;
 			case Block::Translation::Right:
-				coord.x -= 1;
+				coord.x += 1;
 				break;
 			default: // Block::Translation::Down
+				if (coord.y < 1) return false; // cannot go below 0
 				coord.y -= 1;
 		}
 		newCoords.emplace_back(coord);
 		//newCoords.emplace_back(move(coord));
 	}
+	
 	return grid->moveCells(getCellCoords(), newCoords);
 	//return grid->moveCells(getCellCoords(), move(newCoords));
 }
@@ -133,17 +136,13 @@ void Block::drop() {
 	grid->drop(getCellCoords());
 }
 
+
+// TODO: CHANGE
 bool Block::addToGrid(Grid* g) {
 	vector<Cell*> addresses;
-	for (auto& cell: cells) addresses.emplace_back(&cell);
-	
+	for (auto& cell: cells) addresses.emplace_back(&cell);	
 	grid = g;
-	if (grid->addCells(addresses)) {
-		grid->addBlock(*this);
-		return true;
-	}
-
-	return false;
+	return grid->addCells(addresses);
 }
 
 int Block::getPoints() const {

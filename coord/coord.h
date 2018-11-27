@@ -5,6 +5,8 @@ struct Coord {
 	// important coordinates
 	static Coord origin() { return {0, 0}; };
 	static Coord blockStart() { return {0, 14}; };
+
+	bool operator==(const Coord&) const;
 	
 	unsigned int x;
 	unsigned int y;
