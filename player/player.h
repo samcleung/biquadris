@@ -19,7 +19,7 @@ class Player {
 	std::vector<Block> current;
 	
 	public:
-	Player(const std::string&, const std::string&, int _level);	
+	Player(const std::string&, const std::string&);	
 	int turn();
 	void print(int);
 	void setEffect(Effect);

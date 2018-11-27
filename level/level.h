@@ -5,9 +5,9 @@
 
 class Level {
 public:
-    virtual std::vector<Block*> createBlock() = 0;
+    virtual std::vector<Block> createBlock() = 0;
 	Level();
-	~Level();
+	virtual ~Level() = 0;
 };
 
 Level *getLevel(int);

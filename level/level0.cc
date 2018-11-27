@@ -3,10 +3,10 @@
 using namespace std;
 Level0::Level0(int seed, ifstream & infile): infile{infile} {}
 
-vector <Block *> Level0::createBlock(){
+vector <Block> Level0::createBlock(){
 	char nextBlock;
 	infile >> nextBlock;
-	vector <Block *> placeholder;
+	vector <Block> placeholder;
 	switch(nextBlock){
 		case 'I':
 		break;

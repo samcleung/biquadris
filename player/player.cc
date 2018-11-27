@@ -1,23 +1,20 @@
 #include <iostream>
 #include <fstream>
-//#include <string>
 #include <vector>
 #include "player.h"
-//#include "../coord/coord.h"
-//#include "../level/level.h"
-#include "../block/iblock.h"
-#include "../block/jblock.h"
-#include "../block/lblock.h"
-#include "../block/oblock.h"
-#include "../block/sblock.h"
-#include "../block/zblock.h"
-#include "../block/tblock.h"
+//#include "../block/iblock.h"
+//#include "../block/jblock.h"
+//#include "../block/lblock.h"
+//#include "../block/oblock.h"
+//#include "../block/sblock.h"
+//#include "../block/zblock.h"
+//#include "../block/tblock.h"
 
 
 using namespace std;
 
-Player::Player(const std::string& name, const std::string& scriptFile, int _level) :
-name{name}, scriptFile{scriptFile}, lev{_level}, level{getLevel(_level)} {
+Player::Player(const std::string& name, const std::string& scriptFile) :
+name{name}, scriptFile{scriptFile}, lev{0} { //, level{getLevel(_level)}
 //    current = level->createBlock();
     // Grid???
 }
@@ -116,12 +113,12 @@ int Player::turn() {
                         } case 7: { // level up
                             delete level;
                             ++lev;
-                            level = getLevel(lev);
+//                            level = getLevel(lev);
                             break;
                         } case 8: { // level down
                             delete level;
                             --lev;
-                            level = getLevel(lev);
+//                            level = getLevel(lev);
                             break;
                         } default: { // 0 to 5 (left/right/up/down/cw/ccw)
                             // All transformations
@@ -134,25 +131,25 @@ int Player::turn() {
             } else { // Commands with no multiplier
                 switch (commandIndex) {
                     case 9: { // I-block, change current block to this
-                        current.at(0) = IBlock();
+//                        current.at(0) = IBlock();
                         break;
                     } case 10: { // J-block
-                        current.at(0) = JBlock();
+//                        current.at(0) = JBlock();
                         break;
                     } case 11: { // L-block
-                        current.at(0) = LBlock();
+//                        current.at(0) = LBlock();
                         break;
                     } case 12: { // O-block
-                        current.at(0) = OBlock();
+//                        current.at(0) = OBlock();
                         break;
                     } case 13: { // S-block
-                        current.at(0) = SBlock();
+//                        current.at(0) = SBlock();
                         break;
                     } case 14: { // Z-block
-                        current.at(0) = ZBlock();
+//                        current.at(0) = ZBlock();
                         break;
                     } case 15: { // T-block
-                        current.at(0) = TBlock();
+//                        current.at(0) = TBlock();
                         break;
                     } case 16: { // norandom
                         cin >> file;
@@ -182,8 +179,8 @@ int Player::turn() {
         return 2;
     } else { // End the turn normally
         return 0;
-    }
-    
+    }    
+    return 0;
 }
 
 // Prints a line of the player's grid
