@@ -10,4 +10,6 @@ public:
 	~Level();
 };
 
+Level *getLevel(int);
+
 #endif

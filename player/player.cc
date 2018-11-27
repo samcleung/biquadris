@@ -1,67 +1,85 @@
 #include <iostream>
+#include <fstream>
 //#include <string>
 #include <vector>
 #include "player.h"
+//#include "../coord/coord.h"
+//#include "../level/level.h"
 
 using namespace std;
 
-Player::Player(const std::string& name, const std::string& scriptFile) : name{name}, scriptFile{scriptFile} {}
-
-
-// what to do with brown block
+Player::Player(const std::string& name, const std::string& scriptFile, int level) :
+name{name}, scriptFile{scriptFile}, lev{level}, level{getLevel(level)}, current{level->createBlock()} {}
 
 // Read in all the commands
-void Player::turn() {
+int Player::turn() {
+    bool readFile;
+    istream *in = &cin;
+    int commandIndex;
     string command;
+    string file;
     vector<string> commands {"left", "right", "up", "down", "clockwise", "counterclockwise",
                             "drop", "levelup", "leveldown", "I", "J", "L", "O", "S",
-                             "Z", "T", "norandom", "random", "restart"};
+                             "Z", "T", "norandom", "random", "sequence", "restart"};
     vector<int> indices;
     
-    // Get block
-//    vector<Block> blocks = level->getBlock();
-//    current = &blocks.at(0);
-    
     // Read input
-    while(((cin >> command) && !cin.eof())) {
+    // Invariant that only drop/restart/EOF will end a player's turn
+    while (true) {
+        if (readFile) { // Start reading from file
+            in = new ifstream(file.c_str());
+            readFile = false;
+        }
+        
+        in >> command;
+        if (file.empty() && in.eof()) { // Reached EOF in stdin
+            break;
+        }
+        if (!file.empty() && in.eof()) { // EOF in file
+            file = "";
+            delete in;
+            in = &cin; // Reset to stdin
+            in >> command;
+        }
+        
         int index = 0;
         int multiplier;
         int size = command.size();
         
         // Extract multiplier from the command
-        for(int i = 0; i < size; ++i) {
-            if(!((command.at(i) >= '0') && (command.at(i) <= '9'))) {
+        for (int i = 0; i < size; ++i) {
+            if (!((command.at(i) >= '0') && (command.at(i) <= '9'))) {
                 index = i;
                 break;
             }
         }
         
-        if(index == 0) {
+        if (index == 0) {
             // No multiplier
             multiplier = 1;
         } else {
             multiplier = stoi(command.substr(0,index));
         }
         string call = command.substr(index);
-        
-        int commandIndex = -1;
+        commandIndex = -1;
+
         int callSize = call.size();
-        for(int j = 1; j < callSize+1; ++j) {
+        for (int j = 1; j < callSize+1; ++j) {
             int k = 0;
-            for(auto &c: commands) {
+            for (auto &c: commands) {
                 int cSize = c.size();
-                if(call == c) {
+                if (call == c) {
                     commandIndex = k;
                     break;
-                } else if((callSize <= cSize) && (call == c.substr(0,j))) {
+                } else if ((callSize <= cSize) && (call == c.substr(0,j))) {
                     indices.emplace_back(k);
                 }
                 k++;
             }
-            if(commandIndex != -1) {
+            if (commandIndex != -1) {
                 indices.clear(); // Found the command character for character
                 break;
-            } else if(indices.size() == 1) {
+            } else if (indices.size() == 1) {
                 commandIndex = indices.at(0); // One match for command
                 indices.clear();
                 break;
@@ -69,69 +87,99 @@ void Player::turn() {
             indices.clear(); // More than one match for command, use next letter
         }
         
-        // Finished reading in command
-        
-        if(commandIndex != -1) {
+        // Finished reading in command        
+        if (commandIndex != -1) {
             // It was a valid command
-            // Check commands that do not require multipliers first
-            if((commandIndex >= 16) && (commandIndex <= 18)) {
-                switch(commandIndex) {
-                    case 16: { // norandom
-
-                    } case 17: { // random
-
-                    } case 18: { // restart the game
-
-                    }
-                }
-            } else {
-                // Commmands with multipliers
-                for(int i = 0; i < multiplier; ++i) {
-                    // Covers all transformations
-                    if((commandIndex >=0) && (commandIndex <= 5)) {
-                        current->transform(commands.at(commandIndex));
-                    } else {
-                        switch(commandIndex) {
-                            case 6: { // drop
-                                break;
-                            } case 7: { // levelup
-                                break;
-                            } case 8: { // leveldown
-                                break;
-                            } case 9: { // I-block, change current block to this
-                                break;
-                            } case 10: { // J-block
-                                break;
-                            } case 11: { // L-block
-                                break;
-                            } case 12: { // O-block
-                                break;
-                            } case 13: { // S-block
-                                break;
-                            } case 14: { // Z-block
-                                break;
-                            } case 15: { // T-block
-                                break;
+            // Check commands that do require multipliers first
+            if ((commandIndex >=0 ) && (commandIndex <= 8)) {
+                for (int i = 0; i < multiplier; ++i) {
+                    switch (commandIndex) {
+                        case 6: { // drop
+                            for (auto &v: current) {
+                                v.drop();
+                                grid->addBlock(v);
                             }
+                            current.clear();
+                            current = level->createBlock();
+                            break;
+                        } case 7: { // level up
+                            delete level;
+                            ++lev;
+                            level = getLevel(lev);
+                            break;
+                        } case 8: { // level down
+                            delete level;
+                            --lev;
+                            level = getLevel(lev);
+                            break;
+                        } default: { // 0 to 5 (left/right/up/down/cw/ccw)
+                            // All transformations
+                            current->transform(commands.at(commandIndex));
+                            break;
                         }
+                    }
+                    
+                }
+            } else { // Commands with no multiplier
+                switch (commandIndex) {
+                    case 9: { // I-block, change current block to this
+                        current.at(0) = IBlock();
+                        break;
+                    } case 10: { // J-block
+                        current.at(0) = JBlock();
+                        break;
+                    } case 11: { // L-block
+                        current.at(0) = LBlock();
+                        break;
+                    } case 12: { // O-block
+                        current.at(0) = OBlock();
+                        break;
+                    } case 13: { // S-block
+                        current.at(0) = SBlock();
+                        break;
+                    } case 14: { // Z-block
+                        current.at(0) = ZBlock();
+                        break;
+                    } case 15: { // T-block
+                        current.at(0) = TBlock();
+                        break;
+                    } case 16: { // norandom
+                        cin >> file;
+                        //////////// TODO
+                    } case 17: { // random
+                        //////////// TODO
+                    } case 18: { // sequence
+                        cin >> file;
+                        readFile = true;
+                    } case 19: { // restart the game
+
                     }
                 }
             }
         }
         
+        // End turn if drop/restart
+        if ((commandIndex == 6) || (commandIndex == 19)) {
+            break;
+        }
+        
     }
     
-
-    // EOF indicates terminate the entire game
-    // If the turn is over add the transformed block to the grid
+    if (commandIndex == 19) { // Restart the game
+        return 1;
+    } else if (cin.eof()) { // EOF means terminate game
+        return 2;
+    } else { // End the turn normally
+        return 0;
+    }
     
 }
 
 // Prints a line of the player's grid
 void Player::print(int n) {
-    
+    grid->print(n);
 }
 
-//void Player::setEffect(Game::Effect effect) {
-//    this->effect = effect;
-//}
+void Player::setEffect(Effect effect) {
+    this->effect = effect;
+}
