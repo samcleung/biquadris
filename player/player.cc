@@ -2,13 +2,13 @@
 #include <fstream>
 #include <vector>
 #include "player.h"
-//#include "../block/iblock.h"
-//#include "../block/jblock.h"
-//#include "../block/lblock.h"
-//#include "../block/oblock.h"
-//#include "../block/sblock.h"
-//#include "../block/zblock.h"
-//#include "../block/tblock.h"
+#include "../block/iblock.h"
+#include "../block/jblock.h"
+#include "../block/lblock.h"
+#include "../block/oblock.h"
+#include "../block/sblock.h"
+#include "../block/zblock.h"
+#include "../block/tblock.h"
 
 
 using namespace std;
@@ -108,7 +108,7 @@ int Player::turn() {
                                 grid->addBlock(v);
                             }
                             current.clear();
-//                            current = level->createBlock(); // CHANGE TO STACK BLOCKS
+//                            current = level->createBlock();
                             break;
                         } case 7: { // level up
                             delete level;
@@ -131,7 +131,7 @@ int Player::turn() {
             } else { // Commands with no multiplier
                 switch (commandIndex) {
                     case 9: { // I-block, change current block to this
-//                        current.at(0) = IBlock();
+//                        current.at(0) = IBlock(); // Copying error
                         break;
                     } case 10: { // J-block
 //                        current.at(0) = JBlock();
@@ -159,8 +159,9 @@ int Player::turn() {
                     } case 18: { // sequence
                         cin >> file;
                         readFile = true;
+                        break;
                     } case 19: { // restart the game
-
+                        break;
                     }
                 }
             }
