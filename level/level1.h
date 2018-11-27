@@ -3,7 +3,7 @@
 
 class Level1 {
 public:
-	Vector <Block *> createBlock() override;
+	vector <Block> createBlock() override;
 	Level1(int seed); };
 
 #endif

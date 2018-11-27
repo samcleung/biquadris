@@ -4,10 +4,12 @@
 #include "../block/block.h"
 
 class Level {
-	virtual std::vector<Block*> createBlock() = 0;
 public:
+    virtual std::vector<Block> createBlock() = 0;
 	Level();
-	~Level();
+	virtual ~Level() = 0;
 };
+
+Level *getLevel(int);
 
 #endif

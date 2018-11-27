@@ -5,24 +5,22 @@
 #include "../grid/grid.h"
 #include "../level/level.h"
 #include "../block/block.h"
+#include "../coord/coord.h"
 #include "../common/enums.h"
-
-// forward declaration, fix circular includes
-class Game;
 
 class Player {
 	std::string name;
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
-	Game* game;
 	Grid* grid;
+    int lev;
 	Level* level;
-	Block* current;
+	std::vector<Block> current;
 	
 	public:
 	Player(const std::string&, const std::string&);	
-	void turn();
+	int turn();
 	void print(int);
 	void setEffect(Effect);
 };
