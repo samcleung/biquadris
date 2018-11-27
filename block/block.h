@@ -17,7 +17,7 @@ class Block {
 
 	bool rotate(Rotation);
 	bool translate(Translation);
-	std::vector<Coord>&& getCellCoords();
+	std::vector<Coord> getCellCoords();
 	
 	protected:
 	unsigned int dropBy = 0;
