@@ -4,7 +4,6 @@
 #include "level3.h"
 #include "level4.h"
 
-<<<<<<< HEAD
 Level getLevel(int level) {
     switch (level) {
         case 0: return new Level0();
@@ -15,7 +14,6 @@ Level getLevel(int level) {
         case default: return nullptr;
     }
 }
-=======
+
 Level::Level(){}
 Level::~Level(){}
->>>>>>> master

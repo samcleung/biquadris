@@ -5,11 +5,22 @@
 #include "player.h"
 //#include "../coord/coord.h"
 //#include "../level/level.h"
+#include "../block/iblock.h"
+#include "../block/jblock.h"
+#include "../block/lblock.h"
+#include "../block/oblock.h"
+#include "../block/sblock.h"
+#include "../block/zblock.h"
+#include "../block/tblock.h"
+
 
 using namespace std;
 
-Player::Player(const std::string& name, const std::string& scriptFile, int level) :
-name{name}, scriptFile{scriptFile}, lev{level}, level{getLevel(level)}, current{level->createBlock()} {}
+Player::Player(const std::string& name, const std::string& scriptFile, int _level) :
+name{name}, scriptFile{scriptFile}, lev{_level}, level{getLevel(_level)} {
+//    current = level->createBlock();
+    // Grid???
+}
 
 // Read in all the commands
 int Player::turn() {
@@ -31,15 +42,15 @@ int Player::turn() {
             readFile = false;
         }
         
-        in >> command;
-        if (file.empty() && in.eof()) { // Reached EOF in stdin
+        *in >> command;
+        if (file.empty() && in->eof()) { // Reached EOF in stdin
             break;
         }
-        if (!file.empty() && in.eof()) { // EOF in file
+        if (!file.empty() && in->eof()) { // EOF in file
             file = "";
             delete in;
             in = &cin; // Reset to stdin
-            in >> command;
+            *in >> command;
         }
         
         int index = 0;
@@ -100,7 +111,7 @@ int Player::turn() {
                                 grid->addBlock(v);
                             }
                             current.clear();
-                            current = level->createBlock();
+//                            current = level->createBlock(); // CHANGE TO STACK BLOCKS
                             break;
                         } case 7: { // level up
                             delete level;
@@ -114,7 +125,7 @@ int Player::turn() {
                             break;
                         } default: { // 0 to 5 (left/right/up/down/cw/ccw)
                             // All transformations
-                            current->transform(commands.at(commandIndex));
+                            current.at(0).transform(commands.at(commandIndex));
                             break;
                         }
                     }

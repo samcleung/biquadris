@@ -14,13 +14,13 @@ class Player {
 	Effect effect = Effect::None;
 	unsigned int score = 0;
 	Grid* grid;
-	Level* level;
     int lev;
+	Level* level;
 	std::vector<Block> current;
 	
 	public:
-	Player(const std::string&, const std::string&);	
-	void turn();
+	Player(const std::string&, const std::string&, int _level);	
+	int turn();
 	void print(int);
 	void setEffect(Effect);
 };
