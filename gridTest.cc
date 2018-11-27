@@ -16,14 +16,15 @@ using namespace std;
 
 // grid constants
 const int width = 11;
-const int height = 15;
+const int height = 18;
 
 // command constants
 const string PRINT = "print";
-const string ADDBLOCK = "add";
+const string ADDBLOCK = "add";	
+const string DROP = "drop";
 
 void print(Grid& g) {
-	for (int i = width - 1; i >= 0; --i) {
+	for (int i = height - 1; i >= 0; --i) {
 		g.print(i);
 		cout << endl;
 	}
@@ -31,43 +32,58 @@ void print(Grid& g) {
 
 int main() {
 	Grid grid{width, height};
-
-	list<Block> blocks;
+	int level = 0;
 
 	// command interpretter
 	string command;
 	while (cin >> command) {
+		Block* curr = grid.currentBlock();
 		if (command == PRINT) {
 			print(grid);
-		} else if (command == ADDBLOCK) {
+		} else if (command == ADDBLOCK && !curr) {
+			bool result;
 			char type;
 			if (cin >> type) {
 				switch (type) {
 					case 'j':
-						blocks.emplace_back(JBlock{});
+						result = grid.addBlock(JBlock{});
 						break;
 					case 'l':
-						blocks.emplace_back(LBlock{});
+						result = grid.addBlock(LBlock{});
 						break;
 					case 's':
-						blocks.emplace_back(SBlock{});
+						result = grid.addBlock(SBlock{});
 						break;
 					case 'i':
-						blocks.emplace_back(IBlock{});
+						result = grid.addBlock(IBlock{});
 						break;
 					case 'o':
-						blocks.emplace_back(OBlock{});
+						result = grid.addBlock(OBlock{});
 						break;
 					case 't':
-						blocks.emplace_back(TBlock{});
+						result = grid.addBlock(TBlock{});
 						break;
 					case 'z':
-						blocks.emplace_back(ZBlock{});
+						result = grid.addBlock(ZBlock{});
 				}
 			}
-			cout << "Added new block to list of blocks" << endl;
-			blocks.back().addToGrid(&grid);
-			cout << "Added last block in list of blocks to grid" << endl;
+			if (!result) cout << "ERROR: Could not add block" << endl;
+			print(grid);
+		} else {
+			if (curr) {
+				if (command == DROP) {
+					curr->drop();
+					print(grid);
+					cout << "Points:" << grid.update(level) << endl;
+				} else {
+					bool result = curr->transform(command);
+					if (!result) cout << "ERROR: Invalid transform" << endl;
+				}
+			} else {
+				cout << "ERROR: No current block" << endl;
+			}
+			print(grid);
 		}
+
 	}
 }

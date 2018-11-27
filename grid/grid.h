@@ -10,6 +10,7 @@ class Block;
 class Cell;
 
 class Grid {
+	Block* current = nullptr;
 	std::list<Block> onBoard;
 	std::vector<std::vector<Cell*>> cells;
 	std::vector<Coord> modified; // stores all modified cells in a vector, to be redrawn in graphical display
@@ -17,20 +18,21 @@ class Grid {
 	bool isValid(const std::vector<Coord>&); // returns true if coordinates contain no cells
 	int updateCells(int); // updates cells on grid, returning the # of points earned (from cells only)
 	int updateBlocks(); // updates block list, removing empty blocks and returning the # of points earned (from blocks only)
-	unsigned int shiftCells(unsigned int, unsigned int, unsigned int); // recursively shifts cells downward according to rows that have been removed, returns number of rows removed
+	unsigned int shiftCells(unsigned int, unsigned int, unsigned int, unsigned int); // recursively shifts cells downward according to rows that have been removed, returns number of rows removed
 	void removeCell(const Coord&); // removes a cell from the grid, making cell invalid in parent block
-	bool addCell(std::vector<Cell*>::const_iterator, std::vector<Cell*>::const_iterator);
+	bool addCell(std::vector<Cell*>::const_iterator&, std::vector<Cell*>::const_iterator&);
 	bool moveCell(const Coord&, const Coord&);
 
 	public:
 	Grid(int width, int height);
 
-	void addBlock(const Block& blocks); // adds a block to the grid
+	bool addBlock(const Block& block); // adds a block to the grid
 	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful
 	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
-	int updateGrid(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks)
+	int update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks)
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
 	void print(unsigned int row); // prints a grid row to text-display
+	Block* currentBlock() const;
 };
 
 #endif
