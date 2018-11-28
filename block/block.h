@@ -15,8 +15,8 @@ class Block {
 
 	int points = 0;
 
-	bool rotate(Rotation);
-	bool translate(Translation);
+	bool rotate(Rotation, unsigned int count = 1);
+	bool translate(Translation, unsigned int count = 1);
 	std::vector<Coord> getCellCoords();
 	
 	protected:
