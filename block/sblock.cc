@@ -4,7 +4,7 @@
 #include "../cell/cell.h"
 #include "../coord/coord.h"
 
-SBlock::SBlock(const Coord& coord, int level) : Block{level, 3} {
+SBlock::SBlock(int points, unsigned int dropBy, const Coord& coord) : Block{points, dropBy, 3} {
 	cells.emplace_back(Cell{'S', this, coord, Cell::Color::Cyan});
 	cells.emplace_back(Cell{'S', this, Coord{coord.x + 1, coord.y}, Cell::Color::Cyan});
 	cells.emplace_back(Cell{'S', this, Coord{coord.x + 1, coord.y + 1}, Cell::Color::Cyan});
