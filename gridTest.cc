@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include <cmath>
 #include "grid/grid.h"
 #include "block/block.h"
 #include "block/jblock.h"
@@ -44,27 +45,28 @@ int main() {
 			bool result;
 			char type;
 			if (cin >> type) {
+				int points = pow(level + 1, 2);
 				switch (type) {
 					case 'j':
-						result = grid.addBlock(JBlock{});
+						result = grid.addBlock(JBlock{points});
 						break;
 					case 'l':
-						result = grid.addBlock(LBlock{});
+						result = grid.addBlock(LBlock{points});
 						break;
 					case 's':
-						result = grid.addBlock(SBlock{});
+						result = grid.addBlock(SBlock{points});
 						break;
 					case 'i':
-						result = grid.addBlock(IBlock{});
+						result = grid.addBlock(IBlock{points});
 						break;
 					case 'o':
-						result = grid.addBlock(OBlock{});
+						result = grid.addBlock(OBlock{points});
 						break;
 					case 't':
-						result = grid.addBlock(TBlock{});
+						result = grid.addBlock(TBlock{points});
 						break;
 					case 'z':
-						result = grid.addBlock(ZBlock{});
+						result = grid.addBlock(ZBlock{points});
 				}
 			}
 			if (!result) cout << "ERROR: Could not add block" << endl;

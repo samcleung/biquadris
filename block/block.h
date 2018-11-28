@@ -13,10 +13,10 @@ class Block {
 	enum class Translation { Left = 0, Up, Right, Down };
 	enum class Rotation { Clockwise = 4, CounterClockwise };
 
-	int level = 0;
+	int points = 0;
 
-	bool rotate(Rotation);
-	bool translate(Translation);
+	bool rotate(Rotation, unsigned int count = 1);
+	bool translate(Translation, unsigned int count = 1);
 	std::vector<Coord> getCellCoords();
 	
 	protected:
@@ -24,7 +24,7 @@ class Block {
 	unsigned int size;
 	Grid* grid = nullptr;
 	std::vector<Cell> cells;
-	Block(int level, unsigned int size);
+	Block(int points, unsigned int dropBy, unsigned int size);
 
 	public:
 	Block(const Block& other);

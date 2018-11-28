@@ -4,7 +4,7 @@
 #include "../coord/coord.h"
 
 struct JBlock : public Block {
-	JBlock(const Coord& coord = Coord::blockStart(), int level = 0);
+	JBlock(int points = 0, unsigned int dropBy = 0, const Coord& coord = Coord::blockStart());
 };
 
 #endif

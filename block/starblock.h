@@ -4,7 +4,7 @@
 #include "../coord/coord.h"
 
 struct StarBlock : Block {
-	StarBlock(const Coord& coord = Coord::blockStart(), int level = 3);
+	StarBlock(int points = 0, unsigned int dropBy = 0, const Coord& coord = Coord::blockStart());
 };
 
 #endif

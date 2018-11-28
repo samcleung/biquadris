@@ -2,6 +2,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <cmath>
 #include "grid.h"
 #include "../block/block.h"
 
@@ -96,8 +97,7 @@ bool Grid::moveCells(const vector<Coord>& oldCoords, const vector<Coord>& newCoo
 }
 
 unsigned int Grid::shiftCells(unsigned int x = 0, unsigned int y = 0, unsigned int filledLeft = 0, unsigned int amount = 0) {
-	//cout << "(" << x << ", " << y << ") [Amount: " << amount << "]" << endl;
-	if (x >= cells[y].size()) return 1;
+	if (x >= cells[y].size()) return 0;
 
 	bool isFilled = cells[y][x];
 	unsigned int filledRight = shiftCells(x + 1, y, filledLeft + isFilled, amount);
@@ -127,17 +127,18 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-	int points = level + shiftCells();
-	return points * points;
+	return pow(level + shiftCells(), 2);
 }
 
 int Grid::updateBlocks() {
 	int points = 0;
-	for (auto it = onBoard.begin(); it != onBoard.end(); ++it) {
+	for (auto it = onBoard.begin(); it != onBoard.end();) {
 		int p = it->getPoints();
 		if (p != 0) {
 			it = onBoard.erase(it);
 			points += p;
+		} else {
+			++it;
 		}
 	}
 	return points;
@@ -169,14 +170,12 @@ void Grid::drop(const vector<Coord>& coords) {
 	for (const auto& coord: lowest) {
 		for (int y = coord.y - 1; y >= 0; --y) {
 			if (cells[y][coord.x] || y == 0) {
-				int drop = coord.y - y - (y != 0);
+				int drop = coord.y - y - (y == 0 && cells[y][coord.x]);
 				if (minDrop < 0 || drop < minDrop) minDrop = drop;
 				break;
 			}
 		}
 	}
-
-	cout << "minDrop: " << minDrop << endl;
 
 	// drop all cells by min drop
 	if (minDrop > 0) {
