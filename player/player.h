@@ -13,7 +13,7 @@ class Player {
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
-	Grid* grid;
+	Grid grid;
     int lev;
 	Level* level;
 	std::vector<Block> current;

@@ -13,10 +13,14 @@
 
 using namespace std;
 
+// grid constants
+const int width = 11;
+const int height = 18;
+
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, lev{0} { //, level{getLevel(_level)}
-//    current = level->createBlock();
-    // Grid???
+name{name}, scriptFile{scriptFile}, grid{width, height}, lev{0} {
+    //, level{getLevel(_level)}
+    //    current = level->createBlock();
 }
 
 // Read in all the commands
@@ -105,7 +109,7 @@ int Player::turn() {
                         case 6: { // drop
                             for (auto &v: current) {
                                 v.drop();
-                                grid->addBlock(v);
+                                grid.addBlock(v);
                             }
                             current.clear();
 //                            current = level->createBlock();
@@ -186,7 +190,7 @@ int Player::turn() {
 
 // Prints a line of the player's grid
 void Player::print(int n) {
-    grid->print(n);
+    grid.print(n);
 }
 
 void Player::setEffect(Effect effect) {
