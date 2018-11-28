@@ -2,6 +2,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <cmath>
 #include "grid.h"
 #include "../block/block.h"
 
@@ -126,8 +127,7 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-	int points = level + shiftCells();
-	return points * points;
+	return pow(level + shiftCells(), 2);
 }
 
 int Grid::updateBlocks() {

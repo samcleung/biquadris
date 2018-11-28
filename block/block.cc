@@ -14,9 +14,9 @@ const string COUNTERCLOCKWISE = "counterclockwise";
 // block actions
 const string DROP = "drop";
 
-Block::Block(int level, unsigned int size) : level{level}, size{size} {}
+Block::Block(int points, unsigned int dropBy, unsigned int size) : points{points}, dropBy{dropBy}, size{size} {}
 
-Block::Block(const Block& other) : level{other.level}, size{other.size}, grid{other.grid} {
+Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, size{other.size}, grid{other.grid} {
 	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
 }
 
@@ -30,7 +30,7 @@ vector<Coord> Block::getCellCoords() {
 }
 
 bool Block::rotate(Block::Rotation r) {
-	vector<Coord> newCoords; //= getCellCoords();
+	vector<Coord> newCoords;
 
 	bool isOriginXSet = false;
 	unsigned int originX;
@@ -136,8 +136,6 @@ void Block::drop() {
 	grid->drop(getCellCoords());
 }
 
-
-// TODO: CHANGE
 bool Block::addToGrid(Grid* g) {
 	vector<Cell*> addresses;
 	for (auto& cell: cells) addresses.emplace_back(&cell);	
@@ -146,10 +144,7 @@ bool Block::addToGrid(Grid* g) {
 }
 
 int Block::getPoints() const {
-	int score = 0;
-	for (const auto& cell: cells) {
-		if (cell.isValid()) return score;
-	}
-	score = level + 1;
-	return score * score;
+	for (const auto& cell: cells)
+		if (cell.isValid()) return 0;
+	return points;
 }
