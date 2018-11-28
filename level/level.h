@@ -5,11 +5,11 @@
 
 class Level {
 public:
-    virtual std::vector<Block> createBlock() = 0;
+	virtual std::vector<Block> createBlock() = 0;
 	Level();
-	virtual ~Level() = 0;
+	~Level();
+	static Level *getLevel(int level, int seed = 893);
+	static Level *getLevel(int level, std::ifstream &stream);
 };
-
-Level *getLevel(int);
 
 #endif

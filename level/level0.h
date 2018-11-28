@@ -9,7 +9,8 @@ class Level0: public Level {
 	std::ifstream & infile;
 	public:
 		std::vector <Block> createBlock() override;
-		Level0(int seed, std::ifstream & infile); 
+		Level0();
+		Level0(std::ifstream & infile); 
 };
 
 #endif

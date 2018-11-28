@@ -1,9 +1,11 @@
 #ifndef __LEVEL2_H__
 #define __LEVEL2_H__
+#include <vector>
+#include "level.h"
 
-class Level2 {
+class Level2: public Level {
 public:
-	vector <Block> createBlock() override;
+	std::vector <Block> createBlock() override;
 	Level2(int seed); 
 };
 

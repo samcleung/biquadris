@@ -1,8 +1,7 @@
 #include "level0.h"
 
 using namespace std;
-Level0::Level0(int seed, ifstream & infile): infile{infile} {}
-
+Level0::Level0(ifstream & infile): infile{infile} {}
 vector <Block> Level0::createBlock(){
 	char nextBlock;
 	infile >> nextBlock;
