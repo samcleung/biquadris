@@ -8,10 +8,10 @@ using namespace std;
 Level * Level::getLevel(int level, int seed) {
     switch (level) {
         case 0: throw;
-        case 1: return new Level1(seed);
-        case 2: return new Level2(seed);
-        case 3: return new Level3(seed);
-        case 4: return new Level4(seed);
+        case 1: return new Level1((unsigned)seed);
+        case 2: return new Level2((unsigned)seed);
+        case 3: return new Level3((unsigned)seed);
+        case 4: return new Level4((unsigned)seed);
         default: throw;
     }
 }

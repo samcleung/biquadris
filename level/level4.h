@@ -4,6 +4,9 @@
 #include "level.h"
 
 class Level4: public Level{
+	int seed;
+	unsigned int dropBy = 1;
+	int score = 25;
 public:
 	std::vector <Block> createBlock() override;
 	Level4(int seed); 
