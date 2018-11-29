@@ -8,15 +8,6 @@ using namespace std;
 // grid constants
 const int height = 18;
 
-void Game::setSeed(int seed) {
-	seed = seed;
-	isSeeded = true;
-}
-
-void Game::setStartLevel(int level) {
-	startLevel = level;
-}
-
 void Game::initialize(int startLevel, int seed, bool isText){}
 
 Game::Game(){}
@@ -41,7 +32,7 @@ void Game::play() {
             } else { // Apply force on all players, number from 3 to 9 indicates block
                 for (auto &q: players) {
                     if (p.getName() != q.getName()) { // Change this player's block
-//                        switch (result) {
+//                        switch (result) { // Uncomment later on
 //                            case 3: q.setBlock(new IBlock()); break;
 //                            case 4: q.setBlock(new JBlock()); break;
 //                            case 5: q.setBlock(new LBlock()); break;
@@ -60,7 +51,7 @@ void Game::play() {
         this->restart();
     }
     
-    // if result is 2 the game terminates
+    // if result is 2 the game terminates, either EOF or game over
 }
 
 void Game::setEffect(Player& player, Effect effect) {

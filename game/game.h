@@ -10,8 +10,6 @@ class Game {
 	const std::string name;
 	const std::string scriptFile;
 	std::vector<Player> players;
-    bool isSeeded;
-    int startLevel;
 	public:
 	Game();
 	void initialize(int startLevel = 0, int seed = 893, bool isTextDisplay = false);
@@ -21,9 +19,7 @@ class Game {
 	void setEffect(Player&, Effect);
 	bool loadHighScore();
 	bool saveHighScore();
-	void setSeed(int);
 	unsigned int addPlayer(const std::string&, const std::string&);
-	void setStartLevel(int level);
 };
 
 #endif
