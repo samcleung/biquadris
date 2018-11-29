@@ -33,7 +33,7 @@ int scriptFile(const string& command) {
 
 int main(int argc, char *argv[]) {
 	// create game
-	Game game;
+	Game game{};
 
 	// create a map of players and scriptFiles
 	//   (set P1 & P2 scriptFiles to defaults)

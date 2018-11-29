@@ -9,8 +9,10 @@ class Player;
 class Game {
 	const std::string name;
 	const std::string scriptFile;
+	bool didAnyOneLose = false;
 	std::vector<Player> players;
 	public:
+	Game();
 	void initialize(int startLevel = 0, int seed = 893, bool isTextDisplay = false);
 	void play();
 	void restart();
