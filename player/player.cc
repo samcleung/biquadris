@@ -13,10 +13,14 @@
 
 using namespace std;
 
+// grid constants
+const int width = 11;
+const int height = 18;
+
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, lev{0} { //, level{getLevel(_level)}
-//    current = level->createBlock();
-    // Grid???
+name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0} {
+    //, level{getLevel(_level)}
+    //    current = level->createBlock();
 }
 
 // Read in all the commands
@@ -180,7 +184,7 @@ int Player::turn() {
         return 2;
     } else { // End the turn normally
         return 0;
-    }    
+    }    ////// Force z?? Return a number from 3 to 9
     return 0;
 }
 
@@ -191,4 +195,24 @@ void Player::print(int n) {
 
 void Player::setEffect(Effect effect) {
     this->effect = effect;
+}
+
+string Player::getName() {
+    return name;
+}
+
+void Player::setBlock(Block *block) {
+//    delete current.at(0);
+//    current.at(0) = block;
+}
+
+void Player::reset() {
+    effect = Effect::None;
+    grid.reset();
+    grid = make_unique<Grid>(width,height);
+    // Delete current level and get new level
+    lev = 0;
+    current.clear();
+    // current = level->createBlock();
+    
 }

@@ -9,7 +9,6 @@ class Player;
 class Game {
 	const std::string name;
 	const std::string scriptFile;
-	bool didAnyOneLose = false;
 	std::vector<Player> players;
 	public:
 	Game();
@@ -20,9 +19,7 @@ class Game {
 	void setEffect(Player&, Effect);
 	bool loadHighScore();
 	bool saveHighScore();
-	void setSeed(int);
 	unsigned int addPlayer(const std::string&, const std::string&);
-	void setStartLevel(int level);
 };
 
 #endif
