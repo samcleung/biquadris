@@ -16,7 +16,7 @@ Level * Level::getLevel(int level, int seed) {
     }
 }
 Level::~Level(){}
-Level * Level::getLevel(int level, std::ifstream &stream){
+Level * Level::getLevel(int level, string stream){
 	return new Level0(stream);
 }
 Level::Level(){}
