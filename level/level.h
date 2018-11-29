@@ -7,7 +7,7 @@ class Level {
 public:
 	virtual std::vector<Block> createBlock() = 0;
 	Level();
-	~Level();
+	virtual ~Level();
 	static Level *getLevel(int level, int seed = 893);
 	static Level *getLevel(int level, std::ifstream &stream);
 };
