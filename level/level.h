@@ -6,7 +6,7 @@
 
 class Level {
 public:
-	virtual std::vector<Block> createBlock() = 0;
+	virtual std::vector<Block> createBlock(bool isHeavy, int numberOfTurns) = 0;
 	Level();
 	virtual ~Level();
 	//Optional value if a seed is specified by the Client. This will throw an exception you 

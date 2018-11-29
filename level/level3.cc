@@ -9,8 +9,11 @@
 using namespace std;
 Level3::Level3(int seed): seed{seed}{
 }
-vector<Block> Level3::createBlock(){
+vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 	srand(seed);
+	int dropByCopy = dropBy;
+	if(isHeavy)
+		dropBy++;
 	vector<Block> placeholder;
 	int x = rand() % 9 + 1;
 	if(x <= 1)
@@ -27,6 +30,8 @@ vector<Block> Level3::createBlock(){
 		placeholder.push_back(SBlock{score, dropBy});
 	else if (x <= 9)
 		placeholder.push_back(ZBlock{score, dropBy});
+	
+	dropBy = dropByCopy;
 	return placeholder;
 }
 

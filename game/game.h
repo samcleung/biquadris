@@ -10,13 +10,8 @@ class Game {
 	const std::string name;
 	const std::string scriptFile;
 	std::vector<Player> players;
-	int seed;
-	bool isSeeded = false;
-	int startLevel = 0;
-	
 	public:
-	bool isTextOnly = false;
-	
+	void initialize(int startLevel = 0, int seed = 893, bool isTextDisplay = false);
 	void play();
 	void restart();
 	void print();

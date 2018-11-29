@@ -9,8 +9,11 @@
 using namespace std;
 Level4::Level4(int seed): seed{seed}{
 }
-vector<Block> Level4::createBlock(){
+vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	srand(seed);
+	int dropByCopy = dropBy;
+	if(isHeavy)
+		dropBy++;
 	vector<Block> placeholder;
 	int x = rand() % 9 + 1;
 	if(x <= 1)
@@ -27,5 +30,9 @@ vector<Block> Level4::createBlock(){
 		placeholder.push_back(SBlock{score, dropBy});
 	else if (x <= 9)
 		placeholder.push_back(ZBlock{score, dropBy});
+	
+	if(numberOfTurns % 5 == 0 && numberOfTurns > 0)
+		placeholder.push_back(ZBlock{score, dropBy});
+	dropBy = dropByCopy;
 	return placeholder;
 }

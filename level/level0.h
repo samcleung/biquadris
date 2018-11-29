@@ -10,7 +10,7 @@ class Level0: public Level {
 	std::vector<char> commands;
 	unsigned int position = 0;
 	public:
-		std::vector <Block> createBlock() override;
+		std::vector <Block> createBlock(bool isHeavy, int numberOfTurns) override;
 		Level0();
 		Level0(std::string infile); 
 };

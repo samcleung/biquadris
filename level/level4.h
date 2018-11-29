@@ -8,7 +8,7 @@ class Level4: public Level{
 	unsigned int dropBy = 1;
 	int score = 25;
 public:
-	std::vector <Block> createBlock() override;
+	std::vector <Block> createBlock(bool isHeavy, int numberOfTurns) override;
 	Level4(int seed); 
 };
 
