@@ -1,11 +1,11 @@
 #include <string>
 #include "game.h"
 #include "../player/player.h"
+#include <iostream>
 
 using namespace std;
 
 // grid constants
-const int width = 11;
 const int height = 18;
 
 void Game::setSeed(int seed) {
@@ -18,8 +18,14 @@ void Game::setStartLevel(int level) {
 }
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
-	//players.push_back(Player{playerName, scriptFile});
-    Player player{playerName, scriptFile};
+	players.emplace_back(Player{playerName, scriptFile});
+//    Player player{playerName, scriptFile};
+//    for (int i = height - 1; i >= 0; --i) {
+//        player.print(i);
+//        cout << endl;
+//    }
+//    cout << "working" << endl;
+//    players.push_back(player);
 	return players.size();
 }
 
@@ -32,10 +38,11 @@ void Game::setEffect(Player& player, Effect effect) {
 }
 
 void Game::print() {
-    for (int i = 0; i< height; ++i) {
+    for (int i = height - 1; i >= 0; --i) {
         for (auto &p: players) {
             p.print(i);
         }
+        cout << endl;
     }
 }
 

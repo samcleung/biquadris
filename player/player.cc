@@ -18,7 +18,7 @@ const int width = 11;
 const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, grid{width, height}, lev{0} {
+name{name}, scriptFile{scriptFile}, grid{new Grid(width,height)}, lev{0} {
     //, level{getLevel(_level)}
     //    current = level->createBlock();
 }
@@ -109,7 +109,7 @@ int Player::turn() {
                         case 6: { // drop
                             for (auto &v: current) {
                                 v.drop();
-                                grid.addBlock(v);
+                                grid->addBlock(v);
                             }
                             current.clear();
 //                            current = level->createBlock();
@@ -184,13 +184,13 @@ int Player::turn() {
         return 2;
     } else { // End the turn normally
         return 0;
-    }    
+    }    ////// Force z?? Return 3 if force
     return 0;
 }
 
 // Prints a line of the player's grid
 void Player::print(int n) {
-    grid.print(n);
+    grid->print(n);
 }
 
 void Player::setEffect(Effect effect) {
