@@ -24,6 +24,9 @@ class Player {
 	int turn();
 	void print(int);
 	void setEffect(Effect);
+    std::string getName();
+    void setBlock(Block *);
+    void reset();
 };
 
 #endif

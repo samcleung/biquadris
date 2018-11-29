@@ -1,7 +1,7 @@
 #include <string>
+#include <iostream>
 #include "game.h"
 #include "../player/player.h"
-#include <iostream>
 
 using namespace std;
 
@@ -19,18 +19,44 @@ void Game::setStartLevel(int level) {
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
 	players.emplace_back(Player{playerName, scriptFile});
-//    Player player{playerName, scriptFile};
-//    for (int i = height - 1; i >= 0; --i) {
-//        player.print(i);
-//        cout << endl;
-//    }
-//    cout << "working" << endl;
-//    players.push_back(player);
 	return players.size();
 }
 
 void Game::play() {
-	// todo
+    bool endTurn = false;
+    int result;
+    
+    while (!endTurn) {
+        for (auto &p: players) {
+            result = p.turn();
+            
+            if (result == 0) { // Continue playing
+            } else if ((result == 1) || (result == 2)) { // End turns
+                endTurn = true;
+                break;
+            } else { // Apply force on all players, number from 3 to 9 indicates block
+                for (auto &q: players) {
+                    if (p.getName() != q.getName()) { // Change this player's block
+//                        switch (result) {
+//                            case 3: q.setBlock(new IBlock()); break;
+//                            case 4: q.setBlock(new JBlock()); break;
+//                            case 5: q.setBlock(new LBlock()); break;
+//                            case 6: q.setBlock(new OBlock()); break;
+//                            case 7: q.setBlock(new SBlock()); break;
+//                            case 8: q.setBlock(new TBlock()); break;
+//                            case 9: q.setBlock(new ZBlock()); break;
+//                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    if (result == 1) {
+        this->restart();
+    }
+    
+    // if result is 2 the game terminates
 }
 
 void Game::setEffect(Player& player, Effect effect) {
@@ -46,6 +72,17 @@ void Game::print() {
     }
 }
 
-//	void restart();
-//	bool loadHighScore();
-//	bool saveHighScore();
+void Game::restart() {
+    for (auto &p: players) {
+        p.reset();
+    }
+    this->play();
+}
+
+bool Game::loadHighScore() {
+    return true; ////////// When is this called
+}
+
+bool Game::saveHighScore() {
+    return true;
+}
