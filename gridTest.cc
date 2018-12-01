@@ -12,17 +12,13 @@
 #include "block/tblock.h"
 #include "block/zblock.h"
 #include "coord/coord.h"
+#include "command/command.h"
 
 using namespace std;
 
 // grid constants
 const int width = 11;
 const int height = 18;
-
-// command constants
-const string PRINT = "print";
-const string ADDBLOCK = "add";	
-const string DROP = "drop";
 
 void print(Grid& g) {
 	for (int i = height - 1; i >= 0; --i) {
@@ -36,12 +32,65 @@ int main() {
 	int level = 0;
 
 	// command interpretter
-	string command;
-	while (cin >> command) {
+	string input;
+	while (cin >> input) {
+		Command command{input};
 		Block* curr = grid.currentBlock();
-		if (command == PRINT) {
+		int points = pow(level + 1, 2);
+		switch (command) {
+			case (int)Command::Action::Print:
+				print(grid);
+			case (int)Command::Action::I:
+				curr = grid.addBlock(IBlock{points});
+				break;
+			case (int)Command::Action::J:
+				curr = grid.addBlock(JBlock{points});
+				break;
+			case (int)Command::Action::L:
+				grid.addBlock(LBlock{points});
+				break;
+			case (int)Command::Action::S:
+				grid.addBlock(SBlock{points});
+				break;
+			case (int)Command::Action::I:
+				grid.addBlock(IBlock{points});
+				break;
+			case (int)Command::Action::O:
+				grid.addBlock(OBlock{points});
+				break;
+			case (int)Command::Action::T:
+				grid.addBlock(TBlock{points});
+				break;
+			case (int)Command::Action::Z:
+				grid.addBlock(ZBlock{points});
+				break;
+			case (int)Command::Action::Left:
+				if (curr) curr->translate(Block::Translation::Left, command.multiplier);
+				else cout << "ERROR no current block" << endl;
+				break;
+			case (int)Command::Action::Right:
+				if (curr) curr->rotate(Block::Translation::Right, command.multiplier);
+				else cout << "ERROR no current block" << endl;
+				break;
+			case (int)Command::Action::Down:
+				if (curr) curr->rotate(Block::Translation::Down, command.multiplier);
+				else cout << "ERROR no current block" << endl;
+				break;
+			case (int)Command::Action::Clockwise:
+				if (curr) curr->rotate(Block::Rotation::Clockwise, command.multiplier);
+				else cout << "ERROR no current block" << endl;
+				break;
+			case (int)Command::Action::CounterClockwise:
+				if (curr) curr->rotate(Block::Rotation::CounterClockwise, command.multiplier);
+				else cout << "ERROR no current block" << endl;
+				break;
+		}
+
+/*
+
+		if (command == Command::Action::PRINT) {
 			print(grid);
-		} else if (command == ADDBLOCK && !curr) {
+		} else if (command == Command::Action::ADDBLOCK && !curr) {
 			bool result;
 			char type;
 			if (cin >> type) {
@@ -88,4 +137,5 @@ int main() {
 		}
 
 	}
+*/
 }

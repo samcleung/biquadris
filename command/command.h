@@ -28,7 +28,8 @@ struct Command {
 		Restart,
 		RenameAlias,
 		AddAlias,
-		RemoveAlias
+		RemoveAlias,
+		Print
 	};
 
 	const unsigned int multiplier;

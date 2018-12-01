@@ -29,6 +29,7 @@ const string RESTART = "restart";
 const string RENAMEALIAS = "renamealias";
 const string ADDALIAS = "addalias";
 const string REMOVEALIAS = "removealias";
+const string PRINT = "print";
 
 set<string> Command::aliases = {
 	LEFT,
@@ -52,7 +53,8 @@ set<string> Command::aliases = {
 	RESTART,
 	RENAMEALIAS,
 	ADDALIAS,
-	REMOVEALIAS
+	REMOVEALIAS,
+	PRINT
 };
 
 
@@ -80,7 +82,8 @@ map<set<string>, Command::Action> Command::commands = {
 	{{RESTART}, Command::Action::Restart},
 	{{RENAMEALIAS}, Command::Action::RenameAlias},
 	{{ADDALIAS}, Command::Action::AddAlias},
-	{{REMOVEALIAS}, Command::Action::RemoveAlias}
+	{{REMOVEALIAS}, Command::Action::RemoveAlias},
+	{{PRINT}, Command::Action::Print}
 };
 
 
