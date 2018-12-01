@@ -89,10 +89,11 @@ int main(int argc, char *argv[]) {
 		string playerName;
 		cout << "P" << i + 1 << " name: ";
 		cin >> playerName;
-		if (scriptFiles.find(i) == scriptFiles.end())
+		if (scriptFiles.find(i+1) == scriptFiles.end()) {
 			game.addPlayer(playerName, DEFAULTSFN);
-		else
+        } else {
 			game.addPlayer(playerName, scriptFiles[i]);
+        }
 	}
 	
 	game.play();
