@@ -124,16 +124,30 @@ int Player::turn() {
                             --lev;
 //                            level = getLevel(lev);
                             break;
-                        } default: { // 0 to 5 (left/right/up/down/cw/ccw)
-                            // All transformations
-                            current.at(0).transform(commands.at(commandIndex));
-                            break;
-                        }
+                        } case 0: { // left
+				current.at(0).translate(Block::Translation::Left, multiplier);
+				break;
+			} case 1: { // right
+				current.at(0).translate(Block::Translation::Right, multiplier);
+				break;
+			} case 2: { // up
+				current.at(0).translate(Block::Translation::Up, multiplier);
+				break;
+			} case 3: { // down
+				current.at(0).translate(Block::Translation::Down, multiplier);
+				break;
+			} case 4: { // cw
+				current.at(0).rotate(Block::Rotation::Clockwise, multiplier);
+				break;
+			} case 5: { // ccw
+				current.at(0).rotate(Block::Rotation::CounterClockwise, multiplier);
+				break;
+			}
                     }
                     
                 }
             } else { // Commands with no multiplier
-                switch (commandIndex) {
+                 switch (commandIndex) {
                     case 9: { // I-block, change current block to this
 //                        current.at(0) = IBlock(); // Copying error
                         break;

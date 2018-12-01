@@ -23,12 +23,40 @@ const int height = 18;
 const string PRINT = "print";
 const string ADDBLOCK = "add";	
 const string DROP = "drop";
+// translations
+const string LEFT = "left";
+const string RIGHT = "right";
+const string UP = "up";
+const string DOWN = "down";
+// rotations
+const string CLOCKWISE = "clockwise";
+const string COUNTERCLOCKWISE = "counterclockwise";
+
 
 void print(Grid& g) {
 	for (int i = height - 1; i >= 0; --i) {
 		g.print(i);
 		cout << endl;
 	}
+}
+
+bool transform(Block& block, const string& command) {
+        // block command interpreter
+        if (command == LEFT) {
+                return block.translate(Block::Translation::Left);
+        } else if (command == RIGHT) {
+                return block.translate(Block::Translation::Right);
+        } else if (command == UP) {
+                return block.translate(Block::Translation::Up);
+        } else if (command == DOWN) {
+                return block.translate(Block::Translation::Down);
+        } else if (command == CLOCKWISE) {
+                return block.rotate(Block::Rotation::Clockwise);
+        } else if (command == COUNTERCLOCKWISE) {
+                return block.rotate(Block::Rotation::CounterClockwise);
+        }
+
+        return false;
 }
 
 int main() {
@@ -78,7 +106,7 @@ int main() {
 					print(grid);
 					cout << "Points:" << grid.update(level) << endl;
 				} else {
-					bool result = curr->transform(command);
+					bool result = transform(*curr, command);
 					if (!result) cout << "ERROR: Invalid transform" << endl;
 				}
 			} else {
