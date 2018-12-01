@@ -24,7 +24,7 @@ class Player {
     int dropsSinceClear;
 	
 	public:
-	Player(const std::string&, const std::string&, Game *game);	
+	Player(const std::string&, Game *game, int level = 0, std::string scriptfile = "sequence1.txt", int seed = 893);	
 	int turn();
 	void print(int);
 	void setEffect(Effect, Block::Type force = Block::Type::T);
