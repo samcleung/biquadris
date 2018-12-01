@@ -19,8 +19,9 @@ const int width = 11;
 const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0}, level{Level::getLevel(0,scriptFile)} {
+name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0} {
     //    current = level->createBlock();
+    //, level{Level::getLevel(0,scriptFile)}
 }
 
 // Read in all the commands
@@ -136,18 +137,18 @@ int Player::turn() {
                             delete level;
                             ++lev;
                             if (lev == 0) {
-                                level = Level::getLevel(lev,scriptFile);
+//                                level = Level::getLevel(lev,scriptFile);
                             } else {
-                                level = Level::getLevel(lev);
+//                                level = Level::getLevel(lev);
                             }
                             break;
                         } case 8: { // level down
                             delete level;
                             --lev;
                             if (lev == 0) {
-                                level = Level::getLevel(lev,scriptFile);
+//                                level = Level::getLevel(lev,scriptFile);
                             } else {
-                                level = Level::getLevel(lev);
+//                                level = Level::getLevel(lev);
                             }
                             break;
                         }
@@ -237,7 +238,7 @@ void Player::reset() {
     // Delete current level and get new level
     lev = 0;
     delete level;
-    level = Level::getLevel(0,scriptFile);
+//    level = Level::getLevel(0,scriptFile);
 //    current.clear();
     // current = level->createBlock();
     
