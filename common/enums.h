@@ -8,4 +8,6 @@ enum class Effect {
 	Heavy
 };
 
+enum class StatusCode{ Default, Restart, Terminate, PlayerLost };
+
 #endif
