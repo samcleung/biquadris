@@ -17,10 +17,11 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
-Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, grid{new Grid(width,height)}, lev{0},
-level{Level::getLevel(0,scriptFile)}, //current{grid->addBlocks(level->createBlock(false,0))},
-dropsSinceClear{0} {} 
+Player::Player(const std::string& name, const std::string& scriptFile, Game *game) :
+name{name}, scriptFile{"sequence1.txt"}, game{game}, grid{new Grid(width,height)}, lev{0},
+level{Level::getLevel(0,"sequence1.txt")}, dropsSinceClear{0} {
+    current = grid->addBlocks(level->createBlock(false,0));
+} 
 
 // Read in all the commands
 int Player::turn() {
@@ -236,6 +237,6 @@ void Player::reset() {
     lev = 0;
     delete level;
     level = Level::getLevel(0,scriptFile);
-//    current = grid->addBlocks(level->createBlock(false,lev));
+    current = grid->addBlocks(level->createBlock(false,lev));
     dropsSinceClear = 0;    
 }
