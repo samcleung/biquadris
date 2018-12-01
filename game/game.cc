@@ -63,10 +63,3 @@ void Game::restart() {
     this->play();
 }
 
-bool Game::loadHighScore() {
-    return true; ////////// When is this called
-}
-
-bool Game::saveHighScore() {
-    return true;
-}

@@ -16,13 +16,7 @@ class Game {
 	void play();
 	void restart();
 	void print();
-<<<<<<< HEAD
-	void setEffect(Player&, Effect);
-	bool loadHighScore();
-	bool saveHighScore();
-=======
 	void setEffect(Player&, Effect, Block::Type force = Block::Type::T);
->>>>>>> master
 	unsigned int addPlayer(const std::string&, const std::string&);
 };
 
