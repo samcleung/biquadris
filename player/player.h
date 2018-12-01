@@ -31,6 +31,8 @@ class Player {
     const std::string getName();
     void setBlock(Block);
     void reset();
+    bool isHeavy();
+    unsigned int getDropBy();
 };
 
 #endif
