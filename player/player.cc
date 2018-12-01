@@ -212,7 +212,25 @@ int Player::turn() {
 
 // Prints a line of the player's grid
 void Player::print(int n) {
-    grid->print(n);
+	if(n <= 3){
+		switch(n){
+			case 1: cout << "Level:    ";
+				break;
+			case 2: cout << "Score:    ";
+				break;
+			case 3: cout << "-----------";
+		}
+	}
+	else if ( n <= 21)
+		grid->print(n);
+	else{
+		switch(n){
+			case 22: cout <<" Next:"<< endl;
+				break;
+			case 23: break;
+		}
+	}
+
 }
 
 void Player::setEffect(Effect effect, Block::Type force) {
