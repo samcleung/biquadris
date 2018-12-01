@@ -20,6 +20,23 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
+<<<<<<< HEAD
+=======
+// command constants
+const string PRINT = "print";
+const string ADDBLOCK = "add";
+const string DROP = "drop";
+// translations
+const string LEFT = "left";
+const string RIGHT = "right";
+const string UP = "up";
+const string DOWN = "down";
+// rotations
+const string CLOCKWISE = "clockwise";
+const string COUNTERCLOCKWISE = "counterclockwise";
+
+
+>>>>>>> master
 void print(Grid& g) {
 	for (int i = height - 1; i >= 0; --i) {
 		g.print(i);
@@ -27,11 +44,32 @@ void print(Grid& g) {
 	}
 }
 
+bool transform(Block& block, const string& command) {
+        // block command interpreter
+        if (command == LEFT) {
+                return block.translate(Block::Translation::Left);
+        } else if (command == RIGHT) {
+                return block.translate(Block::Translation::Right);
+        } else if (command == UP) {
+                return block.translate(Block::Translation::Up);
+        } else if (command == DOWN) {
+                return block.translate(Block::Translation::Down);
+        } else if (command == CLOCKWISE) {
+                return block.rotate(Block::Rotation::Clockwise);
+        } else if (command == COUNTERCLOCKWISE) {
+                return block.rotate(Block::Rotation::CounterClockwise);
+        }
+
+        return false;
+}
+
 int main() {
 	Grid grid{width, height};
 	int level = 0;
+	Block* curr = nullptr;
 
 	// command interpretter
+<<<<<<< HEAD
 	string input;
 	while (cin >> input) {
 		Command command{input};
@@ -92,33 +130,40 @@ int main() {
 			print(grid);
 		} else if (command == Command::Action::ADDBLOCK && !curr) {
 			bool result;
+=======
+	string command;
+	while (cin >> command) {
+		if (command == PRINT) {
+			print(grid);
+		} else if (command == ADDBLOCK) {
+>>>>>>> master
 			char type;
 			if (cin >> type) {
 				int points = pow(level + 1, 2);
 				switch (type) {
 					case 'j':
-						result = grid.addBlock(JBlock{points});
+						curr = grid.addBlock(JBlock{points});
 						break;
 					case 'l':
-						result = grid.addBlock(LBlock{points});
+						curr = grid.addBlock(LBlock{points});
 						break;
 					case 's':
-						result = grid.addBlock(SBlock{points});
+						curr = grid.addBlock(SBlock{points});
 						break;
 					case 'i':
-						result = grid.addBlock(IBlock{points});
+						curr = grid.addBlock(IBlock{points});
 						break;
 					case 'o':
-						result = grid.addBlock(OBlock{points});
+						curr = grid.addBlock(OBlock{points});
 						break;
 					case 't':
-						result = grid.addBlock(TBlock{points});
+						curr = grid.addBlock(TBlock{points});
 						break;
 					case 'z':
-						result = grid.addBlock(ZBlock{points});
+						curr = grid.addBlock(ZBlock{points});
 				}
 			}
-			if (!result) cout << "ERROR: Could not add block" << endl;
+			if (!curr) cout << "ERROR: Could not add block" << endl;
 			print(grid);
 		} else {
 			if (curr) {
@@ -127,7 +172,7 @@ int main() {
 					print(grid);
 					cout << "Points:" << grid.update(level) << endl;
 				} else {
-					bool result = curr->transform(command);
+					bool result = transform(*curr, command);
 					if (!result) cout << "ERROR: Invalid transform" << endl;
 				}
 			} else {

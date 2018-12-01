@@ -2,6 +2,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <iterator>
 #include <cmath>
 #include "grid.h"
 #include "../block/block.h"
@@ -10,7 +11,12 @@ using namespace std;
 
 Grid::Grid(int width, int height) : cells{vector<vector<Cell*>>(height, vector<Cell*>(width, nullptr))} {}
 
-bool Grid::addBlock(const Block& block) {
+Block* Grid::addBlock(const Block& block) {
+	// if current already exists, remove it
+	if (current) {
+		onBoard.pop_back();
+		current = nullptr;
+	}
 	// add block as last block on the grid
 	onBoard.emplace_back(block);
 	// set current to be address of last block
@@ -21,6 +27,16 @@ bool Grid::addBlock(const Block& block) {
 	if (!result) {
 		onBoard.pop_back();
 		current = nullptr;
+	}
+	return current;
+}
+
+Block* Grid::addBlocks(const vector<Block>& blocks) {
+	Block* result;
+	for (auto it = blocks.begin(), last = prev(blocks.end()); it != blocks.end(); ++it) {
+		result = addBlock(*it);
+		if (!result) return nullptr;
+		if (it != last) result->drop();
 	}
 	return result;
 }
@@ -170,7 +186,8 @@ void Grid::drop(const vector<Coord>& coords) {
 	for (const auto& coord: lowest) {
 		for (int y = coord.y - 1; y >= 0; --y) {
 			if (cells[y][coord.x] || y == 0) {
-				int drop = coord.y - y - (y == 0 && cells[y][coord.x]);
+				cout << "coord.y: " << coord.y << ", y: " << y << endl;
+				int drop = coord.y - y - (bool)cells[y][coord.x];
 				if (minDrop < 0 || drop < minDrop) minDrop = drop;
 				break;
 			}
@@ -205,8 +222,4 @@ void Grid::print(unsigned int row) {
 	
 	// print right border of grid
 	cout << "|";
-}
-
-Block* Grid::currentBlock() const {
-	return current;
 }

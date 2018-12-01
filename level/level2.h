@@ -1,10 +1,14 @@
 #ifndef __LEVEL2_H__
 #define __LEVEL2_H__
+#include <vector>
+#include "level.h"
 
-class Level2 {
+class Level2: public Level {
+	int seed;
+	int score = 9;
 public:
-	vector <Block> createBlock() override;
-	Level2(int seed); 
+	std::vector <Block> createBlock(bool isHeavy, int numberOfTurns) override;
+	Level2( int seed); 
 };
 
 #endif
