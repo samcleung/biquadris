@@ -25,7 +25,7 @@ class Player {
 	void print(int);
 	void setEffect(Effect);
     std::string getName();
-    void setBlock(Block *);
+    void setBlock(Block);
     void reset();
 };
 

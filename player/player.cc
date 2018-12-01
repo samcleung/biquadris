@@ -25,7 +25,7 @@ name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0
 
 // Read in all the commands
 int Player::turn() {
-    bool readFile;
+    bool readFile = false;
     istream *in = &cin;
     int commandIndex;
     string command;
@@ -201,9 +201,9 @@ string Player::getName() {
     return name;
 }
 
-void Player::setBlock(Block *block) {
-//    delete current.at(0);
-//    current.at(0) = block;
+void Player::setBlock(Block block) {
+//    current.erase(current.begin());
+//    current.insert(current.begin(), block);
 }
 
 void Player::reset() {
@@ -212,7 +212,7 @@ void Player::reset() {
     grid = make_unique<Grid>(width,height);
     // Delete current level and get new level
     lev = 0;
-    current.clear();
+//    current.clear();
     // current = level->createBlock();
     
 }

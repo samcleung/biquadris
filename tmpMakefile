@@ -1,8 +1,8 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Werror -g -MMD
 EXEC = program
-OBJECTS = gridTest.o game/game.o player/player.o grid/grid.o block/block.o block/lblock.o block/starblock.o block/iblock.o block/oblock.o block/tblock.o block/jblock.o block/sblock.o block/zblock.o cell/cell.o level/level.o coord/coord.o
-DEPENDS = ${OBJECTS:.o=.d}
+OBJECTS = gridTest.o game/game.o player/player.o grid/grid.o block/block.o block/lblock.o block/starblock.o block/iblock.o block/oblock.o block/tblock.o block/jblock.o block/sblock.o block/zblock.o cell/cell.o level/level.o level/level0.o coord/coord.o level/level2.o level/level1.o level/level3.o level/level4.o
+DEPENDS = ${OBJECTS:.o=.d}DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
 	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
