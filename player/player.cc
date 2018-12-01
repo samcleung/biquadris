@@ -215,8 +215,19 @@ void Player::print(int n) {
     grid->print(n);
 }
 
-void Player::setEffect(Effect effect) {
+void Player::setEffect(Effect effect, Block::Type force) {
     this->effect = effect;
+    if(effect == Effect::Force){
+	switch (force) { // Uncomment later on
+		case Block::Type::I: setBlock(IBlock{}); break;
+		case Block::Type::J: setBlock(JBlock{}); break;
+		case Block::Type::L: setBlock(LBlock{}); break;
+		case Block::Type::O: setBlock(OBlock{}); break;
+		case Block::Type::S: setBlock(SBlock{}); break;
+		case Block::Type::T: setBlock(TBlock{}); break;
+		case Block::Type::Z: setBlock(ZBlock{}); break;
+        	}
+	}
 }
 
 const string Player::getName() {

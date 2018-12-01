@@ -40,22 +40,12 @@ void Game::play() {
     // if result is 2 the game terminates, either EOF or game over
 }
 
-void Game::setEffect(Player& player, Effect effect) {
+void Game::setEffect(Player& player, Effect effect, Block::Type t) {
     for (auto &p: players){
     	if(p.getName() != player.getName())
-		p.setEffect(effect);
+		p.setEffect(effect, t);
     }
-//                        switch (result) { // Uncomment later on
-//                            case 3: q.setBlock(new IBlock()); break;
-//                            case 4: q.setBlock(new JBlock()); break;
-//                            case 5: q.setBlock(new LBlock()); break;
-//                            case 6: q.setBlock(new OBlock()); break;
-//                            case 7: q.setBlock(new SBlock()); break;
-//                            case 8: q.setBlock(new TBlock()); break;
-//                            case 9: q.setBlock(new ZBlock()); break;
-//                        }
 }
-
 void Game::print() {
     for (int i = height - 1; i >= 0; --i) {
         for (auto &p: players) {

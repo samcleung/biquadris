@@ -24,7 +24,7 @@ class Player {
 	Player(const std::string&, const std::string&);	
 	int turn();
 	void print(int);
-	void setEffect(Effect);
+	void setEffect(Effect, Block::Type force = Block::Type::T);
     const std::string getName();
     void setBlock(Block);
     void reset();
