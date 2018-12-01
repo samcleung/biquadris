@@ -19,6 +19,8 @@ unsigned int Game::addPlayer(const string& playerName, const string& scriptFile)
 }
 
 void Game::play() {
+    this->print();
+    
     bool endTurn = false;
     int result;
     
@@ -48,7 +50,7 @@ void Game::setEffect(Player& player, Effect effect, Block::Type t) {
     }
 }
 void Game::print() {
-    for (int i = height - 1; i >= 0; --i) {
+    for (int i = height + 3; i >= 1; --i) {
         for (auto &p: players) {
             p.print(i);
         }
