@@ -126,8 +126,9 @@ void Block::drop() {
 bool Block::addToGrid(Grid* g) {
 	vector<Cell*> addresses;
 	for (auto& cell: cells) addresses.emplace_back(&cell);	
-	grid = g;
-	return grid->addCells(addresses);
+	bool result = g->addCells(addresses);
+	if (result) grid = g;
+	return result;
 }
 
 int Block::getPoints() const {
