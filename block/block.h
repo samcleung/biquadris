@@ -21,6 +21,7 @@ class Block {
 	Block(int points, unsigned int dropBy, unsigned int size);
 
 	public:
+	enum class Type { J, O, Z, I, L, S, T };
 	enum class Translation { Left = 0, Up, Right, Down };
         enum class Rotation { Clockwise = 4, CounterClockwise };
 	
