@@ -270,8 +270,7 @@ const string Player::getName() {
 }
 
 void Player::setBlock(Block block) {
-//    current.pop_front();
-//    current.push_front(block);
+    current = grid->addBlock(block);
 }
 
 void Player::reset() {
