@@ -186,7 +186,6 @@ void Grid::drop(const vector<Coord>& coords) {
 	for (const auto& coord: lowest) {
 		for (int y = coord.y - 1; y >= 0; --y) {
 			if (cells[y][coord.x] || y == 0) {
-				cout << "coord.y: " << coord.y << ", y: " << y << endl;
 				int drop = coord.y - y - (bool)cells[y][coord.x];
 				if (minDrop < 0 || drop < minDrop) minDrop = drop;
 				break;

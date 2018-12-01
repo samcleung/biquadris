@@ -1,7 +1,11 @@
 #include <string>
 #include <set>
 #include <map>
+
+// remove
 #include <algorithm>
+#include <iostream>
+
 #include "command.h"
 
 using namespace std;
@@ -111,17 +115,17 @@ unsigned int Command::getMultiplier(string& input) {
 Command::Action Command::getAction(const string& input) {
 	vector<map<set<string>, Command::Action>::const_iterator> partialMatches;
 	auto exactMatch = commands.end();
-	//map<set<string>, Command::Action>::const_iterator exactMatch = commands.end();
-	
 	int inputLen = input.length();
-	for (int i = 1; i < inputLen; ++i) {
-		for (auto mapIt = commands.begin(), end = commands.end(); mapIt != end && exactMatch != end; ++mapIt) {
+
+	for (int i = 1; i <= inputLen; ++i) {
+		for (auto mapIt = commands.begin(), end = commands.end(); mapIt != end && exactMatch == end; ++mapIt) {
 			for (auto setIt = mapIt->first.begin(); setIt != mapIt->first.end(); ++setIt) {
 				string command = *setIt;
 				int commandLen = command.length();
 				if (input == command) {
 					exactMatch = mapIt;
-				} else if ((inputLen <= commandLen) && (input == command.substr(0, i) && partialMatches.back() != mapIt)) {
+				} else if ((inputLen <= commandLen) && (input == command.substr(0, i) &&
+						(!partialMatches.size() || partialMatches.back() != mapIt))) {
 					partialMatches.emplace_back(mapIt);
 				}
 			}
@@ -129,46 +133,12 @@ Command::Action Command::getAction(const string& input) {
 
 		if (exactMatch != commands.end()) {
 			return exactMatch->second;
-			break;
 		} else if (partialMatches.size() == 1) {
 			return partialMatches[0]->second;
-			break;
 		}
 		partialMatches.clear();
 	}
 	
-	return Command::Action::None;
-	
-	/*
-	vector<int> indices;
-	int commandIndex = -1; // coresponds to Command::Action::None
-
-	inputLen = input.length();
-	for (int j = 1; j <= inputLen; ++j) {
-		int k = 0;
-		for (auto &c: commands) {
-			int cLen = c.length();
-			if (input == c) {
-				commandIndex = k;
-				break;
-			} else if ((inputLen <= cLen) && (input == c.substr(0,j))) {
-				indices.emplace_back(k);
-			}
-			k++;
-		}
-		if (commandIndex != -1) {
-			// Found the command character for character
-			break;
-		} else if (indices.size() == 1) {
-			commandIndex = indices[0]; // One match for command
-			break;
-		}
-
-		indices.clear(); // More than one match for command, use next letter
-	}
-
-	return static_cast<Command::Action>(commandIndex);
-	*/
 	return Command::Action::None;
 }
 
@@ -177,6 +147,7 @@ Command::operator int() const {
 }
 
 bool Command::execute() {
+	// TODO
 	return false;
 }
 
