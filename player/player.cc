@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cmath>
 #include "player.h"
 #include "../block/iblock.h"
 #include "../block/jblock.h"
@@ -20,7 +21,7 @@ const int height = 18;
 Player::Player(const std::string& name, const std::string& scriptFile, Game *game) :
 name{name}, scriptFile{"sequence1.txt"}, game{game}, grid{new Grid(width,height)}, lev{0},
 level{Level::getLevel(0,"sequence1.txt")}, dropsSinceClear{0} {
-    current = grid->addBlocks(level->createBlock(false,0));
+    current = grid->addBlocks(level->createBlock(this->isHeavy(),0));
 } 
 
 // Read in all the commands
@@ -132,7 +133,7 @@ int Player::turn() {
                             break;
                         }  case 6: { // drop
                             current->drop();
-                            current = grid->addBlocks(level->createBlock(false,0)); // Change heavy and turns after...
+                            current = grid->addBlocks(level->createBlock(this->isHeavy(),0)); // turns after...
                             game->print();
                             break;
                         } case 7: { // level up
@@ -160,27 +161,35 @@ int Player::turn() {
                         }
                     }
             } else { // Commands with no multiplier
+                 int points = pow(lev + 1, 2);
                  switch (commandIndex) {
                     case 9: { // I-block, change current block to this
-//                        current.at(0) = IBlock(); // Copying error
+                        current = grid->addBlock(IBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 10: { // J-block
-//                        current.at(0) = JBlock();
+                        current = grid->addBlock(JBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 11: { // L-block
-//                        current.at(0) = LBlock();
+                        current = grid->addBlock(LBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 12: { // O-block
-//                        current.at(0) = OBlock();
+                        current = grid->addBlock(OBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 13: { // S-block
-//                        current.at(0) = SBlock();
+                        current = grid->addBlock(SBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 14: { // Z-block
-//                        current.at(0) = ZBlock();
+                        current = grid->addBlock(ZBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 15: { // T-block
-//                        current.at(0) = TBlock();
+                        current = grid->addBlock(TBlock{points,this->getDropBy()});
+                        game->print();
                         break;
                     } case 16: { // norandom
 //                        cin >> file;
@@ -272,6 +281,22 @@ void Player::reset() {
     lev = 0;
     delete level;
     level = Level::getLevel(0,scriptFile);
-    current = grid->addBlocks(level->createBlock(false,lev));
+    current = grid->addBlocks(level->createBlock(this->isHeavy(),lev));
     dropsSinceClear = 0;    
+}
+
+bool Player::isHeavy() {
+    if (effect == Effect::Heavy) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+unsigned int Player::getDropBy() {
+    if (effect == Effect::Heavy) {
+        return 1;
+    } else {
+        return false;
+    }
 }
