@@ -8,13 +8,19 @@ Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, s
 	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
 }
 
+Block::~Block() {
+	if (grid) {
+		vector<Coord> coords = getCellCoords();
+		for (const auto& coord: coords) grid->removeCell(coord);
+	}
+}
+
 vector<Coord> Block::getCellCoords() {
 	vector<Coord> coords;
 	for (const auto& cell: cells) {
 		if (cell.isValid()) coords.emplace_back(cell.getCoord());
 	}
 	return coords;
-	//return move(coords);
 }
 
 bool Block::rotate(Block::Rotation r, unsigned int count) {
@@ -120,8 +126,9 @@ void Block::drop() {
 bool Block::addToGrid(Grid* g) {
 	vector<Cell*> addresses;
 	for (auto& cell: cells) addresses.emplace_back(&cell);	
-	grid = g;
-	return grid->addCells(addresses);
+	bool result = g->addCells(addresses);
+	if (result) grid = g;
+	return result;
 }
 
 int Block::getPoints() const {

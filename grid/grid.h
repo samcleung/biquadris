@@ -19,7 +19,6 @@ class Grid {
 	int updateCells(int); // updates cells on grid, returning the # of points earned (from cells only)
 	int updateBlocks(); // updates block list, removing empty blocks and returning the # of points earned (from blocks only)
 	unsigned int shiftCells(unsigned int, unsigned int, unsigned int, unsigned int); // recursively shifts cells downward according to rows that have been removed, returns number of rows removed
-	void removeCell(const Coord&); // removes a cell from the grid, making cell invalid in parent block
 	bool addCell(std::vector<Cell*>::const_iterator&, std::vector<Cell*>::const_iterator&);
 	bool moveCell(const Coord&, const Coord&);
 
@@ -29,6 +28,7 @@ class Grid {
 	Block* addBlock(const Block& block); // adds a block to the grid
 	Block* addBlocks(const std::list<Block>& blocks); // adds multiple blocks to the grid, automatically dropping all but the last one
 	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful
+	void removeCell(const Coord& coord); // removes a cell from the grid, making cell invalid in parent block
 	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
 	int update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks)
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
