@@ -26,7 +26,7 @@ class Grid {
 	Grid(int width, int height);
 
 	Block* addBlock(const Block& block); // adds a block to the grid
-	Block* addBlocks(const std::list<Block>& blocks); // adds multiple blocks to the grid, automatically dropping all but the last one
+	Block* addBlocks(const std::vector<Block>& blocks); // adds multiple blocks to the grid, automatically dropping all but the last one
 	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful
 	void removeCell(const Coord& coord); // removes a cell from the grid, making cell invalid in parent block
 	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
