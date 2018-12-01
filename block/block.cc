@@ -2,18 +2,6 @@
 
 using namespace std;
 
-// command constants
-// translations
-const string LEFT = "left";
-const string RIGHT = "right";
-const string UP = "up";
-const string DOWN = "down";
-// rotations
-const string CLOCKWISE = "clockwise";
-const string COUNTERCLOCKWISE = "counterclockwise";
-// block actions
-const string DROP = "drop";
-
 Block::Block(int points, unsigned int dropBy, unsigned int size) : points{points}, dropBy{dropBy}, size{size} {}
 
 Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, size{other.size}, grid{other.grid} {
@@ -123,27 +111,6 @@ bool Block::translate(Block::Translation t, unsigned int count) {
 	}
 	
 	return success;
-}
-
-
-// NOTE: DO NOT USE IN SUBMISSION CODE, ONLY USED FOR TEMPORARY TESTING PURPOSES
-bool Block::transform(const string& command) {
-	// block command interpreter
-	if (command == LEFT) {
-		return translate(Block::Translation::Left);
-	} else if (command == RIGHT) {
-		return translate(Block::Translation::Right);
-	} else if (command == UP) {
-		return translate(Block::Translation::Up);
-	} else if (command == DOWN) {
-		return translate(Block::Translation::Down);
-	} else if (command == CLOCKWISE) {
-		return rotate(Block::Rotation::Clockwise);
-	} else if (command == COUNTERCLOCKWISE) {
-		return rotate(Block::Rotation::CounterClockwise);
-	}
-
-	return false;
 }
 
 void Block::drop() {

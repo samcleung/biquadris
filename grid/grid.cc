@@ -2,6 +2,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <iterator>
 #include <cmath>
 #include "grid.h"
 #include "../block/block.h"
@@ -10,7 +11,7 @@ using namespace std;
 
 Grid::Grid(int width, int height) : cells{vector<vector<Cell*>>(height, vector<Cell*>(width, nullptr))} {}
 
-bool Grid::addBlock(const Block& block) {
+Block* Grid::addBlock(const Block& block) {
 	// add block as last block on the grid
 	onBoard.emplace_back(block);
 	// set current to be address of last block
@@ -21,6 +22,16 @@ bool Grid::addBlock(const Block& block) {
 	if (!result) {
 		onBoard.pop_back();
 		current = nullptr;
+	}
+	return current;
+}
+
+Block* Grid::addBlocks(const list<Block>& blocks) {
+	Block* result;
+	for (auto it = blocks.begin(), last = prev(blocks.end()); it != blocks.end(); ++it) {
+		result = addBlock(*it);
+		if (!result) return nullptr;
+		if (it != last) result->drop();
 	}
 	return result;
 }
@@ -205,8 +216,4 @@ void Grid::print(unsigned int row) {
 	
 	// print right border of grid
 	cout << "|";
-}
-
-Block* Grid::currentBlock() const {
-	return current;
 }

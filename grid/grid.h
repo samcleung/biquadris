@@ -26,13 +26,13 @@ class Grid {
 	public:
 	Grid(int width, int height);
 
-	bool addBlock(const Block& block); // adds a block to the grid
+	Block* addBlock(const Block& block); // adds a block to the grid
+	Block* addBlocks(const std::list<Block>& blocks); // adds multiple blocks to the grid, automatically dropping all but the last one
 	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful
 	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
 	int update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks)
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
 	void print(unsigned int row); // prints a grid row to text-display
-	Block* currentBlock() const;
 };
 
 #endif
