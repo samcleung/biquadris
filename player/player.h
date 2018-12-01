@@ -17,7 +17,7 @@ class Player {
 	unsigned int score = 0;
 	std::unique_ptr<Grid> grid;
     int lev;
-	Level* level;
+    Level* level;
 	std::list<Block> current;
 	
 	public:

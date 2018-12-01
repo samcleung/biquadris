@@ -9,6 +9,7 @@
 #include "../block/sblock.h"
 #include "../block/zblock.h"
 #include "../block/tblock.h"
+#include "../level/level.h"
 
 
 using namespace std;
@@ -18,41 +19,40 @@ const int width = 11;
 const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0} {
-    //, level{getLevel(_level)}
+name{name}, scriptFile{scriptFile}, grid{make_unique<Grid>(width,height)}, lev{0}, level{Level::getLevel(0,scriptFile)} {
     //    current = level->createBlock();
 }
 
 // Read in all the commands
 int Player::turn() {
-    bool readFile = false;
+//    bool readFile = false;
     istream *in = &cin;
     int commandIndex;
     string command;
     string file;
     vector<string> commands {"left", "right", "up", "down", "clockwise", "counterclockwise",
                             "drop", "levelup", "leveldown", "I", "J", "L", "O", "S",
-                             "Z", "T", "norandom", "random", "sequence", "restart"};
+                             "Z", "T", "norandom", "random", "sequence", "restart", "force"};
     vector<int> indices;
     
     // Read input
     // Invariant that only drop/restart/EOF will end a player's turn
     while (true) {
-        if (readFile) { // Start reading from file
-            in = new ifstream(file.c_str());
-            readFile = false;
-        }
-        
+//        if (readFile) { // Start reading from file
+//            in = new ifstream(file.c_str());
+//            readFile = false;
+//        }
+//        
         *in >> command;
-        if (file.empty() && in->eof()) { // Reached EOF in stdin
-            break;
-        }
-        if (!file.empty() && in->eof()) { // EOF in file
-            file = "";
-            delete in;
-            in = &cin; // Reset to stdin
-            *in >> command;
-        }
+//        if (file.empty() && in->eof()) { // Reached EOF in stdin
+//            break;
+//        }
+//        if (!file.empty() && in->eof()) { // EOF in file
+//            file = "";
+//            delete in;
+//            in = &cin; // Reset to stdin
+//            *in >> command;
+//        }
         
         int index = 0;
         int multiplier;
@@ -103,10 +103,28 @@ int Player::turn() {
         if (commandIndex != -1) {
             // It was a valid command
             // Check commands that do require multipliers first
-            if ((commandIndex >=0 ) && (commandIndex <= 8)) {
+            if ((commandIndex >= 0) && (commandIndex <= 8)) {
                 for (int i = 0; i < multiplier; ++i) {
                     switch (commandIndex) {
-                        case 6: { // drop
+                        case 0: { // left
+                            current.front().translate(Block::Translation::Left, multiplier);
+                            break;
+                        } case 1: { // right
+                            current.front().translate(Block::Translation::Right, multiplier);
+                            break;
+                        } case 2: { // up
+                            current.front().translate(Block::Translation::Up, multiplier);
+                            break;
+                        } case 3: { // down
+                            current.front().translate(Block::Translation::Down, multiplier);
+                            break;
+                        } case 4: { // cw
+                            current.front().rotate(Block::Rotation::Clockwise, multiplier);
+                            break;
+                        } case 5: { // ccw
+                            current.front().rotate(Block::Rotation::CounterClockwise, multiplier);
+                            break;
+                        }  case 6: { // drop
                             for (auto &v: current) {
                                 v.drop();
                                 grid->addBlock(v);
@@ -117,42 +135,23 @@ int Player::turn() {
                         } case 7: { // level up
                             delete level;
                             ++lev;
-//                            level = getLevel(lev);
+                            if (lev == 0) {
+                                level = Level::getLevel(lev,scriptFile);
+                            } else {
+                                level = Level::getLevel(lev);
+                            }
                             break;
                         } case 8: { // level down
                             delete level;
                             --lev;
-//                            level = getLevel(lev);
-                            break;
-<<<<<<< HEAD
-                        } default: { // 0 to 5 (left/right/up/down/cw/ccw)
-                            // All transformations
-//                            current.at(0).transform(commands.at(commandIndex));
+                            if (lev == 0) {
+                                level = Level::getLevel(lev,scriptFile);
+                            } else {
+                                level = Level::getLevel(lev);
+                            }
                             break;
                         }
-=======
-                        } case 0: { // left
-				current.at(0).translate(Block::Translation::Left, multiplier);
-				break;
-			} case 1: { // right
-				current.at(0).translate(Block::Translation::Right, multiplier);
-				break;
-			} case 2: { // up
-				current.at(0).translate(Block::Translation::Up, multiplier);
-				break;
-			} case 3: { // down
-				current.at(0).translate(Block::Translation::Down, multiplier);
-				break;
-			} case 4: { // cw
-				current.at(0).rotate(Block::Rotation::Clockwise, multiplier);
-				break;
-			} case 5: { // ccw
-				current.at(0).rotate(Block::Rotation::CounterClockwise, multiplier);
-				break;
-			}
->>>>>>> master
-                    }
-                    
+                    }                    
                 }
             } else { // Commands with no multiplier
                  switch (commandIndex) {
@@ -184,9 +183,12 @@ int Player::turn() {
                         //////////// TODO
                     } case 18: { // sequence
                         cin >> file;
-                        readFile = true;
+//                        readFile = true;
                         break;
                     } case 19: { // restart the game
+                        break;
+                    } case 20: { // force
+                        // read a char
                         break;
                     }
                 }
@@ -224,8 +226,6 @@ const string Player::getName() {
 }
 
 void Player::setBlock(Block block) {
-//    current.erase(current.begin());
-//    current.insert(current.begin(), block);
     current.pop_front();
     current.push_front(block);
 }
@@ -236,6 +236,8 @@ void Player::reset() {
     grid = make_unique<Grid>(width,height);
     // Delete current level and get new level
     lev = 0;
+    delete level;
+    level = Level::getLevel(0,scriptFile);
 //    current.clear();
     // current = level->createBlock();
     
