@@ -99,45 +99,51 @@ int Player::turn() {
             indices.clear(); // More than one match for command, use next letter
         }
         
-        // Finished reading in command        
+        // Finished reading in command
         if (commandIndex != -1) {
+            cout << commands.at(commandIndex) << endl;
             // It was a valid command
             // Check commands that do require multipliers first
             if ((commandIndex >= 0) && (commandIndex <= 8)) {
                     switch (commandIndex) {
                         case 0: { // left
                             current->translate(Block::Translation::Left, multiplier);
+                            game->print();
                             break;
                         } case 1: { // right
                             current->translate(Block::Translation::Right, multiplier);
+                            game->print();
                             break;
                         } case 2: { // up
                             current->translate(Block::Translation::Up, multiplier);
+                            game->print();
                             break;
                         } case 3: { // down
                             current->translate(Block::Translation::Down, multiplier);
+                            game->print();
                             break;
                         } case 4: { // cw
                             current->rotate(Block::Rotation::Clockwise, multiplier);
+                            game->print();
                             break;
                         } case 5: { // ccw
                             current->rotate(Block::Rotation::CounterClockwise, multiplier);
+                            game->print();
                             break;
                         }  case 6: { // drop
-//                            for (auto &v: current) {
-//                                v.drop();
-//                                grid->addBlock(v);
-//                            }
-//                            current.clear();
-//                            current = level->createBlock();
+                            current->drop();
+                            current = grid->addBlocks(level->createBlock(false,0)); // Change heavy and turns after...
+                            game->print();
                             break;
                         } case 7: { // level up
-                            delete level;
-                            ++lev;
-                            if (lev == 0) {
-                                level = Level::getLevel(lev,scriptFile);
-                            } else {
-                                level = Level::getLevel(lev);
+                            if (lev < 4) {
+                                delete level;
+                                ++lev;
+                                if (lev == 0) {
+                                    level = Level::getLevel(lev,scriptFile);
+                                } else {
+                                    level = Level::getLevel(lev);
+                                }
                             }
                             break;
                         } case 8: { // level down
@@ -149,8 +155,8 @@ int Player::turn() {
                                 } else {
                                     level = Level::getLevel(lev);
                                 }
-                                break;
                             }
+                            break;
                         }
                     }
             } else { // Commands with no multiplier
@@ -224,7 +230,7 @@ void Player::print(int n) {
 		}
 	}
 	else if ( n <= 21)
-		grid->print(n);
+		grid->print(n-4);
 	else{
 		switch(n){
 			case 22: cout <<" Next:"<< endl;
