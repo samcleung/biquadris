@@ -9,11 +9,14 @@
 #include "../coord/coord.h"
 #include "../common/enums.h"
 
+class Game;
+
 class Player {
 	std::string name;
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
+    Game *game;
     Grid *grid;
     int lev;
     Level* level;
@@ -21,10 +24,10 @@ class Player {
     int dropsSinceClear;
 	
 	public:
-	Player(const std::string&, const std::string&);	
+	Player(const std::string&, const std::string&, Game *game);	
 	int turn();
 	void print(int);
-	void setEffect(Effect);
+	void setEffect(Effect, Block::Type force = Block::Type::T);
     const std::string getName();
     void setBlock(Block);
     void reset();
