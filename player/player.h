@@ -15,10 +15,9 @@ class Player {
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
-	std::unique_ptr<Grid> grid;
-    int lev;
-    Level* level;
-	std::list<Block> current;
+//    Grid *grid;
+//    int lev;
+//    Level* level;
 	
 	public:
 	Player(const std::string&, const std::string&);	
