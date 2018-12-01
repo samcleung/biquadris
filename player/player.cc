@@ -19,7 +19,8 @@ const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
 name{name}, scriptFile{scriptFile}, grid{new Grid(width,height)}, lev{0},
-level{Level::getLevel(0,scriptFile)}, dropsSinceClear{0} {} //current{grid->addBlock(level->createBlock())}
+level{Level::getLevel(0,scriptFile)}, //current{grid->addBlocks(level->createBlock(false,0))},
+dropsSinceClear{0} {} 
 
 // Read in all the commands
 int Player::turn() {
@@ -102,55 +103,55 @@ int Player::turn() {
             // It was a valid command
             // Check commands that do require multipliers first
             if ((commandIndex >= 0) && (commandIndex <= 8)) {
-                for (int i = 0; i < multiplier; ++i) {
-//                    switch (commandIndex) {
-//                        case 0: { // left
-//                            current.front().translate(Block::Translation::Left, multiplier);
-//                            break;
-//                        } case 1: { // right
-//                            current.front().translate(Block::Translation::Right, multiplier);
-//                            break;
-//                        } case 2: { // up
-//                            current.front().translate(Block::Translation::Up, multiplier);
-//                            break;
-//                        } case 3: { // down
-//                            current.front().translate(Block::Translation::Down, multiplier);
-//                            break;
-//                        } case 4: { // cw
-//                            current.front().rotate(Block::Rotation::Clockwise, multiplier);
-//                            break;
-//                        } case 5: { // ccw
-//                            current.front().rotate(Block::Rotation::CounterClockwise, multiplier);
-//                            break;
-//                        }  case 6: { // drop
+                    switch (commandIndex) {
+                        case 0: { // left
+                            current->translate(Block::Translation::Left, multiplier);
+                            break;
+                        } case 1: { // right
+                            current->translate(Block::Translation::Right, multiplier);
+                            break;
+                        } case 2: { // up
+                            current->translate(Block::Translation::Up, multiplier);
+                            break;
+                        } case 3: { // down
+                            current->translate(Block::Translation::Down, multiplier);
+                            break;
+                        } case 4: { // cw
+                            current->rotate(Block::Rotation::Clockwise, multiplier);
+                            break;
+                        } case 5: { // ccw
+                            current->rotate(Block::Rotation::CounterClockwise, multiplier);
+                            break;
+                        }  case 6: { // drop
 //                            for (auto &v: current) {
 //                                v.drop();
 //                                grid->addBlock(v);
 //                            }
 //                            current.clear();
-////                            current = level->createBlock();
-//                            break;
-//                        } case 7: { // level up
-//                            delete level;
-//                            ++lev;
-//                            if (lev == 0) {
-//                                level = Level::getLevel(lev,scriptFile);
-//                            } else {
-//                                level = Level::getLevel(lev);
-//                            }
-//                            break;
-//                        } case 8: { // level down
-//                            delete level;
-//                            --lev;
-//                            if (lev == 0) {
-//                                level = Level::getLevel(lev,scriptFile);
-//                            } else {
-//                                level = Level::getLevel(lev);
-//                            }
-//                            break;
-//                        }
-//                    }
-                }
+//                            current = level->createBlock();
+                            break;
+                        } case 7: { // level up
+                            delete level;
+                            ++lev;
+                            if (lev == 0) {
+                                level = Level::getLevel(lev,scriptFile);
+                            } else {
+                                level = Level::getLevel(lev);
+                            }
+                            break;
+                        } case 8: { // level down
+                            if (lev > 0) {
+                                delete level;
+                                --lev;
+                                if (lev == 0) {
+                                    level = Level::getLevel(lev,scriptFile);
+                                } else {
+                                    level = Level::getLevel(lev);
+                                }
+                                break;
+                            }
+                        }
+                    }
             } else { // Commands with no multiplier
                  switch (commandIndex) {
                     case 9: { // I-block, change current block to this
@@ -232,11 +233,9 @@ void Player::reset() {
     effect = Effect::None;
     delete grid;
     grid = new Grid{width,height};
-    // Delete current level and get new level
     lev = 0;
     delete level;
     level = Level::getLevel(0,scriptFile);
-//    current.clear();
-    // current = level->createBlock();
-    
+//    current = grid->addBlocks(level->createBlock(false,lev));
+    dropsSinceClear = 0;    
 }
