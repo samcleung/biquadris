@@ -19,11 +19,9 @@ const int width = 11;
 const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
-name{name}, scriptFile{scriptFile} {
-    //, grid{nullptr}, lev{0}, level{nullptr} 
-    //, grid{make_unique<Grid>(width,height)}, lev{0}
+name{name}, scriptFile{scriptFile}, grid{width,height}, lev{0},
+level{Level::getLevel(0,scriptFile)} {
     //    current = level->createBlock();
-    //, level{Level::getLevel(0,scriptFile)}
 }
 
 // Read in all the commands
@@ -217,11 +215,11 @@ int Player::turn() {
 
 // Prints a line of the player's grid
 void Player::print(int n) {
-//    grid->print(n);
+    grid->print(n);
 }
 
 void Player::setEffect(Effect effect) {
-//    this->effect = effect;
+    this->effect = effect;
 }
 
 const string Player::getName() {
@@ -229,19 +227,19 @@ const string Player::getName() {
 }
 
 void Player::setBlock(Block block) {
-//    current.pop_front();
-//    current.push_front(block);
+    current.pop_front();
+    current.push_front(block);
 }
 
 void Player::reset() {
     effect = Effect::None;
-////    grid.reset();
-////    grid = make_unique<Grid>(width,height);
-//    // Delete current level and get new level
-//    lev = 0;
-//    delete level;
-////    level = Level::getLevel(0,scriptFile);
-////    current.clear();
-//    // current = level->createBlock();
+    delete grid;
+    grid{width,height};
+    // Delete current level and get new level
+    lev = 0;
+    delete level;
+    level = Level::getLevel(0,scriptFile);
+//    current.clear();
+    // current = level->createBlock();
     
 }

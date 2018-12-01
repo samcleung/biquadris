@@ -13,10 +13,8 @@ void Game::initialize(int startLevel, int seed, bool isText){}
 Game::Game(){}
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
-    Player test{playerName, scriptFile};
-//	players.emplace_back(Player{playerName, scriptFile});
-    return 0;
-//	return players.size();
+	players.emplace_back(Player{playerName, scriptFile});
+	return players.size();
 }
 
 void Game::play() {
