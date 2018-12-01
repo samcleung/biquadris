@@ -1,7 +1,7 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <string>
-#include <memory>
+#include <list>
 #include "../game/game.h"
 #include "../grid/grid.h"
 #include "../level/level.h"
@@ -14,18 +14,18 @@ class Player {
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
-	std::unique_ptr<Grid> grid;
+    Grid *grid;
     int lev;
-	Level* level;
-	std::vector<Block> current;
+    Level* level;
+    std::list<Block> current;
 	
 	public:
 	Player(const std::string&, const std::string&);	
 	int turn();
 	void print(int);
 	void setEffect(Effect);
-    std::string getName();
-    void setBlock(Block *);
+    const std::string getName();
+    void setBlock(Block);
     void reset();
 };
 
