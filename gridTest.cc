@@ -21,7 +21,7 @@ const int height = 18;
 
 // command constants
 const string PRINT = "print";
-const string ADDBLOCK = "add";	
+const string ADDBLOCK = "add";
 const string DROP = "drop";
 // translations
 const string LEFT = "left";
@@ -62,42 +62,41 @@ bool transform(Block& block, const string& command) {
 int main() {
 	Grid grid{width, height};
 	int level = 0;
+	Block* curr = nullptr;
 
 	// command interpretter
 	string command;
 	while (cin >> command) {
-		Block* curr = grid.currentBlock();
 		if (command == PRINT) {
 			print(grid);
-		} else if (command == ADDBLOCK && !curr) {
-			bool result;
+		} else if (command == ADDBLOCK) {
 			char type;
 			if (cin >> type) {
 				int points = pow(level + 1, 2);
 				switch (type) {
 					case 'j':
-						result = grid.addBlock(JBlock{points});
+						curr = grid.addBlock(JBlock{points});
 						break;
 					case 'l':
-						result = grid.addBlock(LBlock{points});
+						curr = grid.addBlock(LBlock{points});
 						break;
 					case 's':
-						result = grid.addBlock(SBlock{points});
+						curr = grid.addBlock(SBlock{points});
 						break;
 					case 'i':
-						result = grid.addBlock(IBlock{points});
+						curr = grid.addBlock(IBlock{points});
 						break;
 					case 'o':
-						result = grid.addBlock(OBlock{points});
+						curr = grid.addBlock(OBlock{points});
 						break;
 					case 't':
-						result = grid.addBlock(TBlock{points});
+						curr = grid.addBlock(TBlock{points});
 						break;
 					case 'z':
-						result = grid.addBlock(ZBlock{points});
+						curr = grid.addBlock(ZBlock{points});
 				}
 			}
-			if (!result) cout << "ERROR: Could not add block" << endl;
+			if (!curr) cout << "ERROR: Could not add block" << endl;
 			print(grid);
 		} else {
 			if (curr) {

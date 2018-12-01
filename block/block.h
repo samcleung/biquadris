@@ -14,7 +14,6 @@ class Block {
 	unsigned int dropBy = 0;
 	unsigned int size = 0;
 	Grid* grid = nullptr;
-	std::vector<Coord> getCellCoords();
 	
 	protected:
 	std::vector<Cell> cells;
@@ -25,11 +24,13 @@ class Block {
         enum class Rotation { Clockwise = 4, CounterClockwise };
 	
 	Block(const Block& other);
+	~Block();
 	bool rotate(Rotation, unsigned int count = 1);
 	bool translate(Translation, unsigned int count = 1);
 	void drop();
 	bool addToGrid(Grid* g);
 	int getPoints() const;
+	std::vector<Coord> getCellCoords();
 };
 
 #endif

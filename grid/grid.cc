@@ -12,6 +12,11 @@ using namespace std;
 Grid::Grid(int width, int height) : cells{vector<vector<Cell*>>(height, vector<Cell*>(width, nullptr))} {}
 
 Block* Grid::addBlock(const Block& block) {
+	// if current already exists, remove it
+	if (current) {
+		onBoard.pop_back();
+		current = nullptr;
+	}
 	// add block as last block on the grid
 	onBoard.emplace_back(block);
 	// set current to be address of last block
