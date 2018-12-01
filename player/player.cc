@@ -19,9 +19,7 @@ const int height = 18;
 
 Player::Player(const std::string& name, const std::string& scriptFile) :
 name{name}, scriptFile{scriptFile}, grid{new Grid(width,height)}, lev{0},
-level{Level::getLevel(0,scriptFile)} {
-    //    current = level->createBlock();
-}
+level{Level::getLevel(0,scriptFile)}, dropsSinceClear{0} {} //current{grid->addBlock(level->createBlock())}
 
 // Read in all the commands
 int Player::turn() {
@@ -101,58 +99,57 @@ int Player::turn() {
         
         // Finished reading in command        
         if (commandIndex != -1) {
-            cout << commands.at(commandIndex) << endl;
             // It was a valid command
             // Check commands that do require multipliers first
             if ((commandIndex >= 0) && (commandIndex <= 8)) {
                 for (int i = 0; i < multiplier; ++i) {
-                    switch (commandIndex) {
-                        case 0: { // left
-                            current.front().translate(Block::Translation::Left, multiplier);
-                            break;
-                        } case 1: { // right
-                            current.front().translate(Block::Translation::Right, multiplier);
-                            break;
-                        } case 2: { // up
-                            current.front().translate(Block::Translation::Up, multiplier);
-                            break;
-                        } case 3: { // down
-                            current.front().translate(Block::Translation::Down, multiplier);
-                            break;
-                        } case 4: { // cw
-                            current.front().rotate(Block::Rotation::Clockwise, multiplier);
-                            break;
-                        } case 5: { // ccw
-                            current.front().rotate(Block::Rotation::CounterClockwise, multiplier);
-                            break;
-                        }  case 6: { // drop
-                            for (auto &v: current) {
-                                v.drop();
-                                grid->addBlock(v);
-                            }
-                            current.clear();
-//                            current = level->createBlock();
-                            break;
-                        } case 7: { // level up
-                            delete level;
-                            ++lev;
-                            if (lev == 0) {
-                                level = Level::getLevel(lev,scriptFile);
-                            } else {
-                                level = Level::getLevel(lev);
-                            }
-                            break;
-                        } case 8: { // level down
-                            delete level;
-                            --lev;
-                            if (lev == 0) {
-                                level = Level::getLevel(lev,scriptFile);
-                            } else {
-                                level = Level::getLevel(lev);
-                            }
-                            break;
-                        }
-                    }
+//                    switch (commandIndex) {
+//                        case 0: { // left
+//                            current.front().translate(Block::Translation::Left, multiplier);
+//                            break;
+//                        } case 1: { // right
+//                            current.front().translate(Block::Translation::Right, multiplier);
+//                            break;
+//                        } case 2: { // up
+//                            current.front().translate(Block::Translation::Up, multiplier);
+//                            break;
+//                        } case 3: { // down
+//                            current.front().translate(Block::Translation::Down, multiplier);
+//                            break;
+//                        } case 4: { // cw
+//                            current.front().rotate(Block::Rotation::Clockwise, multiplier);
+//                            break;
+//                        } case 5: { // ccw
+//                            current.front().rotate(Block::Rotation::CounterClockwise, multiplier);
+//                            break;
+//                        }  case 6: { // drop
+//                            for (auto &v: current) {
+//                                v.drop();
+//                                grid->addBlock(v);
+//                            }
+//                            current.clear();
+////                            current = level->createBlock();
+//                            break;
+//                        } case 7: { // level up
+//                            delete level;
+//                            ++lev;
+//                            if (lev == 0) {
+//                                level = Level::getLevel(lev,scriptFile);
+//                            } else {
+//                                level = Level::getLevel(lev);
+//                            }
+//                            break;
+//                        } case 8: { // level down
+//                            delete level;
+//                            --lev;
+//                            if (lev == 0) {
+//                                level = Level::getLevel(lev,scriptFile);
+//                            } else {
+//                                level = Level::getLevel(lev);
+//                            }
+//                            break;
+//                        }
+//                    }
                 }
             } else { // Commands with no multiplier
                  switch (commandIndex) {
@@ -227,8 +224,8 @@ const string Player::getName() {
 }
 
 void Player::setBlock(Block block) {
-    current.pop_front();
-    current.push_front(block);
+//    current.pop_front();
+//    current.push_front(block);
 }
 
 void Player::reset() {

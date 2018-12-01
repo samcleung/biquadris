@@ -17,7 +17,8 @@ class Player {
     Grid *grid;
     int lev;
     Level* level;
-    std::list<Block> current;
+    Block *current;
+    int dropsSinceClear;
 	
 	public:
 	Player(const std::string&, const std::string&);	
