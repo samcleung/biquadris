@@ -14,6 +14,7 @@ class Block {
 	unsigned int dropBy = 0;
 	unsigned int size = 0;
 	Grid* grid = nullptr;
+	std::vector<Coord> getCellCoords();
 	
 	protected:
 	std::vector<Cell> cells;
@@ -30,7 +31,6 @@ class Block {
 	void drop();
 	bool addToGrid(Grid* g);
 	int getPoints() const;
-	std::vector<Coord> getCellCoords();
 };
 
 #endif
