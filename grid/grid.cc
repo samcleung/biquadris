@@ -31,7 +31,7 @@ Block* Grid::addBlock(const Block& block) {
 	return current;
 }
 
-Block* Grid::addBlocks(const list<Block>& blocks) {
+Block* Grid::addBlocks(const vector<Block>& blocks) {
 	Block* result;
 	for (auto it = blocks.begin(), last = prev(blocks.end()); it != blocks.end(); ++it) {
 		result = addBlock(*it);
