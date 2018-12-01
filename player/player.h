@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 #include <string>
 #include <memory>
+#include <list>
 #include "../game/game.h"
 #include "../grid/grid.h"
 #include "../level/level.h"
@@ -17,14 +18,14 @@ class Player {
 	std::unique_ptr<Grid> grid;
     int lev;
 	Level* level;
-	std::vector<Block> current;
+	std::list<Block> current;
 	
 	public:
 	Player(const std::string&, const std::string&);	
 	int turn();
 	void print(int);
 	void setEffect(Effect);
-    std::string getName();
+    const std::string getName();
     void setBlock(Block);
     void reset();
 };

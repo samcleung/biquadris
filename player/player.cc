@@ -126,7 +126,7 @@ int Player::turn() {
                             break;
                         } default: { // 0 to 5 (left/right/up/down/cw/ccw)
                             // All transformations
-                            current.at(0).transform(commands.at(commandIndex));
+//                            current.at(0).transform(commands.at(commandIndex));
                             break;
                         }
                     }
@@ -197,13 +197,15 @@ void Player::setEffect(Effect effect) {
     this->effect = effect;
 }
 
-string Player::getName() {
+const string Player::getName() {
     return name;
 }
 
 void Player::setBlock(Block block) {
 //    current.erase(current.begin());
 //    current.insert(current.begin(), block);
+    current.pop_front();
+    current.push_front(block);
 }
 
 void Player::reset() {
