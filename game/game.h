@@ -9,6 +9,8 @@ class Player;
 class Game {
 	const std::string name;
 	const std::string scriptFile;
+	int seed = 893;
+	int startLevel = 0;
 	std::vector<Player> players;
 	public:
 	Game();

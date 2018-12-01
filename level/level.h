@@ -9,9 +9,8 @@ public:
 	virtual std::vector<Block> createBlock(bool isHeavy, int numberOfTurns) = 0;
 	Level();
 	virtual ~Level();
-	//Optional value if a seed is specified by the Client. This will throw an exception you 
-	//try to ask for level 0 (as that requires a file to read form)
-	static Level *getLevel(int level, int seed = 893);
+	//Optional value if a seed or sequence file is specified by the Client
+	static Level *getLevel(int level, int seed = 893, std::string stream = "sequence1.txt");
 	//getLevel purely for level 1. Throws an exception if you ask for any other level
 	static Level *getLevel(int level, std::string stream);
 };

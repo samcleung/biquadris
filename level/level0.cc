@@ -7,7 +7,6 @@
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
-
 using namespace std;
 Level0::Level0(string infile): infile{infile} {
 	char c;

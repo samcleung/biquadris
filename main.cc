@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
 
 	// create a map of players and scriptFiles
 	//   (set P1 & P2 scriptFiles to defaults)
-	map<int,string> scriptFiles;
-	scriptFiles[1] = DEFAULTSF1;
-	scriptFiles[2] = DEFAULTSF2;
+	map<int, string> scriptFiles;
+	scriptFiles[0] = DEFAULTSF1;
+	scriptFiles[1] = DEFAULTSF2;
 
 	int startLevel;
 	int seed;
@@ -50,12 +50,12 @@ int main(int argc, char *argv[]) {
 		
 		if (command == STARTLEVEL) {
 			istringstream iss{argv[++i]};
-			if (iss >> n) startLevel = n;//game.setStartLevel(n);
+			if (iss >> n) startLevel = n;
 		} else if (command == TEXT) {
 			//game.isTextOnly = true;
 		} else if (command == SEED) {
 			istringstream iss{argv[++i]};
-			if (iss >> n) seed = n;//game.setSeed(n);
+			if (iss >> n) seed = n;
 		} else {
 			int fileNumber = scriptFile(command);
 			if (fileNumber > 0) {
@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	game.initialize(startLevel, seed);
-	int maxMapKey = scriptFiles.rbegin()->first;
+	int maxMapKey = 2;
 	int playerCount = 0;
 
 	// create user prompt
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 		string playerName;
 		cout << "P" << i + 1 << " name: ";
 		cin >> playerName;
-		if (scriptFiles.find(i+1) == scriptFiles.end()) {
+		if((unsigned) i >= scriptFiles.size()) {
 			game.addPlayer(playerName, DEFAULTSFN);
         } else {
 			game.addPlayer(playerName, scriptFiles[i]);
