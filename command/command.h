@@ -26,7 +26,7 @@ struct Command {
 		Random,
 		Sequence,
 		Restart,
-		Rename,
+		RenameAlias,
 		AddAlias,
 		RemoveAlias
 	};
@@ -43,7 +43,7 @@ struct Command {
 	unsigned int getMultiplier(std::string&);
 	Action getAction(const std::string&);
 
-	static std::map<Action, std::set<std::string>> commands;
+	static std::map<std::set<std::string>, Action> commands;
 	static std::set<std::string> aliases;
 };
 
