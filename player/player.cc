@@ -83,8 +83,9 @@ int Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::Drop:
+                updateDropsSinceClear();
 				current->drop();
-				current = grid->addBlocks(level->createBlock(isHeavy(), 0));
+				current = grid->addBlocks(level->createBlock(isHeavy(), dropsSinceClear));
 				game->print();
 				quit = true;
 				break;
@@ -223,7 +224,8 @@ void Player::reset() {
     lev = 0;
     delete level;
     level = Level::getLevel(0,scriptFile);
-    current = grid->addBlocks(level->createBlock(this->isHeavy(),lev));
+    updateDropsSinceClear();
+    current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));
     dropsSinceClear = 0;    
 }
 
@@ -241,4 +243,8 @@ unsigned int Player::getDropBy() {
     } else {
         return false;
     }
+}
+
+void Player::updateDropsSinceClear() {
+    dropsSinceClear = grid->getDropsSinceClear();
 }

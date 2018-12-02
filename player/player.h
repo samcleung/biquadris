@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 #include <string>
 #include <list>
+#include <iostream>
 #include "../game/game.h"
 #include "../grid/grid.h"
 #include "../level/level.h"
@@ -34,6 +35,7 @@ class Player {
     void reset();
     bool isHeavy();
     unsigned int getDropBy();
+    void updateDropsSinceClear();
 };
 
 #endif
