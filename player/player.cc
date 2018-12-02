@@ -158,7 +158,7 @@ int Player::turn() {
 				return 1;
 				break;
 			default:
-				validCommand = command.execute();
+				validCommand = command();
 		}
 	}
 	

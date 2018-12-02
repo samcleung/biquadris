@@ -1,85 +1,36 @@
 #include <string>
 #include <set>
 #include <map>
+#include <iostream>
 #include "command.h"
 
 using namespace std;
 
-// command constants to initialize class
-const string LEFT = "left";
-const string RIGHT = "right";
-const string DOWN = "down";
-const string CLOCKWISE = "clockwise";
-const string COUNTERCLOCKWISE = "counterclockwise";
-const string DROP = "drop";
-const string LEVELUP = "levelup";
-const string LEVELDOWN = "leveldown";
-const string I = "I";
-const string J = "J";
-const string L = "L";
-const string O = "O";
-const string S = "S";
-const string Z = "Z";
-const string T = "T";
-const string NORANDOM = "norandom";
-const string RANDOM = "random";
-const string SEQUENCE = "sequence";
-const string RESTART = "restart";
-const string RENAMEALIAS = "renamealias";
-const string ADDALIAS = "addalias";
-const string REMOVEALIAS = "removealias";
-const string PRINT = "print";
-
-set<string> Command::aliases = {
-	LEFT,
-	RIGHT,
-	DOWN,
-	CLOCKWISE,
-	COUNTERCLOCKWISE,
-	DROP,
-	LEVELUP,
-	LEVELDOWN,
-	I,
-	J,
-	L,
-	O,
-	S,
-	Z,
-	T,
-	NORANDOM,
-	RANDOM,
-	SEQUENCE,
-	RESTART,
-	RENAMEALIAS,
-	ADDALIAS,
-	REMOVEALIAS,
-	PRINT
-};
-
+// invarient: no duplicate aliases must exist
 map<set<string>, Command::Action> Command::commands = {
-	{{LEFT}, Command::Action::Left},
-	{{RIGHT}, Command::Action::Right},
-	{{DOWN}, Command::Action::Down},
-	{{CLOCKWISE}, Command::Action::Clockwise},
-	{{COUNTERCLOCKWISE}, Command::Action::CounterClockwise},
-	{{DROP}, Command::Action::Drop},
-	{{LEVELUP}, Command::Action::LevelUp},
-	{{LEVELDOWN}, Command::Action::LevelDown},
-	{{I}, Command::Action::I},
-	{{J}, Command::Action::J},
-	{{L}, Command::Action::L},
-	{{O}, Command::Action::O},
-	{{S}, Command::Action::S},
-	{{Z}, Command::Action::Z},
-	{{T}, Command::Action::T},
-	{{NORANDOM}, Command::Action::NoRandom},
-	{{RANDOM}, Command::Action::Random},
-	{{SEQUENCE}, Command::Action::Sequence},
-	{{RESTART}, Command::Action::Restart},
-	{{RENAMEALIAS}, Command::Action::RenameAlias},
-	{{ADDALIAS}, Command::Action::AddAlias},
-	{{REMOVEALIAS}, Command::Action::RemoveAlias},
-	{{PRINT}, Command::Action::Print}
+	{{"left"}, Command::Action::Left},
+	{{"right"}, Command::Action::Right},
+	{{"down"}, Command::Action::Down},
+	{{"clockwise"}, Command::Action::Clockwise},
+	{{"counterclockwise"}, Command::Action::CounterClockwise},
+	{{"drop"}, Command::Action::Drop},
+	{{"levelup"}, Command::Action::LevelUp},
+	{{"leveldown"}, Command::Action::LevelDown},
+	{{"I"}, Command::Action::I},
+	{{"J"}, Command::Action::J},
+	{{"L"}, Command::Action::L},
+	{{"O"}, Command::Action::O},
+	{{"S"}, Command::Action::S},
+	{{"Z"}, Command::Action::Z},
+	{{"T"}, Command::Action::T},
+	{{"norandom"}, Command::Action::NoRandom},
+	{{"random"}, Command::Action::Random},
+	{{"sequence"}, Command::Action::Sequence},
+	{{"restart"}, Command::Action::Restart},
+	{{"renamealias"}, Command::Action::RenameAlias},
+	{{"addalias"}, Command::Action::AddAlias},
+	{{"removealias"}, Command::Action::RemoveAlias}
+	//{{"print"}, Command::Action::Print}
 };
 
 
@@ -140,8 +91,91 @@ Command::operator int() const {
 	return static_cast<int>(action);
 }
 
-bool Command::execute() {
-	// TODO
+bool Command::operator()() {
+	if (!executed) {
+		switch(action) {
+			case Command::Action::RenameAlias:
+				renameAlias();
+				break;
+			case Command::Action::AddAlias:
+				addAlias();
+				break;
+			case Command::Action::RemoveAlias:
+				removeAlias();
+				break;
+			default:
+				return false;
+		}
+
+		executed = true;
+		return true;
+	}
+
+	// cout ERROR command has already been executed
 	return false;
+}
+
+void Command::renameAlias() {
+	string oldAlias, newAlias;
+
+	if (cin >> oldAlias && cin >> newAlias) {
+		for (const auto& m: commands) {
+			auto loc = m.first.find(oldAlias);
+			if (loc != m.first.end()){
+				m.first.erase(loc);
+				m.first.insert(newAlias);
+				// cout alias x renamed to y
+				return;
+			}
+		}
+	}
+
+	// cout ERROR alias x does not exist
+}
+
+void Command::addAlias() {
+	string oldAlias, newAlias;
+	
+	if (cin >> oldAlias && cin >> newAlias) {
+		// exit if new alias already exists
+		for (const auto& m: Command::commands) {
+			if (m.first.find(newAlias) != m.first.end()) {
+				// cout ERROR alias y already exists
+				return;
+			}
+		}
+		
+		// add alias for a command
+		for (const auto& m: Command::commands) {
+			if (m.first.find(oldAlias) != m.first.end()) {
+				m.first.insert(newAlias);
+				// cout added alias x for y
+				return;
+			}
+		}
+	}
+
+	// cout ERROR alias x does not exist
+}
+
+void Command::removeAlias() {
+	string alias;
+
+	if (cin >> alias) {
+		for (const auto& m: Command::commands) {
+			auto loc = m.first.find(alias);
+			if (loc != m.first.end()) {
+				if (m.first.size() == 1)
+					// cout ERROR cannot remove alias x, last alias
+				else {
+					m.first.erase(loc);
+					// cout removed alias x
+				}					
+				return
+			}
+		}
+	}
+
+	// cout ERROR alias x does not exist
 }
 
