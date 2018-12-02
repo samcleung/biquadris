@@ -32,8 +32,6 @@ level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
 
 // Read in all the commands
 StatusCode Player::turn() {
-	bool readFile = false;
-	istream *in = &cin;
 	string input;
     string levelFile;
 	bool quit = false;
@@ -52,7 +50,7 @@ StatusCode Player::turn() {
 
 		if (!file.empty() && in->eof()) { // EOF in file
 			file = "";
-			delete Player::in;
+			delete in;
 			in = &cin; // Reset to stdin
 			*in >> input;
 		}
