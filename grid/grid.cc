@@ -113,7 +113,6 @@ bool Grid::moveCells(const vector<Coord>& oldCoords, const vector<Coord>& newCoo
 }
 
 unsigned int Grid::shiftCells(unsigned int x = 0, unsigned int y = 0, unsigned int filledLeft = 0, unsigned int amount = 0) {
-    dropsSinceClear = 0;
 	if (x >= cells[y].size()) return 0;
 
 	bool isFilled = cells[y][x];
@@ -144,7 +143,11 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-	return pow(level + shiftCells(), 2);
+    unsigned int temp = shiftCells();
+    if (temp != 0) {
+        dropsSinceClear = 0;
+    }
+	return pow(level + temp, 2);
 }
 
 int Grid::updateBlocks() {
