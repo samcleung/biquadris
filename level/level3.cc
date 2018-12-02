@@ -71,9 +71,9 @@ vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 		placeholder.push_back(SBlock{score, dropByCopy});
 	else if (x <= 9)
 		placeholder.push_back(ZBlock{score, dropByCopy});
-	cout << "VALUE OF DROPBY: " << dropByCopy << endl;	
-	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
-	cout << "VALUE OF X: " << x << endl;
+//	cout << "VALUE OF DROPBY: " << dropByCopy << endl;	
+//	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
+//	cout << "VALUE OF X: " << x << endl;
 	return placeholder;
 }
 

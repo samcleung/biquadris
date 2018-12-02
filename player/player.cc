@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include "player.h"
+#include "../common/enums.h"
 #include "../command/command.h"
 #include "../block/iblock.h"
 #include "../block/jblock.h"
@@ -19,6 +20,9 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
+istream *Player::in = &cin;
+string Player::file = "";
+
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
@@ -27,22 +31,15 @@ level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
 } 
 
 // Read in all the commands
-int Player::turn() {
-	bool readFile = false;
-	istream *in = &cin;
+StatusCode Player::turn() {
 	string input;
     string levelFile;
-	string file;
 	bool quit = false;
 
 	// Read input
 	// Invariant that only drop/restart/EOF will end a player's turn
 	while (!quit) {
 		bool validCommand = true;
-		if (readFile) { // Start reading from file
-			in = new ifstream(file.c_str());
-			readFile = false;
-		}
         
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
 		cout << "Enter a command: ";
@@ -152,10 +149,10 @@ int Player::turn() {
 				break;
 			case (int)Command::Action::Sequence:
 				cin >> file;
-				readFile = true;
+				in = new ifstream(file.c_str());
 				break;
 			case (int)Command::Action::Restart:
-				return 1;
+				return StatusCode::Restart;
 				break;
 			default:
 				validCommand = command();
@@ -163,9 +160,9 @@ int Player::turn() {
 	}
 	
 	if (in->eof()) { // EOF means terminate game
-		return 2;
+		return StatusCode::Terminate;
 	} else { // End the turn normally
-		return 0;
+		return StatusCode::Default;
 	}
 }
 
@@ -243,7 +240,7 @@ unsigned int Player::getDropBy() {
     if (effect == Effect::Heavy) {
         return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
