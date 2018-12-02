@@ -84,6 +84,9 @@ StatusCode Player::turn() {
                 updateDropsSinceClear();
 				current->drop();
 				current = grid->addBlocks(level->createBlock(isHeavy(), dropsSinceClear));
+                if(!current) {
+                    return StatusCode::Terminate;
+                }
 				score += grid->update(lev);
 				game->print();
 				quit = true;
