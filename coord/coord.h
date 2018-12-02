@@ -3,6 +3,7 @@
 
 struct Coord {
 	// important coordinates
+	static Coord mid(){ return {5, 14}; };
 	static Coord origin() { return {0, 0}; };
 	static Coord blockStart() { return {0, 14}; };
 

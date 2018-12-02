@@ -29,6 +29,7 @@ vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 	switch(blocksFromFile[position]){
 		case 'I':
 			placeholder.push_back(IBlock{score, dropByCopy});
+		break;
 		case 'J':
 			placeholder.push_back(JBlock{score, dropByCopy});
 		break;
@@ -50,9 +51,9 @@ vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 	}
 	if((unsigned)++position == blocksFromFile.size())
 		position = 0;
+	cout << "Size of placeholder" << placeholder.size() << endl;
 	return placeholder;
-	
-	cout << dropByCopy << endl;
+//	cout << dropByCopy << endl;
 	}
 	
 

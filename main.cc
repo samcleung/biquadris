@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// command constants
+// command constants test
 const string STARTLEVEL = "-startlevel";
 const string TEXT = "-text";
 const string SEED = "-seed";
