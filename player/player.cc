@@ -13,21 +13,28 @@
 #include "../block/zblock.h"
 #include "../block/tblock.h"
 #include "../level/level.h"
+#include "../coord/coord.h"
 
 using namespace std;
 
 // grid constants
 const int width = 11;
 const int height = 18;
+const int nextHeight = 2;
 
 istream *Player::in = &cin;
 string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
-level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
-	current = grid->addBlocks(level->createBlock(false,0));
+level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{new Grid(width,nextHeight)} {
+	current = grid->addBlocks(level->createBlock(isHeavy(),0));
 	score += grid->update(lev);
+    queue = level->createBlock(isHeavy(),1);
+//    alteredQueue = queue;
+//    alteredQueue.pop_back();
+//    alteredQueue.emplace_back(Block{queue.back(),Coord::origin()});
+//    nextGrid->addBlocks(alteredQueue);
 } 
 
 // Read in all the commands
@@ -42,7 +49,7 @@ StatusCode Player::turn() {
 		bool validCommand = true;
         
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
-		cout << "Enter a command: ";
+        if (in == &cin) cout << "Enter a command: ";
         *in >> input;
         
 		if (file.empty() && in->eof()) // Reached EOF in stdin
@@ -83,7 +90,16 @@ StatusCode Player::turn() {
 			case (int)Command::Action::Drop:
                 updateDropsSinceClear();
 				current->drop();
-				current = grid->addBlocks(level->createBlock(isHeavy(), dropsSinceClear));
+                score += grid->update(lev);
+                current = grid->addBlocks(queue);
+                score += grid->update(lev);
+                queue = level->createBlock(isHeavy(),dropsSinceClear);
+                delete nextGrid;
+                nextGrid = new Grid(width,nextHeight);
+//                alteredQueue = queue;
+//                alteredQueue.pop_back();
+//                alteredQueue.emplace_back(Block{queue.back(),Coord::origin()});
+//                nextGrid->addBlocks(alteredQueue);
                 if(!current) {
                     return StatusCode::Terminate;
                 }
@@ -226,9 +242,10 @@ void Player::reset() {
     lev = 0;
     delete level;
     level = Level::getLevel(0,scriptFile);
-    updateDropsSinceClear();
+    dropsSinceClear = 0;
+    score = 0;
     current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));
-    dropsSinceClear = 0;    
+    score += grid->update(lev);
 }
 
 bool Player::isHeavy() {

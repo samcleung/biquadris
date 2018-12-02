@@ -1,7 +1,7 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <string>
-#include <list>
+#include <vector>
 #include <iostream>
 #include "../game/game.h"
 #include "../grid/grid.h"
@@ -23,7 +23,10 @@ class Player {
     int lev;
     Level* level;
     Block *current;
-    int dropsSinceClear;    
+    int dropsSinceClear;
+    std::vector<Block> queue;
+    std::vector<Block> alteredQueue;
+    Grid *nextGrid;
 	
 	public:
     static std::istream *in;
