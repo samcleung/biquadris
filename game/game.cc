@@ -15,8 +15,8 @@ void Game::initialize(int startLevel, int seed, bool isText){
 }
 
 Game::Game(){
-	Xwindow *window = new Xwindow();
-	this->window = window; 
+//	Xwindow *window = new Xwindow();
+//	this->window = window; 
 }
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
