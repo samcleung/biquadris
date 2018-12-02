@@ -239,11 +239,15 @@ void Player::print(int n) {
 		}
 	}
 	else if ( n <= 21)
-		grid->print(n-4);
+		grid->print(abs(n-21));
 	else{
 		switch(n){
-			case 22: cout <<" Next:"<< endl;
-				break;
+			case 21:
+			cout << "------------------------" << endl;
+			break;
+			case 22: 
+			cout <<" Next:      ";
+			break;
 			case 23: break;
 		}
 	}

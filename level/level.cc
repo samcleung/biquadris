@@ -17,6 +17,14 @@ Level * Level::getLevel(int level, int seed, string sequencefile) {
 }
 Level::~Level(){}
 Level * Level::getLevel(int level, string stream){
-	return new Level0(stream);
+	switch(level){
+	case 0:
+		return new Level0(stream);
+	case 3:
+		return new Level3(stream);
+	case 4:
+		return new Level4(stream);
+	}
+	return new Level4(stream);
 }
 Level::Level(){}
