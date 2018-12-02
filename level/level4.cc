@@ -6,8 +6,16 @@
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
+#include <vector>
+#include <fstream>
 using namespace std;
 Level4::Level4(int seed): seed{seed}{
+}
+Level4::Level4(string s): isFromFile{true}{
+	char a;
+	ifstream ifs(s, ifstream::in);
+	while (ifs >> a)
+		readFromFile.push_back(a);
 }
 vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	srand(seed);
@@ -15,6 +23,34 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
+	if(isFromFile){
+	switch(readFromFile[position]){
+		case 'I':
+			placeholder.push_back(IBlock{score, dropBy});
+		case 'J':
+			placeholder.push_back(JBlock{score, dropBy});
+		break;
+		case 'L':
+			placeholder.push_back(LBlock{score, dropBy});
+		break;
+		case 'O':
+			placeholder.push_back(OBlock{score, dropBy});
+		break;
+		case 'S':
+			placeholder.push_back(SBlock{score, dropBy});
+		break;
+		case 'T':
+			placeholder.push_back(TBlock{score, dropBy});
+		break;
+		case 'Z':
+			placeholder.push_back(ZBlock{score, dropBy});
+		break;
+	}
+	if((unsigned)++position == readFromFile.size())
+		position = 0;
+	return placeholder;
+	}
+
 	int x = rand() % 9 + 1;
 	if(x <= 1)
 		placeholder.push_back(OBlock{score, dropBy});

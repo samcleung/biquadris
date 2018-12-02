@@ -19,10 +19,10 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
-Player::Player(const std::string& name, const std::string& scriptFile, Game *game) :
-name{name}, scriptFile{"sequence1.txt"}, game{game}, grid{new Grid(width,height)}, lev{0},
-level{Level::getLevel(0,"sequence1.txt")}, dropsSinceClear{0} {
-    current = grid->addBlocks(level->createBlock(this->isHeavy(),0));
+Player::Player(const std::string& name, Game *game, int Level,string scriptfile, int seed) :
+name{name}, scriptFile{scriptfile}, game{game}, grid{new Grid(width,height)}, lev{0},
+level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
+    current = grid->addBlocks(level->createBlock(false,0));
 } 
 
 // Read in all the commands
@@ -168,11 +168,15 @@ void Player::print(int n) {
 		}
 	}
 	else if ( n <= 21)
-		grid->print(n-4);
+		grid->print(abs(n-21));
 	else{
 		switch(n){
-			case 22: cout <<" Next:"<< endl;
-				break;
+			case 21:
+			cout << "------------------------" << endl;
+			break;
+			case 22: 
+			cout <<" Next:      ";
+			break;
 			case 23: break;
 		}
 	}

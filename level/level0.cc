@@ -7,7 +7,6 @@
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
-
 using namespace std;
 Level0::Level0(string infile): infile{infile} {
 	char c;
@@ -27,13 +26,14 @@ vector <Block> Level0::createBlock(bool isHeavy, int numberOfTurns){
 	switch(nextBlock){
 		case 'I':
 		placeholder.push_back(IBlock{1, dropBy});
+		break;
 		case 'J':
 		placeholder.push_back(JBlock{1, dropBy});
 		break;
 		case 'L':
 		placeholder.push_back(LBlock{1, dropBy});
 		break;
-		case '0':
+		case 'O':
 		placeholder.push_back(OBlock{1, dropBy});
 		break;
 		case 'S':
