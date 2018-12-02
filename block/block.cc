@@ -8,6 +8,37 @@ Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, s
 	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
 }
 
+Block::Block(const Block& other, const Coord& newCoord) {
+	bool isOriginXSet = false;
+	unsigned int originX;
+	bool isOriginYSet = false;
+	unsigned int originY;
+	
+	// get originX and originY of cells
+	for (const auto& cell: other.cells) {
+		if (cell.isValid()) {
+			// copy cell to new block
+			cells.emplace_back(Cell{cell, this});
+			// get coordinate of cell and set originX/originY
+			Coord coord = cell.getCoord();
+			if (!isOriginXSet || coord.x < originX) {
+				isOriginXSet = true;
+				originX = coord.x;
+			}
+			if (!isOriginYSet || coord.y < originY) {
+				isOriginYSet = true;
+				originY = coord.y;
+			}
+		}
+	}
+
+	// change cells to have coord with newCoord as origin
+	for (auto& cell: cells) {
+		Coord coord = cell.getCoord();
+		cell.setCoord(Coord{coord.x - originX + newCoord.x, coord.y - originY + newCoord.y});
+	}
+}
+
 Block::~Block() {
 	if (grid) {
 		vector<Coord> coords = getCellCoords();
