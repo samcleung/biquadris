@@ -31,6 +31,7 @@ class Block {
 
 	public:
 	Block(const Block& other);
+	Block(const Block& other, const Coord& coord);
 	~Block();
 	void rotate(Rotation, unsigned int count = 1);
 	void translate(Translation, unsigned int count = 1);
