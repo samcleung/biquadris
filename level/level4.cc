@@ -67,8 +67,11 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	else if (x <= 9)
 		placeholder.push_back(ZBlock{score, dropBy});
 	
-	if(numberOfTurns % 5 == 0 && numberOfTurns > 0)
+	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
 		placeholder.push_back(ZBlock{score, dropBy});
+	}
+//	cout << "VALUE OF NUMBER OF TURNS" << numberOfTurns << endl;
+//	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size();
 	dropBy = dropByCopy;
 	return placeholder;
 }

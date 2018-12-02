@@ -20,7 +20,7 @@ const int width = 11;
 const int height = 18;
 
 Player::Player(const std::string& name, Game *game, int Level,string scriptfile, int seed) :
-name{name}, scriptFile{scriptfile}, game{game}, grid{new Grid(width,height)}, lev{0},
+name{name}, scriptFile{scriptfile}, game{game}, grid{new Grid(width,height)}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
     current = grid->addBlocks(level->createBlock(false,0));
 } 
@@ -160,9 +160,9 @@ int Player::turn() {
 void Player::print(int n) {
 	if(n <= 3){
 		switch(n){
-			case 1: cout << "Level:     " << lev << " ";
+			case 1: cout << "Level:      " << lev;
 				break;
-			case 2: cout << "Score:     " << score << " ";
+			case 2: cout << "Score:      " << score;
 				break;
 			case 3: cout << "-------------";
 		}
@@ -175,7 +175,7 @@ void Player::print(int n) {
 			cout << "-------------";
 			break;
 			case 23: 
-			cout <<" Next:      ";
+			cout <<"Next:       ";
 			break;
 			case 24: break;
 		}

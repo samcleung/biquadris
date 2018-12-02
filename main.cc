@@ -82,7 +82,6 @@ int main(int argc, char *argv[]) {
 		cout << prompt.str();
 	}
 	cout << endl;
-	
 	// add players to game
 	for (int i = 1; i < playerCount+1; ++i) {
 		// get player name, then add to game

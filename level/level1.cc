@@ -37,6 +37,7 @@ vector<Block> Level1::createBlock(bool isHeavy, int numberOfTurns){
 	else if (x <= 12)
 		placeholder.push_back(LBlock{score,dropBy});
 
+	cout << "VALUE OF SEED" << seed << endl;
 	return placeholder;
 
 }
