@@ -11,12 +11,14 @@ const int height = 18;
 void Game::initialize(int startLevel, int seed, bool isText){
 	this->seed = seed;
 	this->startLevel = startLevel;
+	if(!isText){
+		Xwindow *window = new Xwindow();
+		this->window = window; 
+	}
 
 }
 
 Game::Game(){
-	Xwindow *window = new Xwindow();
-	this->window = window; 
 }
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
