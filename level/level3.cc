@@ -34,7 +34,7 @@ vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 		case 'L':
 			placeholder.push_back(LBlock{1, dropBy});
 		break;
-		case '0':
+		case 'O':
 			placeholder.push_back(OBlock{1, dropBy});
 		break;
 		case 'S':
