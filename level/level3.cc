@@ -7,6 +7,7 @@
 #include "../block/zblock.h"
 #include "../block/oblock.h"
 #include <fstream>
+#include <iostream>
 using namespace std;
 Level3::Level3(int seed): seed{seed}{
 }
@@ -20,56 +21,59 @@ Level3::Level3(string s): readingFromScript{true}{
 
 }
 vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
-	int dropByCopy = dropBy;
+	unsigned int dropByCopy = dropBy;
 	if(isHeavy)
-		dropBy++;
+		dropByCopy++;
 	vector<Block> placeholder;
 	if(readingFromScript){
 	switch(blocksFromFile[position]){
 		case 'I':
-			placeholder.push_back(IBlock{1, dropBy});
+			placeholder.push_back(IBlock{score, dropByCopy});
 		case 'J':
-			placeholder.push_back(JBlock{1, dropBy});
+			placeholder.push_back(JBlock{score, dropByCopy});
 		break;
 		case 'L':
-			placeholder.push_back(LBlock{1, dropBy});
+			placeholder.push_back(LBlock{score, dropByCopy});
 		break;
 		case 'O':
-			placeholder.push_back(OBlock{1, dropBy});
+			placeholder.push_back(OBlock{score, dropByCopy});
 		break;
 		case 'S':
-			placeholder.push_back(SBlock{1, dropBy});
+			placeholder.push_back(SBlock{score, dropByCopy});
 		break;
 		case 'T':
-			placeholder.push_back(TBlock{1, dropBy});
+			placeholder.push_back(TBlock{score, dropByCopy});
 		break;
 		case 'Z':
-			placeholder.push_back(ZBlock{1, dropBy});
+			placeholder.push_back(ZBlock{score, dropByCopy});
 		break;
 	}
 	if((unsigned)++position == blocksFromFile.size())
 		position = 0;
 	return placeholder;
+	
+	cout << dropByCopy << endl;
 	}
 	
 
 	int x = rand() % 9 + 1;
 	if(x <= 1)
-		placeholder.push_back(OBlock{score, dropBy});
+		placeholder.push_back(OBlock{score, dropByCopy});
 	else if (x <= 2)
-		placeholder.push_back(LBlock{score, dropBy});
+		placeholder.push_back(LBlock{score, dropByCopy});
 	else if (x <= 3)
-		placeholder.push_back(IBlock{score, dropBy});
+		placeholder.push_back(IBlock{score, dropByCopy});
 	else if (x <= 4)
-		placeholder.push_back(JBlock{score, dropBy});
+		placeholder.push_back(JBlock{score, dropByCopy});
 	else if (x <= 5)
-		placeholder.push_back(TBlock{score, dropBy});
+		placeholder.push_back(TBlock{score, dropByCopy});
 	else if (x <= 7)
-		placeholder.push_back(SBlock{score, dropBy});
+		placeholder.push_back(SBlock{score, dropByCopy});
 	else if (x <= 9)
-		placeholder.push_back(ZBlock{score, dropBy});
-	
-	dropBy = dropByCopy;
+		placeholder.push_back(ZBlock{score, dropByCopy});
+	cout << "VALUE OF DROPBY: " << dropByCopy << endl;	
+	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
+	cout << "VALUE OF X: " << x << endl;
 	return placeholder;
 }
 
