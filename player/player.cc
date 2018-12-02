@@ -31,10 +31,7 @@ level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{ne
 	current = grid->addBlocks(level->createBlock(isHeavy(),0));
 	score += grid->update(lev);
     queue = level->createBlock(isHeavy(),1);
-//    alteredQueue = queue;
-//    alteredQueue.pop_back();
-//    alteredQueue.emplace_back(Block{queue.back(),Coord::origin()});
-//    nextGrid->addBlocks(alteredQueue);
+//    nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
 } 
 
 // Read in all the commands
@@ -96,10 +93,7 @@ StatusCode Player::turn() {
                 queue = level->createBlock(isHeavy(),dropsSinceClear);
                 delete nextGrid;
                 nextGrid = new Grid(width,nextHeight);
-//                alteredQueue = queue;
-//                alteredQueue.pop_back();
-//                alteredQueue.emplace_back(Block{queue.back(),Coord::origin()});
-//                nextGrid->addBlocks(alteredQueue);
+//                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
                 if(!current) {
                     return StatusCode::Terminate;
                 }

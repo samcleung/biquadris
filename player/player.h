@@ -25,7 +25,6 @@ class Player {
     Block *current;
     int dropsSinceClear;
     std::vector<Block> queue;
-    std::vector<Block> alteredQueue;
     Grid *nextGrid;
 	
 	public:
