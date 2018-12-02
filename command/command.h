@@ -3,6 +3,7 @@
 #include <string>
 #include <set>
 #include <map>
+#include <vector>
 
 struct Command {
 	enum class Action {
