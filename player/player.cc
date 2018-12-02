@@ -46,7 +46,7 @@ StatusCode Player::turn() {
 		bool validCommand = true;
         
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
-        if (in == &cin) cout << "Enter a command: ";
+        if (in == &cin) cout << "\nEnter a command: ";
         *in >> input;
         
 		if (file.empty() && in->eof()) // Reached EOF in stdin
@@ -195,15 +195,19 @@ void Player::print(int n) {
 	else{
 		switch(n){
 			case 22:
-			cout << "-------------";
-			break;
+                cout << "-------------";
+                break;
 			case 23: 
-			cout <<"Next:       ";
-			break;
-			case 24: break;
+                cout << "Next:        ";
+                break;
+			case 24:
+                nextGrid->print(1);
+                break;
+            case 25:
+                nextGrid->print(0);
+                break;
 		}
 	}
-
 }
 
 void Player::setEffect(Effect effect, Block::Type force) {
