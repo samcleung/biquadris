@@ -16,6 +16,7 @@ class Player {
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
+    int seed;
     Game *game;
     Grid *grid;
     int lev;

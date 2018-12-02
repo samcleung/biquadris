@@ -19,17 +19,18 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
-Player::Player(const std::string& name, Game *game, int Level,string scriptfile, int seed) :
-name{name}, scriptFile{scriptfile}, game{game}, grid{new Grid(width,height)}, lev{0},
+Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
+name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
     current = grid->addBlocks(level->createBlock(false,0));
 } 
 
 // Read in all the commands
 int Player::turn() {
-//	bool readFile = false;
+	bool readFile = false;
 	istream *in = &cin;
 	string input;
+    string levelFile;
 	string file;
 	bool quit = false;
 
@@ -37,23 +38,24 @@ int Player::turn() {
 	// Invariant that only drop/restart/EOF will end a player's turn
 	while (!quit) {
 		bool validCommand = true;
-//		if (readFile) { // Start reading from file
-//			in = new ifstream(file.c_str());
-//			readFile = false;
-//		}
-//        
+		if (readFile) { // Start reading from file
+			in = new ifstream(file.c_str());
+			readFile = false;
+		}
+        
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
 		cout << "Enter a command: ";
-        	*in >> input;
-//		if (file.empty() && in->eof()) // Reached EOF in stdin
-//			break;
-//
-//		if (!file.empty() && in->eof()) { // EOF in file
-//			file = "";
-//			delete in;
-//			in = &cin; // Reset to stdin
-//			*in >> command;
-//		}
+        *in >> input;
+        
+		if (file.empty() && in->eof()) // Reached EOF in stdin
+			break;
+
+		if (!file.empty() && in->eof()) { // EOF in file
+			file = "";
+			delete in;
+			in = &cin; // Reset to stdin
+			*in >> input;
+		}
         
 		Command command{input};
 
@@ -87,18 +89,22 @@ int Player::turn() {
 				quit = true;
 				break;
 			case (int)Command::Action::LevelUp:
-				if (lev < 4) {
-					delete level;
-					++lev;
-					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
-				}
+                for(unsigned int i = 0; i < command.multiplier; ++i) {
+                    if (lev < 4) {
+                        delete level;
+                        ++lev;
+                        level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+                    }
+                }
 				break;
 			case (int)Command::Action::LevelDown:
-				if (lev > 0) {
-					delete level;
-					--lev;
-					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
-				}
+                for(unsigned int i = 0; i < command.multiplier; ++i) {
+                    if (lev > 0) {
+                        delete level;
+                        --lev;
+                        level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+                    }
+                }
 				break;
 			case (int)Command::Action::I:
 				current = grid->addBlock(IBlock{points, getDropBy()});
@@ -129,16 +135,21 @@ int Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::NoRandom:
-				// TODO
-				//cin >> file;
+				cin >> levelFile;
+                if ((lev == 3) || (lev == 4)) {
+                    delete level;
+                    level = Level::getLevel(lev, levelFile);
+                }
 				break;
 			case (int)Command::Action::Random:
-				// TODO
+                if ((lev == 3) || (lev == 4)) {
+                    delete level;
+                    level = Level::getLevel(lev, seed, scriptFile);
+                }
 				break;
 			case (int)Command::Action::Sequence:
-				// TODO
-				//cin >> file;
-				//readFile = true;
+				cin >> file;
+				readFile = true;
 				break;
 			case (int)Command::Action::Restart:
 				return 1;
@@ -148,12 +159,11 @@ int Player::turn() {
 		}
 	}
 	
-	if (cin.eof()) { // EOF means terminate game
+	if (in->eof()) { // EOF means terminate game
 		return 2;
 	} else { // End the turn normally
 		return 0;
-	}    ////// Force z?? Return a number from 3 to 9
-	return 0;
+	}
 }
 
 // Prints a line of the player's grid
