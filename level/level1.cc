@@ -7,18 +7,21 @@
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
-
+#include <iostream>
 
 using namespace std;
 
-Level1::Level1(unsigned int seed): seed{seed}{}
-vector<Block> Level1::createBlock(bool isHeavy, int numberOfTurns){
+Level1::Level1(unsigned int seed): seed{seed}{
 	srand(seed);
+}
+vector<Block> Level1::createBlock(bool isHeavy, int numberOfTurns){
 	unsigned int dropBy = 0;
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
+
 	int x = rand() % 12 + 1;
+	cout << x << endl;
 	if(x <= 1)
 		placeholder.push_back(SBlock{score,dropBy});
 	else if (x <= 2)

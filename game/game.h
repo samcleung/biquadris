@@ -10,6 +10,7 @@ class Game {
 	const std::string name;
 	const std::string scriptFile;
 	int seed = 893;
+	unsigned int highScore = 0;
 	int startLevel = 0;
 	std::vector<Player> players;
 	public:
