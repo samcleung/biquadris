@@ -17,8 +17,6 @@ void Game::initialize(int startLevel, int seed, bool isText){
 Game::Game(){}
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
-	cout << "VALUE OF SEED" << seed << endl;
-	cout << "VALUE OF LEVEL" << startLevel << endl;
 	players.emplace_back(Player{playerName, this, startLevel, scriptFile, seed});
 	return players.size();
 }
