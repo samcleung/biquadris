@@ -14,7 +14,10 @@ void Game::initialize(int startLevel, int seed, bool isText){
 
 }
 
-Game::Game(){}
+Game::Game(){
+	Xwindow *window = new Xwindow();
+	this->window = window; 
+}
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
 	players.emplace_back(Player{playerName, this, startLevel, scriptFile, seed});
