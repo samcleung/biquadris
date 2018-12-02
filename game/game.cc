@@ -25,23 +25,28 @@ void Game::play() {
     this->print();
     
     bool endTurn = false;
-    int result;
     
     while (!endTurn) {
         for (auto &p: players) {
-            result = p.turn();
+	    auto result = p.turn();
             
-            if (result == 0) { // Continue playing
-            } else if ((result == 1) || (result == 2)) { // End turns
+            if (result == StatusCode::Default) { // Continue playing
+            }
+	    else if (result == StatusCode::Restart) { // End turns
                 endTurn = true;
                 break;
             }
-        
+	    else if(result == StatusCode::Terminate){
+	    	exit(0);
+	    }
 	if(highScore < p.getScore())
 		highScore = p.getScore();
         }
     }
-    // if result is 2 the game terminates, either EOF or game over
+    for(auto &p: players)
+    	p.reset();
+
+	this->play();
 }
 
 void Game::setEffect(Player& player, Effect effect, Block::Type t) {

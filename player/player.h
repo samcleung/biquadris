@@ -27,7 +27,7 @@ class Player {
 	
 	public:
 	Player(const std::string&, Game *game, int level = 0, std::string scriptfile = "sequence1.txt", int seed = 893);	
-	int turn();
+	StatusCode turn();
 	void print(int);
 	void setEffect(Effect, Block::Type force = Block::Type::T);
 	unsigned int getScore();
