@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	scriptFiles[1] = DEFAULTSF1;
 	scriptFiles[2] = DEFAULTSF2;
 
-	int startLevel;
+	int startLevel = 0;
 	int seed;
 	// setup game settings
 	for (int i = 1; i < argc; ++i) {
