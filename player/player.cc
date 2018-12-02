@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include "player.h"
+#include "../common/enums.h"
 #include "../command/command.h"
 #include "../block/iblock.h"
 #include "../block/jblock.h"
@@ -30,7 +31,9 @@ level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
 } 
 
 // Read in all the commands
-int Player::turn() {
+StatusCode Player::turn() {
+	bool readFile = false;
+	istream *in = &cin;
 	string input;
     string levelFile;
 	bool quit = false;
@@ -151,7 +154,7 @@ int Player::turn() {
 				in = new ifstream(file.c_str());
 				break;
 			case (int)Command::Action::Restart:
-				return 1;
+				return StatusCode::Restart;
 				break;
 			default:
 				validCommand = command.execute();
@@ -159,9 +162,9 @@ int Player::turn() {
 	}
 	
 	if (in->eof()) { // EOF means terminate game
-		return 2;
+		return StatusCode::Terminate;
 	} else { // End the turn normally
-		return 0;
+		return StatusCode::Default;
 	}
 }
 
@@ -239,7 +242,7 @@ unsigned int Player::getDropBy() {
     if (effect == Effect::Heavy) {
         return 1;
     } else {
-        return false;
+        return 0;
     }
 }
 
