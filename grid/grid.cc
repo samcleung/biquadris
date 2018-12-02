@@ -143,11 +143,11 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-    unsigned int temp = shiftCells();
-    if (temp != 0) {
-        dropsSinceClear = 0;
-    }
-	return pow(level + temp, 2);
+	unsigned int temp = shiftCells();
+	if (temp != 0) {
+		dropsSinceClear = 0;
+	}
+	return temp ? pow(level + temp, 2) : 0;
 }
 
 int Grid::updateBlocks() {

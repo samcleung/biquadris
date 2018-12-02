@@ -43,7 +43,8 @@ StatusCode Player::turn() {
         
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
 		cout << "Enter a command: ";
-        *in >> input;
+        	*in >> input;
+		cout << endl;
         
 		if (file.empty() && in->eof()) // Reached EOF in stdin
 			break;
