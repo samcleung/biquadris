@@ -6,8 +6,17 @@
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
+#include <fstream>
 using namespace std;
 Level3::Level3(int seed): seed{seed}{
+}
+
+Level3::Level3(string s): readingFromScript{true}{
+	char a;
+	ifstream ifs(s, ifstream::in);
+	while (ifs >> a)
+		blocksFromFile.push_back(a);
+
 }
 vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 	srand(seed);
@@ -15,6 +24,35 @@ vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
+	if(readingFromScript){
+	switch(blocksFromFile[position]){
+		case 'I':
+			placeholder.push_back(IBlock{1, dropBy});
+		case 'J':
+			placeholder.push_back(JBlock{1, dropBy});
+		break;
+		case 'L':
+			placeholder.push_back(LBlock{1, dropBy});
+		break;
+		case '0':
+			placeholder.push_back(OBlock{1, dropBy});
+		break;
+		case 'S':
+			placeholder.push_back(SBlock{1, dropBy});
+		break;
+		case 'T':
+			placeholder.push_back(TBlock{1, dropBy});
+		break;
+		case 'Z':
+			placeholder.push_back(ZBlock{1, dropBy});
+		break;
+	}
+	if((unsigned)++position == blocksFromFile.size())
+		position = 0;
+	return placeholder;
+	}
+	
+
 	int x = rand() % 9 + 1;
 	if(x <= 1)
 		placeholder.push_back(OBlock{score, dropBy});
