@@ -113,6 +113,7 @@ bool Grid::moveCells(const vector<Coord>& oldCoords, const vector<Coord>& newCoo
 }
 
 unsigned int Grid::shiftCells(unsigned int x = 0, unsigned int y = 0, unsigned int filledLeft = 0, unsigned int amount = 0) {
+    dropsSinceClear = 0;
 	if (x >= cells[y].size()) return 0;
 
 	bool isFilled = cells[y][x];
@@ -207,6 +208,8 @@ void Grid::drop(const vector<Coord>& coords) {
 	
 	// clear current
 	current = nullptr;
+    // increment drop counter
+    ++dropsSinceClear;
 }
 
 void Grid::print(unsigned int row) {
@@ -221,4 +224,8 @@ void Grid::print(unsigned int row) {
 	
 	// print right border of grid
 	cout << "|";
+}
+
+int Grid::getDropsSinceClear() const {
+    return dropsSinceClear;
 }
