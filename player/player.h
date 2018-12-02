@@ -23,9 +23,11 @@ class Player {
     int lev;
     Level* level;
     Block *current;
-    int dropsSinceClear;
+    int dropsSinceClear;    
 	
 	public:
+    static std::istream *in;
+    static std::string file;
 	Player(const std::string&, Game *game, int level = 0, std::string scriptfile = "sequence1.txt", int seed = 893);	
 	StatusCode turn();
 	void print(int);

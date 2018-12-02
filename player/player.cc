@@ -20,6 +20,9 @@ using namespace std;
 const int width = 11;
 const int height = 18;
 
+istream *Player::in = &cin;
+string Player::file = "";
+
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
@@ -33,17 +36,12 @@ StatusCode Player::turn() {
 	istream *in = &cin;
 	string input;
     string levelFile;
-	string file;
 	bool quit = false;
 
 	// Read input
 	// Invariant that only drop/restart/EOF will end a player's turn
 	while (!quit) {
 		bool validCommand = true;
-		if (readFile) { // Start reading from file
-			in = new ifstream(file.c_str());
-			readFile = false;
-		}
         
 		if (!validCommand) cout << "ERROR: Invalid command" << endl;
 		cout << "Enter a command: ";
@@ -54,7 +52,7 @@ StatusCode Player::turn() {
 
 		if (!file.empty() && in->eof()) { // EOF in file
 			file = "";
-			delete in;
+			delete Player::in;
 			in = &cin; // Reset to stdin
 			*in >> input;
 		}
@@ -153,7 +151,7 @@ StatusCode Player::turn() {
 				break;
 			case (int)Command::Action::Sequence:
 				cin >> file;
-				readFile = true;
+				in = new ifstream(file.c_str());
 				break;
 			case (int)Command::Action::Restart:
 				return StatusCode::Restart;
