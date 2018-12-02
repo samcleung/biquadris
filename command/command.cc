@@ -1,11 +1,6 @@
 #include <string>
 #include <set>
 #include <map>
-
-// remove
-#include <algorithm>
-#include <iostream>
-
 #include "command.h"
 
 using namespace std;
@@ -61,9 +56,6 @@ set<string> Command::aliases = {
 	PRINT
 };
 
-
-// NOTE: use constants for aliases and commands values
-// swap Command::Action and set<string>, when iterating, store enum in a vector. If vector len is 1, then that is the command 
 map<set<string>, Command::Action> Command::commands = {
 	{{LEFT}, Command::Action::Left},
 	{{RIGHT}, Command::Action::Right},
@@ -89,6 +81,8 @@ map<set<string>, Command::Action> Command::commands = {
 	{{REMOVEALIAS}, Command::Action::RemoveAlias},
 	{{PRINT}, Command::Action::Print}
 };
+
+
 
 
 // copy of string as param, will be modified by getMultiplier

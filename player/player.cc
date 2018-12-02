@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include "player.h"
+#include "../command/command.h"
 #include "../block/iblock.h"
 #include "../block/jblock.h"
 #include "../block/lblock.h"
@@ -26,205 +27,133 @@ level{Level::getLevel(0,"sequence1.txt")}, dropsSinceClear{0} {
 
 // Read in all the commands
 int Player::turn() {
-//    bool readFile = false;
-    istream *in = &cin;
-    int commandIndex;
-    string command;
-    string file;
-    vector<string> commands {"left", "right", "up", "down", "clockwise", "counterclockwise",
-                            "drop", "levelup", "leveldown", "I", "J", "L", "O", "S",
-                             "Z", "T", "norandom", "random", "sequence", "restart", "force"};
-    vector<int> indices;
-    
-    // Read input
-    // Invariant that only drop/restart/EOF will end a player's turn
-    while (true) {
-//        if (readFile) { // Start reading from file
-//            in = new ifstream(file.c_str());
-//            readFile = false;
-//        }
-//        
-        *in >> command;
-//        if (file.empty() && in->eof()) { // Reached EOF in stdin
-//            break;
-//        }
-//        if (!file.empty() && in->eof()) { // EOF in file
-//            file = "";
-//            delete in;
-//            in = &cin; // Reset to stdin
-//            *in >> command;
-//        }
-        
-        int index = 0;
-        int multiplier = 1;
-        int size = command.size();
-        
-        // Extract multiplier from the command
-        for (int i = 0; i < size; ++i) {
-            if (!((command.at(i) >= '0') && (command.at(i) <= '9'))) {
-                index = i;
-                break;
-            }
-        }
-        
-        if (index == 0) {
-            // No multiplier
-            multiplier = 1;
-        } else {
-            multiplier = stoi(command.substr(0,index));
-        }
-        string call = command.substr(index);
-        commandIndex = -1;
+//	bool readFile = false;
+	istream *in = &cin;
+	string input;
+	string file;
+	bool quit = false;
 
-        int callSize = call.size();
-        for (int j = 1; j < callSize+1; ++j) {
-            int k = 0;
-            for (auto &c: commands) {
-                int cSize = c.size();
-                if (call == c) {
-                    commandIndex = k;
-                    break;
-                } else if ((callSize <= cSize) && (call == c.substr(0,j))) {
-                    indices.emplace_back(k);
-                }
-                k++;
-            }
-            if (commandIndex != -1) {
-                indices.clear(); // Found the command character for character
-                break;
-            } else if (indices.size() == 1) {
-                commandIndex = indices.at(0); // One match for command
-                indices.clear();
-                break;
-            }
-            indices.clear(); // More than one match for command, use next letter
-        }
+	// Read input
+	// Invariant that only drop/restart/EOF will end a player's turn
+	while (!quit) {
+		bool validCommand = true;
+//		if (readFile) { // Start reading from file
+//			in = new ifstream(file.c_str());
+//			readFile = false;
+//		}
+//        
+		if (!validCommand) cout << "ERROR: Invalid command" << endl;
+		cout << "Enter a command: ";
+        	*in >> input;
+//		if (file.empty() && in->eof()) // Reached EOF in stdin
+//			break;
+//
+//		if (!file.empty() && in->eof()) { // EOF in file
+//			file = "";
+//			delete in;
+//			in = &cin; // Reset to stdin
+//			*in >> command;
+//		}
         
-        // Finished reading in command
-        if (commandIndex != -1) {
-            cout << commands.at(commandIndex) << endl;
-            // It was a valid command
-            // Check commands that do require multipliers first
-            if ((commandIndex >= 0) && (commandIndex <= 8)) {
-                    switch (commandIndex) {
-                        case 0: { // left
-                            current->translate(Block::Translation::Left, multiplier);
-                            game->print();
-                            break;
-                        } case 1: { // right
-                            current->translate(Block::Translation::Right, multiplier);
-                            game->print();
-                            break;
-                        } case 2: { // up
-                            current->translate(Block::Translation::Up, multiplier);
-                            game->print();
-                            break;
-                        } case 3: { // down
-                            current->translate(Block::Translation::Down, multiplier);
-                            game->print();
-                            break;
-                        } case 4: { // cw
-                            current->rotate(Block::Rotation::Clockwise, multiplier);
-                            game->print();
-                            break;
-                        } case 5: { // ccw
-                            current->rotate(Block::Rotation::CounterClockwise, multiplier);
-                            game->print();
-                            break;
-                        }  case 6: { // drop
-                            current->drop();
-                            current = grid->addBlocks(level->createBlock(this->isHeavy(),0)); // turns after...
-                            game->print();
-                            break;
-                        } case 7: { // level up
-                            if (lev < 4) {
-                                delete level;
-                                ++lev;
-                                if (lev == 0) {
-                                    level = Level::getLevel(lev,scriptFile);
-                                } else {
-                                    level = Level::getLevel(lev);
-                                }
-                            }
-                            break;
-                        } case 8: { // level down
-                            if (lev > 0) {
-                                delete level;
-                                --lev;
-                                if (lev == 0) {
-                                    level = Level::getLevel(lev,scriptFile);
-                                } else {
-                                    level = Level::getLevel(lev);
-                                }
-                            }
-                            break;
-                        }
-                    }
-            } else { // Commands with no multiplier
-                 int points = pow(lev + 1, 2);
-                 switch (commandIndex) {
-                    case 9: { // I-block, change current block to this
-                        current = grid->addBlock(IBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 10: { // J-block
-                        current = grid->addBlock(JBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 11: { // L-block
-                        current = grid->addBlock(LBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 12: { // O-block
-                        current = grid->addBlock(OBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 13: { // S-block
-                        current = grid->addBlock(SBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 14: { // Z-block
-                        current = grid->addBlock(ZBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 15: { // T-block
-                        current = grid->addBlock(TBlock{points,this->getDropBy()});
-                        game->print();
-                        break;
-                    } case 16: { // norandom
-//                        cin >> file;
-                        //////////// TODO
-                    } case 17: { // random
-                        //////////// TODO
-                    } case 18: { // sequence
-//                        cin >> file;
-//                        readFile = true;
-                        break;
-                    } case 19: { // restart the game
-                        break;
-                    } case 20: { // force
-                        // read a char
-                        break;
-                    }
-                }
-            }
-        }
-        
-        // End turn if drop/restart
-        if ((commandIndex == 6) || (commandIndex == 19)) {
-            break;
-        }
-        
-    }
-    
-    if (commandIndex == 19) { // Restart the game
-        return 1;
-    } else if (cin.eof()) { // EOF means terminate game
-        return 2;
-    } else { // End the turn normally
-        return 0;
-    }    ////// Force z?? Return a number from 3 to 9
-    return 0;
+		Command command{input};
+
+		int points = pow(lev + 1, 2);
+		validCommand = true;
+		switch (command) {
+			case (int)Command::Action::Left:
+				current->translate(Block::Translation::Left, command.multiplier);
+				game->print();
+				break;
+			case (int)Command::Action::Right:
+				current->translate(Block::Translation::Right, command.multiplier);
+				game->print();
+				break;
+			case (int)Command::Action::Down:
+				current->translate(Block::Translation::Down, command.multiplier);
+				game->print();
+				break;
+			case (int)Command::Action::Clockwise:
+				current->rotate(Block::Rotation::Clockwise, command.multiplier);
+				game->print();
+				break;
+			case (int)Command::Action::CounterClockwise:
+				current->rotate(Block::Rotation::CounterClockwise, command.multiplier);
+				game->print();
+				break;
+			case (int)Command::Action::Drop:
+				current->drop();
+				current = grid->addBlocks(level->createBlock(isHeavy(), 0));
+				game->print();
+				quit = true;
+				break;
+			case (int)Command::Action::LevelUp:
+				if (lev < 4) {
+					delete level;
+					++lev;
+					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+				}
+				break;
+			case (int)Command::Action::LevelDown:
+				if (lev > 0) {
+					delete level;
+					--lev;
+					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+				}
+				break;
+			case (int)Command::Action::I:
+				current = grid->addBlock(IBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::J:
+				current = grid->addBlock(JBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::L:
+				current = grid->addBlock(LBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::O:
+				current = grid->addBlock(OBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::S:
+				current = grid->addBlock(SBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::Z:
+				current = grid->addBlock(ZBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::T:
+				current = grid->addBlock(TBlock{points, getDropBy()});
+				game->print();
+				break;
+			case (int)Command::Action::NoRandom:
+				// TODO
+				//cin >> file;
+				break;
+			case (int)Command::Action::Random:
+				// TODO
+				break;
+			case (int)Command::Action::Sequence:
+				// TODO
+				//cin >> file;
+				//readFile = true;
+				break;
+			case (int)Command::Action::Restart:
+				return 1;
+				break;
+			default:
+				validCommand = command.execute();
+		}
+	}
+	
+	if (cin.eof()) { // EOF means terminate game
+		return 2;
+	} else { // End the turn normally
+		return 0;
+	}    ////// Force z?? Return a number from 3 to 9
+	return 0;
 }
 
 // Prints a line of the player's grid
