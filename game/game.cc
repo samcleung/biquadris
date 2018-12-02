@@ -12,13 +12,16 @@ void Game::initialize(int startLevel, int seed, bool isText){
 	this->seed = seed;
 	this->startLevel = startLevel;
 	if(!isText){
-		Xwindow *window = new Xwindow();
-		this->window = window; 
+		//Xwindow *window = new Xwindow();
+		//this->window = window; 
 	}
 
 }
 
 Game::Game(){
+
+//	Xwindow *window = new Xwindow();
+//	this->window = window; 
 }
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
@@ -61,7 +64,8 @@ void Game::setEffect(Player& player, Effect effect, Block::Type t) {
     }
 }
 void Game::print() {
-    for (int i = 1; i <= height + 6; i++) {
+    cout << endl;
+    for (int i = 1; i <= height + 7; i++) {
         for (auto &p: players) {
             p.print(i);
 	   cout << "    ";
