@@ -12,13 +12,13 @@ using namespace std;
 Level4::Level4(int seed): seed{seed}{
 }
 Level4::Level4(string s): isFromFile{true}{
+	srand(seed);
 	char a;
 	ifstream ifs(s, ifstream::in);
 	while (ifs >> a)
 		readFromFile.push_back(a);
 }
 vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
-	srand(seed);
 	int dropByCopy = dropBy;
 	if(isHeavy)
 		dropBy++;

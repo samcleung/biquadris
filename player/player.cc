@@ -171,24 +171,24 @@ int Player::turn() {
 void Player::print(int n) {
 	if(n <= 3){
 		switch(n){
-			case 1: cout << "Level:    ";
+			case 1: cout << "Level:     " << lev << " ";
 				break;
-			case 2: cout << "Score:    ";
+			case 2: cout << "Score:     " << score << " ";
 				break;
-			case 3: cout << "-----------";
+			case 3: cout << "-------------";
 		}
 	}
 	else if ( n <= 21)
 		grid->print(abs(n-21));
 	else{
 		switch(n){
-			case 21:
-			cout << "------------------------" << endl;
+			case 22:
+			cout << "-------------";
 			break;
-			case 22: 
+			case 23: 
 			cout <<" Next:      ";
 			break;
-			case 23: break;
+			case 24: break;
 		}
 	}
 
@@ -247,4 +247,8 @@ unsigned int Player::getDropBy() {
 
 void Player::updateDropsSinceClear() {
     dropsSinceClear = grid->getDropsSinceClear();
+}
+
+unsigned int Player::getScore(){
+	return score;
 }

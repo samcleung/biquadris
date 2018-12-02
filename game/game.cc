@@ -33,12 +33,10 @@ void Game::play() {
                 break;
             }
         
-	//if(highScore < p.getScore())
-//		highScore = p.getScore()
-  //      }
-	}
+	if(highScore < p.getScore())
+		highScore = p.getScore();
+        }
     }
-    
     // if result is 2 the game terminates, either EOF or game over
 }
 
@@ -52,6 +50,7 @@ void Game::print() {
     for (int i = 1; i <= height + 6; i++) {
         for (auto &p: players) {
             p.print(i);
+	   cout << "    ";
         }
         cout << endl;
     }

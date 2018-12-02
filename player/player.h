@@ -30,6 +30,7 @@ class Player {
 	int turn();
 	void print(int);
 	void setEffect(Effect, Block::Type force = Block::Type::T);
+	unsigned int getScore();
     const std::string getName();
     void setBlock(Block);
     void reset();

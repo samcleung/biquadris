@@ -12,6 +12,7 @@ Level3::Level3(int seed): seed{seed}{
 }
 
 Level3::Level3(string s): readingFromScript{true}{
+	srand(seed);
 	char a;
 	ifstream ifs(s, ifstream::in);
 	while (ifs >> a)
@@ -19,7 +20,6 @@ Level3::Level3(string s): readingFromScript{true}{
 
 }
 vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
-	srand(seed);
 	int dropByCopy = dropBy;
 	if(isHeavy)
 		dropBy++;
