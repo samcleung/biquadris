@@ -49,7 +49,7 @@ void Game::setEffect(Player& player, Effect effect, Block::Type t) {
     }
 }
 void Game::print() {
-    for (int i = height + 3; i >= 1; --i) {
+    for (int i = 1; i <= height + 6; i++) {
         for (auto &p: players) {
             p.print(i);
         }
