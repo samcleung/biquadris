@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 #include <string>
 #include <list>
+#include <iostream>
 #include "../game/game.h"
 #include "../grid/grid.h"
 #include "../level/level.h"
@@ -16,6 +17,7 @@ class Player {
 	std::string scriptFile;
 	Effect effect = Effect::None;
 	unsigned int score = 0;
+    int seed;
     Game *game;
     Grid *grid;
     int lev;
@@ -34,6 +36,7 @@ class Player {
     void reset();
     bool isHeavy();
     unsigned int getDropBy();
+    void updateDropsSinceClear();
 };
 
 #endif
