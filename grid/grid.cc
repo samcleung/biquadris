@@ -143,7 +143,11 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-	return pow(level + shiftCells(), 2);
+    unsigned int temp = shiftCells();
+    if (temp != 0) {
+        dropsSinceClear = 0;
+    }
+	return pow(level + temp, 2);
 }
 
 int Grid::updateBlocks() {
@@ -207,6 +211,8 @@ void Grid::drop(const vector<Coord>& coords) {
 	
 	// clear current
 	current = nullptr;
+    // increment drop counter
+    ++dropsSinceClear;
 }
 
 void Grid::print(unsigned int row) {
@@ -221,4 +227,8 @@ void Grid::print(unsigned int row) {
 	
 	// print right border of grid
 	cout << "|";
+}
+
+int Grid::getDropsSinceClear() const {
+    return dropsSinceClear;
 }
