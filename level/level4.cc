@@ -27,6 +27,7 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	switch(readFromFile[position]){
 		case 'I':
 			placeholder.push_back(IBlock{score, dropBy});
+		break;
 		case 'J':
 			placeholder.push_back(JBlock{score, dropBy});
 		break;
@@ -48,6 +49,8 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	}
 	if((unsigned)++position == readFromFile.size())
 		position = 0;
+	cout << "VALUE OF NUMBER OF TURNS" << numberOfTurns << endl;
+	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
 	return placeholder;
 	}
 
@@ -70,8 +73,8 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
 		placeholder.push_back(ZBlock{score, dropBy});
 	}
-//	cout << "VALUE OF NUMBER OF TURNS" << numberOfTurns << endl;
-//	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size();
+	cout << "VALUE OF NUMBER OF TURNS" << numberOfTurns << endl;
+	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
 	dropBy = dropByCopy;
 	return placeholder;
 }
