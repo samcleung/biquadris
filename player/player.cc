@@ -22,7 +22,8 @@ const int height = 18;
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
-    current = grid->addBlocks(level->createBlock(false,0));
+	current = grid->addBlocks(level->createBlock(false,0));
+	score += grid->update(lev);
 } 
 
 // Read in all the commands
@@ -86,6 +87,7 @@ int Player::turn() {
                 updateDropsSinceClear();
 				current->drop();
 				current = grid->addBlocks(level->createBlock(isHeavy(), dropsSinceClear));
+				score += grid->update(lev);
 				game->print();
 				quit = true;
 				break;
