@@ -1,7 +1,7 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <string>
-#include <list>
+#include <vector>
 #include <iostream>
 #include "../game/game.h"
 #include "../grid/grid.h"
@@ -20,10 +20,13 @@ class Player {
     int seed;
     Game *game;
     Grid *grid;
+    int initLevel;
     int lev;
     Level* level;
     Block *current;
-    int dropsSinceClear;    
+    int dropsSinceClear;
+    std::vector<Block> queue;
+    Grid *nextGrid;
 	
 	public:
     static std::istream *in;
@@ -39,6 +42,7 @@ class Player {
     bool isHeavy();
     unsigned int getDropBy();
     void updateDropsSinceClear();
+    void clear();
 };
 
 #endif

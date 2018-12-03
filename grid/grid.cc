@@ -14,6 +14,7 @@ Grid::Grid(int width, int height) : cells{vector<vector<Cell*>>(height, vector<C
 Block* Grid::addBlock(const Block& block) {
 	// if current already exists, remove it
 	if (current) {
+		onBoard.back().clear();
 		onBoard.pop_back();
 		current = nullptr;
 	}
@@ -25,6 +26,7 @@ Block* Grid::addBlock(const Block& block) {
 	bool result = current->addToGrid(this);
 	// pop last block if it cannot be added
 	if (!result) {
+		onBoard.back().clear();
 		onBoard.pop_back();
 		current = nullptr;
 	}
@@ -32,6 +34,10 @@ Block* Grid::addBlock(const Block& block) {
 }
 
 Block* Grid::addBlocks(const vector<Block>& blocks) {
+	// DEBUGGING
+	cout << "[DEBUG] Number of blocks being added: " << blocks.size() << endl;
+
+
 	Block* result;
 	for (auto it = blocks.begin(), last = prev(blocks.end()); it != blocks.end(); ++it) {
 		result = addBlock(*it);
@@ -143,11 +149,11 @@ void Grid::removeCell(const Coord& coord) {
 }
 
 int Grid::updateCells(int level) {
-    unsigned int temp = shiftCells();
-    if (temp != 0) {
-        dropsSinceClear = 0;
-    }
-	return pow(level + temp, 2);
+	unsigned int temp = shiftCells();
+	if (temp != 0) {
+		dropsSinceClear = 0;
+	}
+	return temp ? pow(level + temp, 2) : 0;
 }
 
 int Grid::updateBlocks() {
@@ -211,8 +217,8 @@ void Grid::drop(const vector<Coord>& coords) {
 	
 	// clear current
 	current = nullptr;
-    // increment drop counter
-    ++dropsSinceClear;
+	// increment drop counter
+	++dropsSinceClear;
 }
 
 void Grid::print(unsigned int row) {

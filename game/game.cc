@@ -11,10 +11,18 @@ const int height = 18;
 void Game::initialize(int startLevel, int seed, bool isText){
 	this->seed = seed;
 	this->startLevel = startLevel;
+	if(!isText){
+		//Xwindow *window = new Xwindow();
+		//this->window = window; 
+	}
 
 }
 
-Game::Game(){}
+Game::Game(){
+
+//	Xwindow *window = new Xwindow();
+//	this->window = window; 
+}
 
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
 	players.emplace_back(Player{playerName, this, startLevel, scriptFile, seed});
@@ -37,6 +45,9 @@ void Game::play() {
                 break;
             }
 	    else if(result == StatusCode::Terminate){
+            for (auto &q: players) {
+                q.clear(); // Tell player to free all heap allocated objects
+            }
 	    	exit(0);
 	    }
 	if(highScore < p.getScore())
@@ -56,7 +67,8 @@ void Game::setEffect(Player& player, Effect effect, Block::Type t) {
     }
 }
 void Game::print() {
-    for (int i = 1; i <= height + 6; i++) {
+    cout << endl;
+    for (int i = 1; i <= height + 7; i++) {
         for (auto &p: players) {
             p.print(i);
 	   cout << "    ";

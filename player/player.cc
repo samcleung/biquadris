@@ -13,21 +13,25 @@
 #include "../block/zblock.h"
 #include "../block/tblock.h"
 #include "../level/level.h"
+#include "../coord/coord.h"
 
 using namespace std;
 
 // grid constants
 const int width = 11;
 const int height = 18;
+const int nextHeight = 2;
 
 istream *Player::in = &cin;
 string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
-name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
-level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
-	current = grid->addBlocks(level->createBlock(false,0));
+name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, initLevel{Level}, lev{Level},
+level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{new Grid(width,nextHeight)} {
+	current = grid->addBlocks(level->createBlock(isHeavy(),0));
 	score += grid->update(lev);
+    queue = level->createBlock(isHeavy(),1);
+    nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
 } 
 
 // Read in all the commands
@@ -86,7 +90,16 @@ StatusCode Player::turn() {
 			case (int)Command::Action::Drop:
                 updateDropsSinceClear();
 				current->drop();
-				current = grid->addBlocks(level->createBlock(isHeavy(), dropsSinceClear));
+                score += grid->update(lev);
+                current = grid->addBlocks(queue);
+                score += grid->update(lev);
+                queue = level->createBlock(isHeavy(),dropsSinceClear);
+                delete nextGrid;
+                nextGrid = new Grid(width,nextHeight);
+                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+                if(!current) {
+                    return StatusCode::Terminate;
+                }
 				score += grid->update(lev);
 				game->print();
 				quit = true;
@@ -99,6 +112,7 @@ StatusCode Player::turn() {
                         level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
                     }
                 }
+                game->print();
 				break;
 			case (int)Command::Action::LevelDown:
                 for(unsigned int i = 0; i < command.multiplier; ++i) {
@@ -108,6 +122,7 @@ StatusCode Player::turn() {
                         level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
                     }
                 }
+                game->print();
 				break;
 			case (int)Command::Action::I:
 				current = grid->addBlock(IBlock{points, getDropBy()});
@@ -185,15 +200,19 @@ void Player::print(int n) {
 	else{
 		switch(n){
 			case 22:
-			cout << "-------------";
-			break;
+                cout << "-------------";
+                break;
 			case 23: 
-			cout <<"Next:       ";
-			break;
-			case 24: break;
+                cout << "Next:        ";
+                break;
+			case 24:
+                nextGrid->print(1);
+                break;
+            case 25:
+                nextGrid->print(0);
+                break;
 		}
 	}
-
 }
 
 void Player::setEffect(Effect effect, Block::Type force) {
@@ -223,12 +242,17 @@ void Player::reset() {
     effect = Effect::None;
     delete grid;
     grid = new Grid{width,height};
-    lev = 0;
+    lev = initLevel;
     delete level;
-    level = Level::getLevel(0,scriptFile);
-    updateDropsSinceClear();
+    level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+    dropsSinceClear = 0;
+    score = 0;
     current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));
-    dropsSinceClear = 0;    
+    score += grid->update(lev);
+    queue = level->createBlock(isHeavy(),dropsSinceClear);
+    delete nextGrid;
+    nextGrid = new Grid(width,nextHeight);
+    nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
 }
 
 bool Player::isHeavy() {
@@ -251,6 +275,12 @@ void Player::updateDropsSinceClear() {
     dropsSinceClear = grid->getDropsSinceClear();
 }
 
-unsigned int Player::getScore(){
+unsigned int Player::getScore() {
 	return score;
+}
+
+void Player::clear() {
+    delete grid;
+    delete level;
+    delete nextGrid;
 }

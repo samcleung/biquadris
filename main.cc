@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// command constants
+// command constants test
 const string STARTLEVEL = "-startlevel";
 const string TEXT = "-text";
 const string SEED = "-seed";
@@ -42,7 +42,8 @@ int main(int argc, char *argv[]) {
 	scriptFiles[2] = DEFAULTSF2;
 
 	int startLevel = 0;
-	int seed;
+	int seed = 893;
+	bool isTextOnly = false;
 	// setup game settings
 	for (int i = 1; i < argc; ++i) {
 		int n;
@@ -52,7 +53,7 @@ int main(int argc, char *argv[]) {
 			istringstream iss{argv[++i]};
 			if (iss >> n) startLevel = n;
 		} else if (command == TEXT) {
-			//game.isTextOnly = true;
+			isTextOnly = true;
 		} else if (command == SEED) {
 			istringstream iss{argv[++i]};
 			if (iss >> n) seed = n;
@@ -63,7 +64,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	game.initialize(startLevel, seed);
+	game.initialize(startLevel, seed, isTextOnly);
 	int maxMapKey = scriptFiles.rbegin()->first;
 	int playerCount = 0;
 

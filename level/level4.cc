@@ -2,10 +2,12 @@
 #include "../block/iblock.h"
 #include "../block/jblock.h"
 #include "../block/sblock.h"
+#include "../block/starblock.h"
 #include "../block/lblock.h"
 #include "../block/tblock.h"
 #include "../block/zblock.h"
 #include "../block/oblock.h"
+#include "../coord/coord.h"
 #include <vector>
 #include <fstream>
 using namespace std;
@@ -23,10 +25,14 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
+	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
+		placeholder.push_back(StarBlock{score, dropBy, Coord::mid()});
+	}
 	if(isFromFile){
 	switch(readFromFile[position]){
 		case 'I':
 			placeholder.push_back(IBlock{score, dropBy});
+		break;
 		case 'J':
 			placeholder.push_back(JBlock{score, dropBy});
 		break;
@@ -48,9 +54,8 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 	}
 	if((unsigned)++position == readFromFile.size())
 		position = 0;
-	return placeholder;
 	}
-
+	else{
 	int x = rand() % 9 + 1;
 	if(x <= 1)
 		placeholder.push_back(OBlock{score, dropBy});
@@ -66,12 +71,9 @@ vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
 		placeholder.push_back(SBlock{score, dropBy});
 	else if (x <= 9)
 		placeholder.push_back(ZBlock{score, dropBy});
-	
-	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
-		placeholder.push_back(ZBlock{score, dropBy});
 	}
 //	cout << "VALUE OF NUMBER OF TURNS" << numberOfTurns << endl;
-//	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size();
+//	cout << "LENGTH OF ARRAY RETURNED" << placeholder.size() << endl;
 	dropBy = dropByCopy;
 	return placeholder;
 }

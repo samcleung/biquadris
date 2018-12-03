@@ -10,25 +10,31 @@
 class Grid;
 
 class Block {
+	public:
+	enum class Type { J, O, Z, I, L, S, T };
+        enum class Translation { Left = 0, Up, Right, Down };
+        enum class Rotation { Clockwise = 4, CounterClockwise };
+
+	private:
 	int points = 0;
 	unsigned int dropBy = 0;
 	unsigned int size = 0;
 	Grid* grid = nullptr;
-	std::vector<Coord> getCellCoords();
+	std::vector<Coord> getCellCoords();	
+	bool rotateCells(Rotation);
+	bool translateCells(Translation);
+	void applyDropBy();
 	
 	protected:
 	std::vector<Cell> cells;
 	Block(int points, unsigned int dropBy, unsigned int size);
 
 	public:
-	enum class Type { J, O, Z, I, L, S, T };
-	enum class Translation { Left = 0, Up, Right, Down };
-        enum class Rotation { Clockwise = 4, CounterClockwise };
-	
 	Block(const Block& other);
-	~Block();
-	bool rotate(Rotation, unsigned int count = 1);
-	bool translate(Translation, unsigned int count = 1);
+	Block(const Block& other, const Coord& coord);
+	void clear();
+	void rotate(Rotation, unsigned int count = 1);
+	void translate(Translation, unsigned int count = 1);
 	void drop();
 	bool addToGrid(Grid* g);
 	int getPoints() const;

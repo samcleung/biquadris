@@ -34,7 +34,7 @@ class Grid {
 	int update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks)
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
 	void print(unsigned int row); // prints a grid row to text-display
-    int getDropsSinceClear() const; // returns drops since clear 
+	int getDropsSinceClear() const; // returns drops since clear 
 };
 
 #endif

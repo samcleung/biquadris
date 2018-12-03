@@ -4,10 +4,13 @@
 #include "../player/player.h"
 #include "../common/enums.h"
 #include "../block/block.h"
+//#include "../graphics/window.h"
+
 class Player;
 
 class Game {
 	const std::string name;
+//	Xwindow *window;
 	const std::string scriptFile;
 	int seed = 893;
 	unsigned int highScore = 0;
