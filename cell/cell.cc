@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include "cell.h"
+#include "../game/game.h"
 #include "../block/block.h"
 #include "../coord/coord.h"
 
@@ -28,19 +29,21 @@ Coord Cell::getCoord() const {
 	return coord;
 }
 
-// TODO
 string Cell::print(int offsetX, int offsetY) const {
 	// prints cell to text interface in its corresponding color
 	ostringstream oss;
-	oss << "\033[";
-	int x = (int)color;
-	if (x < 0) oss << "2;" << x * -1;
-	else oss << "22;" << x;
-	oss << "m" << value << "\033[0m";
+	if (Game::isBonusEnabled) {
+		oss << "\033[";
+		int x = (int)color;
+		if (x < 0) oss << "2;" << x * -1;
+		else oss << "22;" << x;
+		oss << "m" << value << "\033[0m";
+	} else {
+		oss << value;
+	}
 	return oss.str();
 }
 
-// TODO
 ostream& operator<<(std::ostream& out, const Cell& cell) {
 	out << cell.print(0, 0);
 	return out;
