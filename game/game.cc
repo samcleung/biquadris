@@ -52,8 +52,13 @@ void Game::play() {
                 q.clear(); // Tell player to free all heap allocated objects
             }
 	    cout << "GAME OVER. " << p.getName() << " has lost."  << endl;
-	    cout << "Hi Score: " << highScore << ". Achieved by: " << personInLead << endl;
-	    	exit(0);
+	    if(highScore != 0)
+	    	cout << "Hi Score: " << highScore << ". Achieved by: " << personInLead << endl;
+	    else
+	    	cout << "Uh Oh. It seems you both only got 0. Git gud" << endl;
+
+	    return;
+
 	    }
 	if(highScore < p.getScore())
 		personInLead = p.getName();
