@@ -20,13 +20,13 @@ Level4::Level4(string s): isFromFile{true}{
 	while (ifs >> a)
 		readFromFile.push_back(a);
 }
-vector<Block> Level4::createBlock(bool isHeavy, int numberOfTurns){
+vector<Block> Level4::createBlockIMP(bool isHeavy, int numberOfTurns){
 	int dropByCopy = dropBy;
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
 	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
-		placeholder.push_back(StarBlock{score, dropBy, Coord::mid()});
+		placeholder.push_back(StarBlock{0, dropBy, Coord::mid()});
 	}
 	if(isFromFile){
 	switch(readFromFile[position]){
