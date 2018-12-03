@@ -31,6 +31,8 @@ class Player {
     	bool isHeavy();
     	void updateDropsSinceClear();
 	unsigned int getDropBy();
+	void readEffect(int);
+
 public:
     	static std::istream *in;
     	static std::string file;

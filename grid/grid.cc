@@ -148,12 +148,13 @@ void Grid::removeCell(const Coord& coord) {
 	}
 }
 
-int Grid::updateCells(int level) {
-	unsigned int temp = shiftCells();
-	if (temp != 0) {
+pair<int,int> Grid::updateCells(int level) {
+	unsigned int rowsCleared = shiftCells();
+	if (rowsCleared != 0) {
 		dropsSinceClear = 0;
 	}
-	return temp ? pow(level + temp, 2) : 0;
+    int score = rowsCleared ? pow(level + rowsCleared, 2) : 0;
+    return pair<int,int> (score, rowsCleared);
 }
 
 int Grid::updateBlocks() {
@@ -170,8 +171,10 @@ int Grid::updateBlocks() {
 	return points;
 }
 
-int Grid::update(int level) {
-	return updateCells(level) + updateBlocks();
+pair<int,int> Grid::update(int level) {
+    pair<int,int> temp = updateCells(level);
+    int score = temp.first + updateBlocks();
+    return pair<int,int> (score, temp.second);
 }
 
 bool Grid::isValid(const vector<Coord>& coords) {
@@ -221,15 +224,33 @@ void Grid::drop(const vector<Coord>& coords) {
 	++dropsSinceClear;
 }
 
-void Grid::print(unsigned int row) {
+void Grid::print(unsigned int row, Effect effect) {
 	// print left border of grid
 	cout << "|";
 	
 	// print cell
-	for (const auto& cell : cells[row]) {
-		if (cell) cout << *cell;
-		else cout << ' ';
-	};
+    if (effect == Effect::Blind) {
+        int col = 0;
+        for (const auto& cell : cells[row]) {
+            if ((row <= 13) && (row >= 4)) {
+                if ((col >= 2) && (col <= 8)) {
+                    cout << "?";
+                } else {
+                    if (cell) cout << *cell;
+                    else cout << ' ';
+                }
+            } else {
+                if (cell) cout << *cell;
+                else cout << ' ';
+            }
+            ++col;
+        }
+    } else {
+        for (const auto& cell : cells[row]) {
+            if (cell) cout << *cell;
+            else cout << ' ';
+        }    
+    }
 	
 	// print right border of grid
 	cout << "|";
