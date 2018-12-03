@@ -91,9 +91,9 @@ StatusCode Player::turn() {
                 current = grid->addBlocks(queue);
                 score += grid->update(lev);
                 queue = level->createBlock(isHeavy(),dropsSinceClear);
-//                delete nextGrid;
-//                nextGrid = new Grid(width,nextHeight);
-//                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+                delete nextGrid;
+                nextGrid = new Grid(width,nextHeight);
+                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
                 if(!current) {
                     return StatusCode::Terminate;
                 }
@@ -270,6 +270,12 @@ void Player::updateDropsSinceClear() {
     dropsSinceClear = grid->getDropsSinceClear();
 }
 
-unsigned int Player::getScore(){
+unsigned int Player::getScore() {
 	return score;
+}
+
+void Player::clear() {
+    delete grid;
+    delete level;
+    delete nextGrid;
 }

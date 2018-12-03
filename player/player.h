@@ -41,6 +41,7 @@ class Player {
     bool isHeavy();
     unsigned int getDropBy();
     void updateDropsSinceClear();
+    void clear();
 };
 
 #endif
