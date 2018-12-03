@@ -11,7 +11,7 @@ class Grid;
 
 class Block {
 	public:
-	enum class Type { J, O, Z, I, L, S, T };
+	enum class Type { J, O, Z, I, L, S, T, None};
         enum class Translation { Left = 0, Up, Right, Down };
         enum class Rotation { Clockwise = 4, CounterClockwise };
 
