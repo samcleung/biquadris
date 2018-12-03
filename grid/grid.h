@@ -26,17 +26,37 @@ class Grid {
 	bool moveCell(const Coord&, const Coord&);
 
 	public:
+	//Ctor for grid. 
 	Grid(int width, int height);
 
-	Block* addBlock(const Block& block); // adds a block to the grid
-	Block* addBlocks(const std::vector<Block>& blocks); // adds multiple blocks to the grid, automatically dropping all but the last one
-	bool addCells(const std::vector<Cell*>& cells); // adds cells to the grid, true if successful
-	void removeCell(const Coord& coord); // removes a cell from the grid, making cell invalid in parent block
-	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
-	std::pair<int,int> update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks) and # rows cleared
+	//Adds a block to the grid.
+	//Returns a pointer to the new block. Returns nullptr if unable to add the block
+	Block* addBlock(const Block& block);
+
+	//Adds multiple blocks to the grid, dropping all blocks but the last one
+	//Returns a pointer to the LAST block. Retruns nullptr if unable to add the Block
+	Block* addBlocks(const std::vector<Block>& blocks);
+
+	//Adds cells to the grid. Returns true if successful, false otherwise
+	bool addCells(const std::vector<Cell*>& cells);
+	
+	//Removes a cell from the grid, making it invalid in the block that owns that cell
+	void removeCell(const Coord& coord);
+
+	//Moves cells to a new location. Returns true if successful, false otherwise
+	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords);
+
+	//Updates all cells and blocks. Basically checks if any rows can be deleted.
+	//Returns a pair: (# of points earned, # of rows cleared)
+	std::pair<int,int> update(int level);
+
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
-	void print(unsigned int row, Effect effect); // prints a grid row to text-display
-	int getDropsSinceClear() const; // returns drops since clear 
+
+	//Prints the indicated row on to std::cout. Applies the blind effect if specified. 
+	void print(unsigned int row, Effect effect);
+
+	//Returns number of blocks that have been dropped since the last clear
+	int getDropsSinceClear() const;
 };
 
 #endif
