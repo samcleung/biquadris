@@ -11,7 +11,7 @@ using namespace std;
 Level2::Level2(int seed): seed{seed}{
 	srand(seed);
 }
-vector<Block> Level2::createBlock(bool isHeavy, int numberOfTurns){
+vector<Block> Level2::createBlockIMP(bool isHeavy, int numberOfTurns){
 	vector<Block> placeholder;
 	unsigned int dropBy = 0;
 	if(isHeavy)

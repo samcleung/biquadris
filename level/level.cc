@@ -15,6 +15,11 @@ Level * Level::getLevel(int level, int seed, string sequencefile) {
         default: throw;
     }
 }
+
+vector<Block> Level::createBlock(bool isHeavy, int numberOfTurns){
+	return createBlockIMP(isHeavy, numberOfTurns);
+}
+
 Level::~Level(){}
 Level * Level::getLevel(int level, string stream){
 	switch(level){

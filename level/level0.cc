@@ -14,7 +14,7 @@ Level0::Level0(string infile): infile{infile} {
 	while(ifs >> c)
 		commands.push_back(c);
 }
-vector <Block> Level0::createBlock(bool isHeavy, int numberOfTurns){
+vector <Block> Level0::createBlockIMP(bool isHeavy, int numberOfTurns){
 	char nextBlock = commands[position];
 	position++;
 	unsigned int dropBy = 0;

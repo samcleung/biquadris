@@ -20,7 +20,7 @@ Level3::Level3(string s): readingFromScript{true}{
 		blocksFromFile.push_back(a);
 
 }
-vector<Block> Level3::createBlock(bool isHeavy, int numberOfTurns){
+vector<Block> Level3::createBlockIMP(bool isHeavy, int numberOfTurns){
 	unsigned int dropByCopy = dropBy;
 	if(isHeavy)
 		dropByCopy++;
