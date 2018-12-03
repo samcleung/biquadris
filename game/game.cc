@@ -45,6 +45,9 @@ void Game::play() {
                 break;
             }
 	    else if(result == StatusCode::Terminate){
+            for (auto &q: players) {
+                q.clear(); // Tell player to free all heap allocated objects
+            }
 	    	exit(0);
 	    }
 	if(highScore < p.getScore())
