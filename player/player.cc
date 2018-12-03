@@ -201,7 +201,7 @@ void Player::print(int n) {
 		}
 	}
 	else if ( n <= 21)
-		grid->print(abs(n-21));
+		grid->print(abs(n-21), effect);
 	else{
 		switch(n){
 			case 22:
@@ -211,10 +211,10 @@ void Player::print(int n) {
                 cout << "Next:        ";
                 break;
 			case 24:
-                nextGrid->print(1);
+                nextGrid->print(1, Effect::None);
                 break;
             case 25:
-                nextGrid->print(0);
+                nextGrid->print(0, Effect::None);
                 break;
 		}
 	}

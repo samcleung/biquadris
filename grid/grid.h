@@ -6,6 +6,7 @@
 #include "../block/block.h"
 #include "../cell/cell.h"
 #include "../coord/coord.h"
+#include "../common/enums.h"
 
 class Block;
 class Cell;
@@ -34,7 +35,7 @@ class Grid {
 	bool moveCells(const std::vector<Coord>& oldCoords, const std::vector<Coord>& newCoords); // moves cells to new location - true if successful
 	std::pair<int,int> update(int level); // updates all cells and blocks, returning the # of points earned (from cells & blocks) and # rows cleared
 	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
-	void print(unsigned int row); // prints a grid row to text-display
+	void print(unsigned int row, Effect effect); // prints a grid row to text-display
 	int getDropsSinceClear() const; // returns drops since clear 
 };
 

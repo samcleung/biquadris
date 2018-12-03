@@ -224,15 +224,33 @@ void Grid::drop(const vector<Coord>& coords) {
 	++dropsSinceClear;
 }
 
-void Grid::print(unsigned int row) {
+void Grid::print(unsigned int row, Effect effect) {
 	// print left border of grid
 	cout << "|";
 	
 	// print cell
-	for (const auto& cell : cells[row]) {
-		if (cell) cout << *cell;
-		else cout << ' ';
-	};
+    if (effect == Effect::Blind) {
+        int col = 0;
+        for (const auto& cell : cells[row]) {
+            if ((row <= 13) && (row >= 4)) {
+                if ((col >= 2) && (col <= 8)) {
+                    cout << "?";
+                } else {
+                    if (cell) cout << *cell;
+                    else cout << ' ';
+                }
+            } else {
+                if (cell) cout << *cell;
+                else cout << ' ';
+            }
+            ++col;
+        }
+    } else {
+        for (const auto& cell : cells[row]) {
+            if (cell) cout << *cell;
+            else cout << ' ';
+        }    
+    }
 	
 	// print right border of grid
 	cout << "|";
