@@ -270,6 +270,12 @@ void Player::updateDropsSinceClear() {
     dropsSinceClear = grid->getDropsSinceClear();
 }
 
-unsigned int Player::getScore(){
+unsigned int Player::getScore() {
 	return score;
+}
+
+void Player::clear() {
+    delete grid;
+    delete level;
+    delete nextGrid;
 }
