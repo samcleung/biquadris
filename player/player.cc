@@ -275,7 +275,7 @@ unsigned int Player::getScore() {
 }
 
 void Player::clear() {
-//    delete grid;
+    delete grid;
     delete level;
-//    delete nextGrid;
+    delete nextGrid;
 }
