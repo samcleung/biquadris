@@ -299,7 +299,7 @@ void Player::clear() {
 void Player::readEffect(int e) {
     bool validEffect = true;
     string eff;
-    if (e == 2) {
+    if (e >= 2) {
         while(validEffect) {
             cout << "Please enter an effect (blind, heavy, or force): ";
             cin >> eff;
