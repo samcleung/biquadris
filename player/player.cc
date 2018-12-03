@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
+#include <utility>
 #include "player.h"
 #include "../common/enums.h"
 #include "../command/command.h"
@@ -29,7 +30,8 @@ Player::Player(const std::string& name, Game *game, int Level, string scriptfile
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, initLevel{Level}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{new Grid(width,nextHeight)} {
 	current = grid->addBlocks(level->createBlock(isHeavy(),0));
-	score += grid->update(lev);
+    pair <int,int> tempPair(grid->update(lev));
+	score += tempPair.first;
     queue = level->createBlock(isHeavy(),1);
     nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
 } 
@@ -84,12 +86,16 @@ StatusCode Player::turn() {
 				current->rotate(Block::Rotation::CounterClockwise, command.multiplier);
 				game->print();
 				break;
-			case (int)Command::Action::Drop:
+			case (int)Command::Action::Drop: {
                 updateDropsSinceClear();
 				current->drop();
-                score += grid->update(lev);
+                pair <int,int> tempPair(grid->update(lev));
+	            score += tempPair.first;
+                readEffect(tempPair.second);
+                // Get next block in queue
                 current = grid->addBlocks(queue);
-                score += grid->update(lev);
+                pair <int,int> tempPair2(grid->update(lev));
+                score += tempPair.first;
                 queue = level->createBlock(isHeavy(),dropsSinceClear);
                 delete nextGrid;
                 nextGrid = new Grid(width,nextHeight);
@@ -97,10 +103,10 @@ StatusCode Player::turn() {
                 if(!current) {
                     return StatusCode::Terminate;
                 }
-				score += grid->update(lev);
 				game->print();
 				quit = true;
 				break;
+            }
 			case (int)Command::Action::LevelUp:
                 for(unsigned int i = 0; i < command.multiplier; ++i) {
                     if (lev < 4) {
@@ -215,15 +221,17 @@ void Player::print(int n) {
 void Player::setEffect(Effect effect, Block::Type force) {
     this->effect = effect;
     if(effect == Effect::Force){
-	switch (force) { // Uncomment later on
-		case Block::Type::I: setBlock(IBlock{}); break;
-		case Block::Type::J: setBlock(JBlock{}); break;
-		case Block::Type::L: setBlock(LBlock{}); break;
-		case Block::Type::O: setBlock(OBlock{}); break;
-		case Block::Type::S: setBlock(SBlock{}); break;
-		case Block::Type::T: setBlock(TBlock{}); break;
-		case Block::Type::Z: setBlock(ZBlock{}); break;
-        	}
+        int points = pow(lev + 1, 2);
+        switch (force) {
+            case Block::Type::I: setBlock(IBlock{points, getDropBy()}); break;
+            case Block::Type::J: setBlock(JBlock{points, getDropBy()}); break;
+            case Block::Type::L: setBlock(LBlock{points, getDropBy()}); break;
+            case Block::Type::O: setBlock(OBlock{points, getDropBy()}); break;
+            case Block::Type::S: setBlock(SBlock{points, getDropBy()}); break;
+            case Block::Type::T: setBlock(TBlock{points, getDropBy()}); break;
+            case Block::Type::Z: setBlock(ZBlock{points, getDropBy()}); break;
+            case Block::Type::None: break;
+        }
 	}
 }
 
@@ -244,8 +252,9 @@ void Player::reset() {
     level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
     dropsSinceClear = 0;
     score = 0;
-    current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));
-    score += grid->update(lev);
+    current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));    
+    pair <int,int> tempPair(grid->update(lev));
+    score += tempPair.first;
     queue = level->createBlock(isHeavy(),dropsSinceClear);
     delete nextGrid;
     nextGrid = new Grid(width,nextHeight);
@@ -280,4 +289,43 @@ void Player::clear() {
     delete grid;
     delete level;
     delete nextGrid;
+}
+
+void Player::readEffect(int e) {
+    bool validEffect = true;
+    string eff;
+    if (e == 2) {
+        while(validEffect) {
+            cout << "Please enter an effect (blind, heavy, or force): ";
+            cin >> eff;
+            if (eff == "blind") {
+                validEffect = false;
+                game->setEffect(*this, Effect::Blind, Block::Type::None);
+            } else if (eff == "heavy") {
+                validEffect = false;
+                game->setEffect(*this, Effect::Heavy, Block::Type::None);
+            } else if (eff == "force") {
+                bool readChar = true;;
+                validEffect = false;
+                char c;
+                while(readChar) {
+                    readChar = false;
+                    cout << "Please enter a block type: ";
+                    cin >> c;
+                    switch (c) {
+                        case 'I': game->setEffect(*this, Effect::Force, Block::Type::I); break;
+                        case 'J': game->setEffect(*this, Effect::Force, Block::Type::J); break;
+                        case 'L': game->setEffect(*this, Effect::Force, Block::Type::L); break;
+                        case 'O': game->setEffect(*this, Effect::Force, Block::Type::O); break;
+                        case 'S': game->setEffect(*this, Effect::Force, Block::Type::S); break;
+                        case 'T': game->setEffect(*this, Effect::Force, Block::Type::T); break;
+                        case 'Z': game->setEffect(*this, Effect::Force, Block::Type::Z); break;
+                        default: readChar = true; break;
+                    }
+                }
+            } else {
+                cout << "Invalid effect." << endl;
+            }
+        }
+    }
 }

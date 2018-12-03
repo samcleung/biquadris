@@ -27,6 +27,7 @@ class Player {
     int dropsSinceClear;
     std::vector<Block> queue;
     Grid *nextGrid;
+    void readEffect(int);
 	
 	public:
     static std::istream *in;
