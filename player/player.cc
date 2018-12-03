@@ -33,17 +33,20 @@ level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0} {
 // Read in all the commands
 StatusCode Player::turn() {
 	string input;
-    string levelFile;
+	string levelFile;
+	bool validCommand = true;
 	bool quit = false;
 
 	// Read input
 	// Invariant that only drop/restart/EOF will end a player's turn
 	while (!quit) {
-		bool validCommand = true;
-        
-		if (!validCommand) cout << "ERROR: Invalid command" << endl;
-		cout << "Enter a command: ";
-        *in >> input;
+		if (!validCommand) {
+			Command::promptInvalid();
+			validCommand = true;
+		}
+
+		Command::prompt(name);
+        	*in >> input;
         
 		if (file.empty() && in->eof()) // Reached EOF in stdin
 			break;

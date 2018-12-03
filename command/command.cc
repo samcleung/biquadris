@@ -29,11 +29,9 @@ map<set<string>, Command::Action> Command::commands = {
 	{{"restart"}, Command::Action::Restart},
 	{{"renamealias"}, Command::Action::RenameAlias},
 	{{"addalias"}, Command::Action::AddAlias},
-	{{"removealias"}, Command::Action::RemoveAlias}
-	//{{"print"}, Command::Action::Print}
+	{{"removealias"}, Command::Action::RemoveAlias},
+	{{"help"}, Command::Action::Help}
 };
-
-
 
 
 // copy of string as param, will be modified by getMultiplier
@@ -94,6 +92,9 @@ Command::operator int() const {
 bool Command::operator()() {
 	if (!executed) {
 		switch(action) {
+			case Command::Action::Help:
+				printHelp();
+				break;
 			case Command::Action::RenameAlias:
 				renameAlias();
 				break;
@@ -111,71 +112,100 @@ bool Command::operator()() {
 		return true;
 	}
 
-	// cout ERROR command has already been executed
+	cout << "ERROR: command has already been executed" << endl;
 	return false;
 }
 
-void Command::renameAlias() {
+void Command::renameAlias() const {
 	string oldAlias, newAlias;
 
 	if (cin >> oldAlias && cin >> newAlias) {
-		for (const auto& m: commands) {
-			auto loc = m.first.find(oldAlias);
-			if (loc != m.first.end()){
-				m.first.erase(loc);
-				m.first.insert(newAlias);
-				// cout alias x renamed to y
-				return;
+		for (auto it = commands.begin(); it != commands.end(); ++it) {
+			for (const auto& alias: it->first) {
+				if (alias == oldAlias) {
+					set<string> oldSet = it->first;
+					Command::Action a = it->second;
+					oldSet.erase(oldAlias);
+					oldSet.insert(newAlias);
+					commands.erase(it);
+					commands.insert(pair<set<string>, Command::Action>{oldSet, a});
+					cout << "Renamed alias \"" << oldAlias << "\" to \"" << newAlias<< "\"" << endl;
+					return;
+				}
 			}
 		}
 	}
 
-	// cout ERROR alias x does not exist
+	cout << "ERROR: alias \"" << oldAlias << "\" does not exist" << endl;
 }
 
-void Command::addAlias() {
+void Command::addAlias() const {
 	string oldAlias, newAlias;
 	
 	if (cin >> oldAlias && cin >> newAlias) {
 		// exit if new alias already exists
 		for (const auto& m: Command::commands) {
 			if (m.first.find(newAlias) != m.first.end()) {
-				// cout ERROR alias y already exists
+				cout << "ERROR: alias \"" << newAlias << "\" already exists" << endl;
 				return;
 			}
 		}
 		
 		// add alias for a command
-		for (const auto& m: Command::commands) {
-			if (m.first.find(oldAlias) != m.first.end()) {
-				m.first.insert(newAlias);
-				// cout added alias x for y
-				return;
+		for (auto it = commands.begin(); it != commands.end(); ++it) {
+			for (const auto& alias: it->first) {
+				if (alias == oldAlias) {
+					set<string> oldSet = it->first;
+					Command::Action a = it->second;
+					oldSet.insert(newAlias);
+					commands.erase(it);
+					commands.insert(pair<set<string>, Command::Action>{oldSet, a});
+					cout << "Added alias \"" << newAlias << "\" for \"" << oldAlias << "\"" << endl;
+					return;
+				}
 			}
 		}
 	}
 
-	// cout ERROR alias x does not exist
+	cout << "ERROR: alias \"" << oldAlias << "\" does not exist" << endl;
 }
 
-void Command::removeAlias() {
-	string alias;
+void Command::removeAlias() const {
+	string targetAlias;
 
-	if (cin >> alias) {
-		for (const auto& m: Command::commands) {
-			auto loc = m.first.find(alias);
-			if (loc != m.first.end()) {
-				if (m.first.size() == 1)
-					// cout ERROR cannot remove alias x, last alias
-				else {
-					m.first.erase(loc);
-					// cout removed alias x
-				}					
-				return
+	if (cin >> targetAlias) {
+		for (auto it = commands.begin(); it != commands.end(); ++it) {
+			for (const auto& alias: it->first) {
+				if (targetAlias == alias) {
+					if (it->first.size() == 1) {
+						cout << "ERROR: cannot remove alias \"" << targetAlias << "\", last alias" << endl;
+					} else {
+						set<string> oldSet = it->first;
+						Command::Action a = it->second;
+						oldSet.erase(targetAlias);
+						commands.erase(it);
+						commands.insert(pair<set<string>, Command::Action>{oldSet, a});
+						cout << "Removed alias \"" << targetAlias << "\"" << endl;
+					}
+
+					return;
+				}
 			}
 		}
 	}
 
-	// cout ERROR alias x does not exist
+	cout << "ERROR: alias \"" << targetAlias << "\" does not exist" << endl;
 }
 
+void Command::printHelp() const {
+	cout << "-------------------------" << endl;
+	cout << "All command aliases: " << endl;
+	for (const auto& m: commands) {
+		for (auto it = m.first.begin(), last = prev(m.first.end()); it != m.first.end(); ++it) {
+			cout << *it;
+			if (it != last) cout << ", ";
+		}
+		cout << endl;
+	}
+	cout << "-------------------------" << endl;
+}
