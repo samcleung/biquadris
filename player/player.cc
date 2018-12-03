@@ -58,6 +58,7 @@ StatusCode Player::turn() {
 			file = "";
 			delete in;
 			in = &cin; // Reset to stdin
+            cout << "\nEnter a command: ";
 			*in >> input;
 		}
         
@@ -100,6 +101,7 @@ StatusCode Player::turn() {
                 delete nextGrid;
                 nextGrid = new Grid(width,nextHeight);
                 nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+                removeEffect();
                 if(!current) {
                     return StatusCode::Terminate;
                 }
@@ -328,4 +330,8 @@ void Player::readEffect(int e) {
             }
         }
     }
+}
+
+void Player::removeEffect() {
+    effect = Effect::None;
 }
