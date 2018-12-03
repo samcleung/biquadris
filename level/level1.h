@@ -7,8 +7,8 @@
 class Level1: public Level {
 	const int score = 4;
 	unsigned int seed;
+	std::vector <Block> createBlockIMP(bool isHeavy, int numberOfTurns) override;
 	public:
-		std::vector <Block> createBlock(bool isHeavy, int numberOfTurns) override;
 		Level1(unsigned int seed);
 };
 

@@ -5,7 +5,6 @@
 #include "game/game.h"
 
 using namespace std;
-
 // command constants test
 const string STARTLEVEL = "-startlevel";
 const string TEXT = "-text";
