@@ -26,7 +26,7 @@ istream *Player::in = &cin;
 string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
-name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, lev{Level},
+name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, initLevel{Level}, lev{Level},
 level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{new Grid(width,nextHeight)} {
 	current = grid->addBlocks(level->createBlock(isHeavy(),0));
 	score += grid->update(lev);
@@ -109,6 +109,7 @@ StatusCode Player::turn() {
                         level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
                     }
                 }
+                game->print();
 				break;
 			case (int)Command::Action::LevelDown:
                 for(unsigned int i = 0; i < command.multiplier; ++i) {
@@ -118,6 +119,7 @@ StatusCode Player::turn() {
                         level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
                     }
                 }
+                game->print();
 				break;
 			case (int)Command::Action::I:
 				current = grid->addBlock(IBlock{points, getDropBy()});
@@ -237,9 +239,9 @@ void Player::reset() {
     effect = Effect::None;
     delete grid;
     grid = new Grid{width,height};
-    lev = 0;
+    lev = initLevel;
     delete level;
-    level = Level::getLevel(0,scriptFile);
+    level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
     dropsSinceClear = 0;
     score = 0;
     current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));

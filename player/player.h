@@ -20,6 +20,7 @@ class Player {
     int seed;
     Game *game;
     Grid *grid;
+    int initLevel;
     int lev;
     Level* level;
     Block *current;
