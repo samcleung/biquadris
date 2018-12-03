@@ -33,42 +33,37 @@ unsigned int Game::addPlayer(const string& playerName, const string& scriptFile)
 
 void Game::play() {
     this->print();
-    unsigned int highScore;
-    string personInLead;
+    unsigned int highScore = 0;
+    string personInLead = players.front().getName();
     bool endTurn = false;
     
     while (!endTurn) {
         for (auto &p: players) {
-	    auto result = p.turn();
+	       auto result = p.turn();
             
-            if (result == StatusCode::Default) { // Continue playing
+           if (result == StatusCode::Default) { // Continue playing
+           } else if (result == StatusCode::Restart) { // End turns
+               endTurn = true;
+               break;
+           } else if(result == StatusCode::Terminate) {
+               for (auto &q: players) {
+                   q.clear(); // Tell player to free all heap allocated objects
+               }
+               cout << "GAME OVER. " << p.getName() << " has lost."  << endl;
+               if(highScore != 0) {
+                   cout << "High Score: " << highScore << ". Achieved by: " << personInLead << endl;
+               } else {
+                   cout << "Uh Oh. It seems you both only got 0. Git gud" << endl;
+               }
+	           return;
+	       }
+            if (highScore < p.getScore()) {
+                personInLead = p.getName();
+                highScore = p.getScore();
             }
-	    else if (result == StatusCode::Restart) { // End turns
-                endTurn = true;
-                break;
-            }
-	    else if(result == StatusCode::Terminate){
-            for (auto &q: players) {
-                q.clear(); // Tell player to free all heap allocated objects
-            }
-	    cout << "GAME OVER. " << p.getName() << " has lost."  << endl;
-	    if(highScore != 0)
-	    	cout << "Hi Score: " << highScore << ". Achieved by: " << personInLead << endl;
-	    else
-	    	cout << "Uh Oh. It seems you both only got 0. Git gud" << endl;
-
-	    return;
-
-	    }
-	if(highScore < p.getScore())
-		personInLead = p.getName();
-		highScore = p.getScore();
         }
     }
-    for(auto &p: players)
-    	p.reset();
-
-	this->play();
+    restart();
 }
 
 void Game::setEffect(Player& player, Effect effect, Block::Type t) {
