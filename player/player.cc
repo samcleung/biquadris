@@ -186,6 +186,7 @@ StatusCode Player::turn() {
 	}
 	
 	if (in->eof()) { // EOF means terminate game
+        cout << endl;
 		return StatusCode::Terminate;
 	} else { // End the turn normally
 		return StatusCode::Default;
