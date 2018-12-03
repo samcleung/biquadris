@@ -30,25 +30,27 @@ struct Command {
 		RenameAlias,
 		AddAlias,
 		RemoveAlias,
-		Print
+		Help
 	};
 
 	const unsigned int multiplier;
 
 	Command(std::string input);
 	operator int() const;
-	bool operator==(const Action&) const;
-	bool execute(); // executes command on Command class
-	
+	bool operator()(); // executes command on Command class, returning true if valid
+	void renameAlias() const;
+	void addAlias() const;
+	void removeAlias() const;
+	void printHelp() const;
+	static void prompt(const std::string& pName) { std::cout << "[" << pName << "] Enter a command: "; }
+	static void promptInvalid() { std::cout << "ERROR: Invalid command. For a complete list of all command aliases, enter \"help\"." << std::endl; }
+
 	private:
+	bool executed = false;
 	const Action action;
 	unsigned int getMultiplier(std::string&);
 	Action getAction(const std::string&);
-
 	static std::map<std::set<std::string>, Action> commands;
-	static std::set<std::string> aliases;
 };
-
-bool operator==(const Command::Action&, const Command&);
 
 #endif
