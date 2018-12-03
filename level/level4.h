@@ -10,8 +10,8 @@ class Level4: public Level{
 	int position = 0;
 	unsigned int dropBy = 1;
 	int score = 25;
+	std::vector <Block> createBlockIMP(bool isHeavy, int numberOfTurns) override;
 public:
-	std::vector <Block> createBlock(bool isHeavy, int numberOfTurns) override;
 	Level4(int seed); 
 	Level4(std::string blockFile);
 };
