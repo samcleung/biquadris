@@ -51,8 +51,8 @@ StatusCode Player::turn() {
 			validCommand = true;
 		}
 
-		Command::prompt(name);
-        	*in >> input;
+        if (in == &cin) Command::prompt(name);
+        *in >> input;
         
 		if (file.empty() && in->eof()) // Reached EOF in stdin
 			break;
@@ -61,7 +61,7 @@ StatusCode Player::turn() {
 			file = "";
 			delete in;
 			in = &cin; // Reset to stdin
-            cout << "\nEnter a command: ";
+            Command::prompt(name);
 			*in >> input;
 		}
         
