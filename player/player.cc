@@ -91,9 +91,9 @@ StatusCode Player::turn() {
                 current = grid->addBlocks(queue);
                 score += grid->update(lev);
                 queue = level->createBlock(isHeavy(),dropsSinceClear);
-//                delete nextGrid;
-//                nextGrid = new Grid(width,nextHeight);
-//                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+                delete nextGrid;
+                nextGrid = new Grid(width,nextHeight);
+                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
                 if(!current) {
                     return StatusCode::Terminate;
                 }
