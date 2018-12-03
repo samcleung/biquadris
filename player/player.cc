@@ -101,11 +101,11 @@ StatusCode Player::turn() {
                 delete nextGrid;
                 nextGrid = new Grid(width,nextHeight);
                 nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
-                removeEffect();
                 if(!current) {
                     return StatusCode::Terminate;
                 }
 				game->print();
+                effect = Effect::None;
 				quit = true;
 				break;
             }
@@ -332,6 +332,3 @@ void Player::readEffect(int e) {
     }
 }
 
-void Player::removeEffect() {
-    effect = Effect::None;
-}

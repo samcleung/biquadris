@@ -28,7 +28,6 @@ class Player {
     std::vector<Block> queue;
     Grid *nextGrid;
     void readEffect(int);
-    void removeEffect();
 	
 	public:
     static std::istream *in;
