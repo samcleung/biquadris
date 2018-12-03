@@ -4,6 +4,8 @@
 
 using namespace std;
 
+bool Game::isBonusEnabled = false;
+
 // grid constants
 const int height = 18;
 
@@ -14,6 +16,7 @@ void Game::initialize(int startLevel, int seed, bool isText){
 		//Xwindow *window = new Xwindow();
 		//this->window = window; 
 	}
+	this->isBonusEnabled = isBonusEnabled;
 
 }
 

@@ -11,6 +11,7 @@ const string STARTLEVEL = "-startlevel";
 const string TEXT = "-text";
 const string SEED = "-seed";
 const string SCRIPTFILE = "-scriptfile";
+const string ENABLEBONUS = "-enablebonus";
 
 // default script file constants
 const string DEFAULTSF1 = "sequence1.txt";
@@ -45,6 +46,7 @@ int main(int argc, char *argv[]) {
 	int startLevel = 0;
 	int seed = 893;
 	bool isTextOnly = false;
+
 	// setup game settings
 	for (int i = 1; i < argc; ++i) {
 		int n;
@@ -58,6 +60,8 @@ int main(int argc, char *argv[]) {
 		} else if (command == SEED) {
 			istringstream iss{argv[++i]};
 			if (iss >> n) seed = n;
+		} else if (command == ENABLEBONUS) {
+			Game::isBonusEnabled = true;
 		} else {
 			int fileNumber = scriptFile(command);
 			if (fileNumber > 0) {

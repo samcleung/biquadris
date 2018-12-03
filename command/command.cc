@@ -3,6 +3,7 @@
 #include <map>
 #include <iostream>
 #include "command.h"
+#include "../game/game.h"
 
 using namespace std;
 
@@ -96,13 +97,18 @@ bool Command::operator()() {
 				printHelp();
 				break;
 			case Command::Action::RenameAlias:
-				renameAlias();
-				break;
+				if (Game::isBonusEnabled) {
+					renameAlias();
+					break;
+				}
 			case Command::Action::AddAlias:
-				addAlias();
-				break;
+				if (Game::isBonusEnabled) {
+					addAlias();
+					break;
+				}
 			case Command::Action::RemoveAlias:
-				removeAlias();
+				if (Game::isBonusEnabled) removeAlias();
+				else cout << "ERROR: bonus mode not activated (-enablebonus)" << endl;
 				break;
 			default:
 				return false;

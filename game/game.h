@@ -24,6 +24,7 @@ class Game {
 	void print();
 	void setEffect(Player&, Effect, Block::Type force = Block::Type::T);
 	unsigned int addPlayer(const std::string&, const std::string&);
+	static bool isBonusEnabled;
 };
 
 #endif
