@@ -1,10 +1,10 @@
 #ifndef __GAME_H__
 #define __GAME_H__
+//#include "../graphics/window.h"
 #include <vector>
 #include "../player/player.h"
 #include "../common/enums.h"
 #include "../block/block.h"
-//#include "../graphics/window.h"
 
 class Player;
 
@@ -13,11 +13,11 @@ class Game {
 //	Xwindow *window;
 	const std::string scriptFile;
 	int seed = 893;
-	unsigned int highScore = 0;
 	int startLevel = 0;
 	std::vector<Player> players;
 	public:
 	Game();
+	~Game();
 	void initialize(int startLevel = 0, int seed = 893, bool isTextDisplay = false);
 	void play();
 	void restart();
