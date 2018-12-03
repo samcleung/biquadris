@@ -1,7 +1,6 @@
 #include <string>
 #include <iostream>
 #include "game.h"
-#include "../player/player.h"
 
 using namespace std;
 
@@ -24,6 +23,9 @@ Game::Game(){
 //	this->window = window; 
 }
 
+Game::~Game(){
+}
+
 unsigned int Game::addPlayer(const string& playerName, const string& scriptFile) {
 	players.emplace_back(Player{playerName, this, startLevel, scriptFile, seed});
 	return players.size();
@@ -31,7 +33,8 @@ unsigned int Game::addPlayer(const string& playerName, const string& scriptFile)
 
 void Game::play() {
     this->print();
-    
+    unsigned int highScore;
+    string personInLead;
     bool endTurn = false;
     
     while (!endTurn) {
@@ -48,9 +51,12 @@ void Game::play() {
             for (auto &q: players) {
                 q.clear(); // Tell player to free all heap allocated objects
             }
+	    cout << "GAME OVER. " << p.getName() << " has lost."  << endl;
+	    cout << "Hi Score: " << highScore << ". Achieved by: " << personInLead << endl;
 	    	exit(0);
 	    }
 	if(highScore < p.getScore())
+		personInLead = p.getName();
 		highScore = p.getScore();
         }
     }

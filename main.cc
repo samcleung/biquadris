@@ -5,6 +5,7 @@
 #include "game/game.h"
 
 using namespace std;
+
 // command constants test
 const string STARTLEVEL = "-startlevel";
 const string TEXT = "-text";
@@ -40,6 +41,7 @@ int main(int argc, char *argv[]) {
 	scriptFiles[1] = DEFAULTSF1;
 	scriptFiles[2] = DEFAULTSF2;
 
+
 	int startLevel = 0;
 	int seed = 893;
 	bool isTextOnly = false;
@@ -64,7 +66,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	game.initialize(startLevel, seed, isTextOnly);
-	int maxMapKey = scriptFiles.rbegin()->first;
+	int maxMapKey = 2;
 	int playerCount = 0;
 
 	// create user prompt
