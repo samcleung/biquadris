@@ -39,10 +39,12 @@ Block::Block(const Block& other, const Coord& newCoord) {
 	}
 }
 
-Block::~Block() {
+void Block::clear() {
 	if (grid) {
 		vector<Coord> coords = getCellCoords();
 		for (const auto& coord: coords) grid->removeCell(coord);
+	} else {
+		for (auto& cell: cells) cell.remove();
 	}
 }
 
@@ -164,6 +166,13 @@ void Block::drop() {
 }
 
 bool Block::addToGrid(Grid* g) {
+	// DEBUG
+	/*cout << "Adding Block to Grid" << endl;
+	for (const auto& cell: cells) {
+		Coord coord = cell.getCoord();
+		cout << "(" << coord.x << "," << coord.y << ")" << endl;
+	}*/
+
 	vector<Cell*> addresses;
 	for (auto& cell: cells) addresses.emplace_back(&cell);	
 	bool result = g->addCells(addresses);
