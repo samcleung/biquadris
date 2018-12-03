@@ -161,7 +161,7 @@ StatusCode Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::NoRandom:
-				cin >> levelFile;
+				*in >> levelFile;
                 if ((lev == 3) || (lev == 4)) {
                     delete level;
                     level = Level::getLevel(lev, levelFile);
@@ -174,7 +174,7 @@ StatusCode Player::turn() {
                 }
 				break;
 			case (int)Command::Action::Sequence:
-				cin >> file;
+				*in >> file;
 				in = new ifstream(file.c_str());
 				break;
 			case (int)Command::Action::Restart:
@@ -302,8 +302,10 @@ void Player::readEffect(int e) {
     string eff;
     if (e >= 2) {
         while(validEffect) {
-            cout << "Please enter an effect (blind, heavy, or force): ";
-            cin >> eff;
+            if (in == &cin) {
+                cout << "Please enter an effect (blind, heavy, or force): ";
+            }
+            *in >> eff;
             if (eff == "blind") {
                 validEffect = false;
                 game->setEffect(*this, Effect::Blind, Block::Type::None);
@@ -316,8 +318,10 @@ void Player::readEffect(int e) {
                 char c;
                 while(readChar) {
                     readChar = false;
-                    cout << "Please enter a block type: ";
-                    cin >> c;
+                    if (in == &cin) {
+                        cout << "Please enter a block type: ";
+                    }
+                    *in >> c;
                     switch (c) {
                         case 'I': game->setEffect(*this, Effect::Force, Block::Type::I); break;
                         case 'J': game->setEffect(*this, Effect::Force, Block::Type::J); break;
@@ -330,7 +334,9 @@ void Player::readEffect(int e) {
                     }
                 }
             } else {
-                cout << "Invalid effect." << endl;
+                if (in == &cin) {
+                    cout << "Invalid effect." << endl;
+                }
             }
         }
     }
