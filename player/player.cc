@@ -24,7 +24,7 @@ const int width = 11;
 const int height = 18;
 const int nextHeight = 2;
 
-istream *Player::in = &cin;
+unique_ptr<ifstream> Player::inFile = nullptr;
 string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
@@ -50,18 +50,21 @@ StatusCode Player::turn() {
 			validCommand = true;
 		}
 
-        if (in == &cin) Command::prompt(name);
-        *in >> input;
+        	if (inFile == nullptr) {
+			Command::prompt(name);
+        		cin >> input;
+		} else {
+			*inFile >> input;
+		}
         
-		if (file.empty() && in->eof()) // Reached EOF in stdin
+		if (file.empty() && cin.eof()) // Reached EOF in stdin
 			break;
 
-		if (!file.empty() && in->eof()) { // EOF in file
+		if (!file.empty() && inFile->eof()) { // EOF in file
 			file = "";
-			delete in;
-			in = &cin; // Reset to stdin
+			inFile = nullptr;
 			Command::prompt(name);
-			*in >> input;
+			cin >> input;
 		}
         
 		Command command{input};
@@ -152,7 +155,8 @@ StatusCode Player::turn() {
 				break;
 			case (int)Command::Action::NoRandom:
 				if ((lev == 3) || (lev == 4)) {
-					*in >> levelFile;
+					if (inFile == nullptr) cin >> levelFile;
+					else *inFile >> levelFile;
 					level = unique_ptr<Level>(Level::getLevel(lev, levelFile));
 				}
 				break;
@@ -162,8 +166,8 @@ StatusCode Player::turn() {
 				}
 				break;
 			case (int)Command::Action::Sequence:
-				*in >> file;
-				in = new ifstream(file.c_str());
+				cin >> file;
+				inFile = make_unique<ifstream>(file.c_str());
 				break;
 			case (int)Command::Action::Restart:
 				return StatusCode::Restart;
@@ -173,7 +177,7 @@ StatusCode Player::turn() {
 		}
 	}
 	
-	if (in->eof()) { // EOF means terminate game
+	if (cin.eof()) { // EOF means terminate game
 		cout << endl;
 		return StatusCode::Terminate;
 	} else { // End the turn normally
@@ -270,15 +274,12 @@ void Player::readEffect(int e) {
     string eff;
     if (e >= 2) {
         while(validEffect) {
-            if (!file.empty() && in->eof()) { // EOF in file
-                file = "";
-                delete in;
-                in = &cin; // Reset to stdin
-            }
-            if (in == &cin) {
+            if (inFile == nullptr) {
                 cout << "Please enter an effect (blind, heavy, or force): ";
-            }
-            *in >> eff;
+		cin >> eff;
+            } else {
+		*inFile >> eff;
+	    }
             if (eff == "blind") {
                 validEffect = false;
                 game->setEffect(*this, Effect::Blind, Block::Type::None);
@@ -290,16 +291,17 @@ void Player::readEffect(int e) {
                 validEffect = false;
                 char c;
                 while(readChar) {
-                    if (!file.empty() && in->eof()) { // EOF in file
+                    if (!file.empty() && inFile->eof()) { // EOF in file
                         file = "";
-                        delete in;
-                        in = &cin; // Reset to stdin
+                        inFile = nullptr;
                     }
                     readChar = false;
-                    if (in == &cin) {
+                    if (inFile == nullptr) {
                         cout << "Please enter a block type: ";
-                    }
-                    *in >> c;
+			cin >> c;
+                    } else {
+			*inFile >> c;
+		    }
                     switch (c) {
                         case 'I': game->setEffect(*this, Effect::Force, Block::Type::I); break;
                         case 'J': game->setEffect(*this, Effect::Force, Block::Type::J); break;
@@ -312,7 +314,7 @@ void Player::readEffect(int e) {
                     }
                 }
             } else {
-                if (in == &cin) {
+                if (inFile == nullptr) {
                     cout << "Invalid effect." << endl;
                 }
             }
