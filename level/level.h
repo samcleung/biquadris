@@ -1,5 +1,6 @@
 #ifndef __LEVEL_H__
 #define __LEVEL_H__
+#include <memory>
 #include <vector>
 #include <string>
 #include "../block/block.h"
@@ -17,12 +18,12 @@ public:
 
 	//Static Method returning a pointer to a Level, determined by the provided int, level
 	//Optional value if a seed or a sequence file is specified by the Client
-	static Level *getLevel(int level, int seed = 893, std::string stream = "sequence1.txt");
+	static std::unique_ptr<Level> getLevel(int level, int seed = 893, std::string stream = "sequence1.txt");
 
 
 	//Only takes in a sequence file (no option for seed). Used for implementing norandom 
 	// and random options in level 3 and 4
-	static Level *getLevel(int level, std::string stream);
+	static std::unique_ptr<Level> getLevel(int level, std::string stream);
 };
 
 #endif

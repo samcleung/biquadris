@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <memory>
 #include "../game/game.h"
 #include "../grid/grid.h"
 #include "../level/level.h"
@@ -19,14 +20,14 @@ class Player {
 	unsigned int score = 0;
     	int seed;
     	Game *game;
-    	Grid *grid;
+    	std::unique_ptr<Grid> grid;
     	int initLevel;
     	int lev;
-    	Level* level;
+    	std::unique_ptr<Level> level;
     	Block *current;
     	int dropsSinceClear;
     	std::vector<Block> queue;
-    	Grid *nextGrid;
+    	std::unique_ptr<Grid> nextGrid;
     	void setBlock(Block);
     	bool isHeavy();
     	void updateDropsSinceClear();

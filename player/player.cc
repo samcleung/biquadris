@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <utility>
+#include <memory>
 #include "player.h"
 #include "../common/enums.h"
 #include "../command/command.h"
@@ -27,8 +28,7 @@ istream *Player::in = &cin;
 string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
-name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, initLevel{Level}, lev{Level},
-level{Level::getLevel(Level, seed, scriptfile)}, nextGrid{new Grid(width,nextHeight)} {
+name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{make_unique<Grid>(width, height)}, initLevel{Level}, lev{Level}, level{Level::getLevel(Level, seed, scriptfile)}, nextGrid{make_unique<Grid>(width, nextHeight)} {
 	current = grid->addBlocks(level->createBlock(isHeavy(),0));
 	update();
 	queue = level->createBlock(isHeavy(),1);
@@ -96,8 +96,7 @@ StatusCode Player::turn() {
 				current = grid->addBlocks(queue);
 				update();
 				queue = level->createBlock(isHeavy(), grid->getDropsSinceClear());
-				delete nextGrid;
-				nextGrid = new Grid(width,nextHeight);
+				nextGrid = make_unique<Grid>(width, nextHeight);
 				nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
 				if (!current) return StatusCode::Terminate;
 				game->print();
@@ -108,9 +107,8 @@ StatusCode Player::turn() {
 			case (int)Command::Action::LevelUp:
 				for(unsigned int i = 0; i < command.multiplier; ++i) {
 				if (lev < 4) {
-					delete level;
 					++lev;
-					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+					level = unique_ptr<Level>(lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile));
 					}
 				}
 				game->print();
@@ -118,9 +116,8 @@ StatusCode Player::turn() {
 			case (int)Command::Action::LevelDown:
 				for(unsigned int i = 0; i < command.multiplier; ++i) {
 					if (lev > 0) {
-						delete level;
 						--lev;
-						level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+						level = unique_ptr<Level>(lev ? Level::getLevel(lev) : Level::getLevel(lev, scriptFile));
 					}
 				}
 				game->print();
@@ -156,14 +153,12 @@ StatusCode Player::turn() {
 			case (int)Command::Action::NoRandom:
 				*in >> levelFile;
 				if ((lev == 3) || (lev == 4)) {
-					delete level;
-					level = Level::getLevel(lev, levelFile);
+					level = unique_ptr<Level>(Level::getLevel(lev, levelFile));
 				}
 				break;
 			case (int)Command::Action::Random:
 				if ((lev == 3) || (lev == 4)) {
-					delete level;
-					level = Level::getLevel(lev, seed, scriptFile);
+					level = unique_ptr<Level>(Level::getLevel(lev, seed, scriptFile));
 				}
 				break;
 			case (int)Command::Action::Sequence:
@@ -244,17 +239,14 @@ void Player::setBlock(Block block) {
 
 void Player::reset() {
 	effect = Effect::None;
-	delete grid;
-	grid = new Grid{width,height};
+	grid = make_unique<Grid>(width,height);
 	lev = initLevel;
-	delete level;
-	level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+	level = unique_ptr<Level>(lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile));
 	score = 0;
 	current = grid->addBlocks(level->createBlock(isHeavy(), 0));    
 	update();
 	queue = level->createBlock(isHeavy(), 0);
-	delete nextGrid;
-	nextGrid = new Grid(width,nextHeight);
+	nextGrid = make_unique<Grid>(width, nextHeight);
 	nextGrid->addBlock({Block{queue.back(), Coord::origin()}});
 }
 
@@ -271,9 +263,6 @@ unsigned int Player::getScore() {
 }
 
 void Player::clear() {
-    delete grid;
-    delete level;
-    delete nextGrid;
 }
 
 void Player::readEffect(int e) {
