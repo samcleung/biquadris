@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Block::Block(int points, unsigned int dropBy, unsigned int size) : points{points}, dropBy{dropBy}, size{size} {}
+Block::Block(int points, unsigned int dropBy, bool countable, unsigned int size) : points{points}, dropBy{dropBy}, countable{countable}, size{size} {}
 
-Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, size{other.size}, grid{other.grid} {
+Block::Block(const Block& other) : points{other.points}, dropBy{other.dropBy}, countable{other.countable}, size{other.size}, grid{other.grid} {
 	for (const auto& cell: other.cells) cells.emplace_back(Cell{cell, this});
 }
 
@@ -162,17 +162,10 @@ void Block::applyDropBy() {
 }
 
 void Block::drop() {
-	grid->drop(getCellCoords());
+	grid->drop(getCellCoords(), countable);
 }
 
 bool Block::addToGrid(Grid* g) {
-	// DEBUG
-	/*cout << "Adding Block to Grid" << endl;
-	for (const auto& cell: cells) {
-		Coord coord = cell.getCoord();
-		cout << "(" << coord.x << "," << coord.y << ")" << endl;
-	}*/
-
 	vector<Cell*> addresses;
 	for (auto& cell: cells) addresses.emplace_back(&cell);	
 	bool result = g->addCells(addresses);

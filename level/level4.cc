@@ -10,6 +10,9 @@
 #include "../coord/coord.h"
 #include <vector>
 #include <fstream>
+
+#include <iostream>
+
 using namespace std;
 Level4::Level4(int seed): seed{seed}{
 }
@@ -25,7 +28,7 @@ vector<Block> Level4::createBlockIMP(bool isHeavy, int numberOfTurns){
 	if(isHeavy)
 		dropBy++;
 	vector<Block> placeholder;
-	if(numberOfTurns % 5 == 0 && numberOfTurns > 0){
+	if((numberOfTurns + 1) % 5 == 0 && numberOfTurns > 0){
 		placeholder.push_back(StarBlock{0, dropBy, Coord::mid()});
 	}
 	if(isFromFile){

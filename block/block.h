@@ -18,6 +18,7 @@ class Block {
 	private:
 	int points = 0;
 	unsigned int dropBy = 0;
+	bool countable = true;
 	unsigned int size = 0;
 	Grid* grid = nullptr;
 	std::vector<Coord> getCellCoords();	
@@ -27,7 +28,7 @@ class Block {
 	
 	protected:
 	std::vector<Cell> cells;
-	Block(int points, unsigned int dropBy, unsigned int size);
+	Block(int points, unsigned int dropBy, bool countable, unsigned int size);
 
 	public:
 	//Copy Ctor
