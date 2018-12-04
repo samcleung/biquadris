@@ -12,7 +12,7 @@ class Block;
 class Cell;
 
 class Grid {
-    int dropsSinceClear = 0;
+	int dropsSinceClear = 0;
 	Block* current = nullptr;
 	std::list<Block> onBoard;
 	std::vector<std::vector<Cell*>> cells;
@@ -50,7 +50,7 @@ class Grid {
 	//Returns a pair: (# of points earned, # of rows cleared)
 	std::pair<int,int> update(int level);
 
-	void drop(const std::vector<Coord>& coords); // lowers the cells as low as possible, while maintaining shape
+	void drop(const std::vector<Coord>& coords, bool countable); // lowers the cells as low as possible, while maintaining shape
 
 	//Prints the indicated row on to std::cout. Applies the blind effect if specified. 
 	void print(unsigned int row, Effect effect);

@@ -28,12 +28,11 @@ string Player::file = "";
 
 Player::Player(const std::string& name, Game *game, int Level, string scriptfile, int seed) :
 name{name}, scriptFile{scriptfile}, seed{seed}, game{game}, grid{new Grid(width,height)}, initLevel{Level}, lev{Level},
-level{Level::getLevel(Level, seed, scriptfile)}, dropsSinceClear{0}, nextGrid{new Grid(width,nextHeight)} {
+level{Level::getLevel(Level, seed, scriptfile)}, nextGrid{new Grid(width,nextHeight)} {
 	current = grid->addBlocks(level->createBlock(isHeavy(),0));
-    pair <int,int> tempPair(grid->update(lev));
-	score += tempPair.first;
-    queue = level->createBlock(isHeavy(),1);
-    nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+	update();
+	queue = level->createBlock(isHeavy(),1);
+	nextGrid->addBlock({Block{queue.back(), Coord::origin()}});
 } 
 
 // Read in all the commands
@@ -61,7 +60,7 @@ StatusCode Player::turn() {
 			file = "";
 			delete in;
 			in = &cin; // Reset to stdin
-            Command::prompt(name);
+			Command::prompt(name);
 			*in >> input;
 		}
         
@@ -91,46 +90,40 @@ StatusCode Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::Drop: {
-                updateDropsSinceClear();
 				current->drop();
-                pair <int,int> tempPair(grid->update(lev));
-	            score += tempPair.first;
-                readEffect(tempPair.second);
-                // Get next block in queue
-                current = grid->addBlocks(queue);
-                pair <int,int> tempPair2(grid->update(lev));
-                score += tempPair.first;
-                queue = level->createBlock(isHeavy(),dropsSinceClear);
-                delete nextGrid;
-                nextGrid = new Grid(width,nextHeight);
-                nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
-                if(!current) {
-                    return StatusCode::Terminate;
-                }
+				update();
+				// Get next block in queue
+				current = grid->addBlocks(queue);
+				update();
+				queue = level->createBlock(isHeavy(), grid->getDropsSinceClear());
+				delete nextGrid;
+				nextGrid = new Grid(width,nextHeight);
+				nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+				if (!current) return StatusCode::Terminate;
 				game->print();
-                effect = Effect::None;
+				effect = Effect::None;
 				quit = true;
 				break;
-            }
+			}
 			case (int)Command::Action::LevelUp:
-                for(unsigned int i = 0; i < command.multiplier; ++i) {
-                    if (lev < 4) {
-                        delete level;
-                        ++lev;
-                        level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
-                    }
-                }
-                game->print();
+				for(unsigned int i = 0; i < command.multiplier; ++i) {
+				if (lev < 4) {
+					delete level;
+					++lev;
+					level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+					}
+				}
+				game->print();
 				break;
 			case (int)Command::Action::LevelDown:
-                for(unsigned int i = 0; i < command.multiplier; ++i) {
-                    if (lev > 0) {
-                        delete level;
-                        --lev;
-                        level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
-                    }
-                }
-                game->print();
+				for(unsigned int i = 0; i < command.multiplier; ++i) {
+					if (lev > 0) {
+						delete level;
+						--lev;
+						level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+					}
+				}
+				game->print();
 				break;
 			case (int)Command::Action::I:
 				current = grid->addBlock(IBlock{points, getDropBy()});
@@ -162,16 +155,16 @@ StatusCode Player::turn() {
 				break;
 			case (int)Command::Action::NoRandom:
 				*in >> levelFile;
-                if ((lev == 3) || (lev == 4)) {
-                    delete level;
-                    level = Level::getLevel(lev, levelFile);
-                }
+				if ((lev == 3) || (lev == 4)) {
+					delete level;
+					level = Level::getLevel(lev, levelFile);
+				}
 				break;
 			case (int)Command::Action::Random:
-                if ((lev == 3) || (lev == 4)) {
-                    delete level;
-                    level = Level::getLevel(lev, seed, scriptFile);
-                }
+				if ((lev == 3) || (lev == 4)) {
+					delete level;
+					level = Level::getLevel(lev, seed, scriptFile);
+				}
 				break;
 			case (int)Command::Action::Sequence:
 				*in >> file;
@@ -186,7 +179,7 @@ StatusCode Player::turn() {
 	}
 	
 	if (in->eof()) { // EOF means terminate game
-        cout << endl;
+		cout << endl;
 		return StatusCode::Terminate;
 	} else { // End the turn normally
 		return StatusCode::Default;
@@ -197,94 +190,80 @@ StatusCode Player::turn() {
 void Player::print(int n) {
 	if(n <= 3){
 		switch(n){
-			case 1: cout << "Level:      " << lev;
+			case 1: cout << "Level:\t\t" << lev;
 				break;
-			case 2: cout << "Score:      " << score;
+			case 2: cout << "Score:\t\t" << score;
 				break;
 			case 3: cout << "-------------";
 		}
 	}
-	else if ( n <= 21)
-		grid->print(abs(n-21), effect);
-	else{
+	else if (n <= 21) {
+		grid->print(abs(n - 21), effect);
+	} else {
 		switch(n){
 			case 22:
                 cout << "-------------";
                 break;
 			case 23: 
-                cout << "Next:        ";
+                cout << "Next:\t\t";
                 break;
 			case 24:
-                nextGrid->print(1, Effect::None);
-                break;
-            case 25:
-                nextGrid->print(0, Effect::None);
-                break;
+					nextGrid->print(1, Effect::None);
+					break;
+			case 25:
+					nextGrid->print(0, Effect::None);
+					break;
 		}
 	}
 }
 
 void Player::setEffect(Effect effect, Block::Type force) {
-    this->effect = effect;
-    if(effect == Effect::Force){
-        int points = pow(lev + 1, 2);
-        switch (force) {
-            case Block::Type::I: setBlock(IBlock{points, getDropBy()}); break;
-            case Block::Type::J: setBlock(JBlock{points, getDropBy()}); break;
-            case Block::Type::L: setBlock(LBlock{points, getDropBy()}); break;
-            case Block::Type::O: setBlock(OBlock{points, getDropBy()}); break;
-            case Block::Type::S: setBlock(SBlock{points, getDropBy()}); break;
-            case Block::Type::T: setBlock(TBlock{points, getDropBy()}); break;
-            case Block::Type::Z: setBlock(ZBlock{points, getDropBy()}); break;
-            case Block::Type::None: break;
-        }
+	this->effect = effect;
+	if(effect == Effect::Force){
+		int points = pow(lev + 1, 2);
+		switch (force) {
+			case Block::Type::I: setBlock(IBlock{points, getDropBy()}); break;
+			case Block::Type::J: setBlock(JBlock{points, getDropBy()}); break;
+			case Block::Type::L: setBlock(LBlock{points, getDropBy()}); break;
+			case Block::Type::O: setBlock(OBlock{points, getDropBy()}); break;
+				case Block::Type::S: setBlock(SBlock{points, getDropBy()}); break;
+			case Block::Type::T: setBlock(TBlock{points, getDropBy()}); break;
+				case Block::Type::Z: setBlock(ZBlock{points, getDropBy()}); break;
+			case Block::Type::None: break;
+		}
 	}
 }
 
 const string Player::getName() {
-    return name;
+	return name;
 }
 
 void Player::setBlock(Block block) {
-    current = grid->addBlock(block);
+	current = grid->addBlock(block);
 }
 
 void Player::reset() {
-    effect = Effect::None;
-    delete grid;
-    grid = new Grid{width,height};
-    lev = initLevel;
-    delete level;
-    level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
-    dropsSinceClear = 0;
-    score = 0;
-    current = grid->addBlocks(level->createBlock(this->isHeavy(),dropsSinceClear));    
-    pair <int,int> tempPair(grid->update(lev));
-    score += tempPair.first;
-    queue = level->createBlock(isHeavy(),dropsSinceClear);
-    delete nextGrid;
-    nextGrid = new Grid(width,nextHeight);
-    nextGrid->addBlock({Block{queue.back(),Coord::origin()}});
+	effect = Effect::None;
+	delete grid;
+	grid = new Grid{width,height};
+	lev = initLevel;
+	delete level;
+	level = lev ? Level::getLevel(lev) : Level::getLevel(lev,scriptFile);
+	score = 0;
+	current = grid->addBlocks(level->createBlock(isHeavy(), 0));    
+	update();
+	queue = level->createBlock(isHeavy(), 0);
+	delete nextGrid;
+	nextGrid = new Grid(width,nextHeight);
+	nextGrid->addBlock({Block{queue.back(), Coord::origin()}});
 }
 
 bool Player::isHeavy() {
-    if (effect == Effect::Heavy) {
-        return true;
-    } else {
-        return false;
-    }
+	return effect == Effect::Heavy;
 }
 
 unsigned int Player::getDropBy() {
-    if (effect == Effect::Heavy) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-void Player::updateDropsSinceClear() {
-    dropsSinceClear = grid->getDropsSinceClear();
+	return effect == Effect::Heavy ? 1 : 0;
 }
 
 unsigned int Player::getScore() {
@@ -342,3 +321,8 @@ void Player::readEffect(int e) {
     }
 }
 
+void Player::update() {
+	pair<int,int> pointRowPair{grid->update(lev)};
+	score += pointRowPair.first;
+	readEffect(pointRowPair.second);
+}

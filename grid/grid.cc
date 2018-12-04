@@ -34,10 +34,6 @@ Block* Grid::addBlock(const Block& block) {
 }
 
 Block* Grid::addBlocks(const vector<Block>& blocks) {
-	// DEBUGGING
-	cout << "[DEBUG] Number of blocks being added: " << blocks.size() << endl;
-
-
 	Block* result;
 	for (auto it = blocks.begin(), last = prev(blocks.end()); it != blocks.end(); ++it) {
 		result = addBlock(*it);
@@ -154,6 +150,7 @@ pair<int,int> Grid::updateCells(int level) {
 		dropsSinceClear = 0;
 	}
     int score = rowsCleared ? pow(level + rowsCleared, 2) : 0;
+	cout << "Cell points: " << score << endl;
     return pair<int,int> (score, rowsCleared);
 }
 
@@ -168,6 +165,7 @@ int Grid::updateBlocks() {
 			++it;
 		}
 	}
+	cout << "Block points: " << points << endl;
 	return points;
 }
 
@@ -184,7 +182,7 @@ bool Grid::isValid(const vector<Coord>& coords) {
 	return true;
 }
 
-void Grid::drop(const vector<Coord>& coords) {
+void Grid::drop(const vector<Coord>& coords, bool countable = true) {
 	// get lowest cell in each column of the coords
 	vector<Coord> lowest;
 	map<unsigned int, set<unsigned int>> setMap;
@@ -221,7 +219,7 @@ void Grid::drop(const vector<Coord>& coords) {
 	// clear current
 	current = nullptr;
 	// increment drop counter
-	++dropsSinceClear;
+	if (countable) ++dropsSinceClear;
 }
 
 void Grid::print(unsigned int row, Effect effect) {
@@ -257,5 +255,5 @@ void Grid::print(unsigned int row, Effect effect) {
 }
 
 int Grid::getDropsSinceClear() const {
-    return dropsSinceClear;
+	return dropsSinceClear;
 }

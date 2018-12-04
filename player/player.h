@@ -32,7 +32,7 @@ class Player {
     	void updateDropsSinceClear();
 	unsigned int getDropBy();
 	void readEffect(int);
-
+	void update();
 public:
     	static std::istream *in;
     	static std::string file;
