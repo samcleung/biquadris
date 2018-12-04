@@ -151,8 +151,8 @@ StatusCode Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::NoRandom:
-				*in >> levelFile;
 				if ((lev == 3) || (lev == 4)) {
+					*in >> levelFile;
 					level = unique_ptr<Level>(Level::getLevel(lev, levelFile));
 				}
 				break;
