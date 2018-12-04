@@ -270,6 +270,11 @@ void Player::readEffect(int e) {
     string eff;
     if (e >= 2) {
         while(validEffect) {
+            if (in->eof()) { // EOF in file
+                file = "";
+                delete in;
+                in = &cin; // Reset to stdin
+            }
             if (in == &cin) {
                 cout << "Please enter an effect (blind, heavy, or force): ";
             }
@@ -285,6 +290,11 @@ void Player::readEffect(int e) {
                 validEffect = false;
                 char c;
                 while(readChar) {
+                    if (in->eof()) { // EOF in file
+                        file = "";
+                        delete in;
+                        in = &cin; // Reset to stdin
+                    }
                     readChar = false;
                     if (in == &cin) {
                         cout << "Please enter a block type: ";
