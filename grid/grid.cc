@@ -149,9 +149,8 @@ pair<int,int> Grid::updateCells(int level) {
 	if (rowsCleared != 0) {
 		dropsSinceClear = 0;
 	}
-    int score = rowsCleared ? pow(level + rowsCleared, 2) : 0;
-	cout << "Cell points: " << score << endl;
-    return pair<int,int> (score, rowsCleared);
+	int score = rowsCleared ? pow(level + rowsCleared, 2) : 0;
+	return pair<int,int> (score, rowsCleared);
 }
 
 int Grid::updateBlocks() {
@@ -165,7 +164,6 @@ int Grid::updateBlocks() {
 			++it;
 		}
 	}
-	cout << "Block points: " << points << endl;
 	return points;
 }
 
