@@ -35,7 +35,7 @@ class Player {
 	void readEffect(int);
 	void update();
 public:
-    	static std::istream *in;
+    	static std::unique_ptr<std::ifstream> inFile;
     	static std::string file;
 
 	//Ctor for Player:
