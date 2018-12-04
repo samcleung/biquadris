@@ -190,9 +190,9 @@ StatusCode Player::turn() {
 void Player::print(int n) {
 	if(n <= 3){
 		switch(n){
-			case 1: cout << "Level:\t\t" << lev;
+			case 1: cout << "Level:      " << lev;
 				break;
-			case 2: cout << "Score:\t\t" << score;
+			case 2: cout << "Score:      " << score;
 				break;
 			case 3: cout << "-------------";
 		}
@@ -205,7 +205,7 @@ void Player::print(int n) {
                 cout << "-------------";
                 break;
 			case 23: 
-                cout << "Next:\t\t";
+                cout << "Next:        ";
                 break;
 			case 24:
 					nextGrid->print(1, Effect::None);
