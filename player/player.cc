@@ -154,9 +154,9 @@ StatusCode Player::turn() {
 				game->print();
 				break;
 			case (int)Command::Action::NoRandom:
-				if (inFile == nullptr) cin >> levelFile;
-				else *inFile >> levelFile;
 				if ((lev == 3) || (lev == 4)) {
+					if (inFile == nullptr) cin >> levelFile;
+					else *inFile >> levelFile;
 					level = unique_ptr<Level>(Level::getLevel(lev, levelFile));
 				}
 				break;
@@ -291,6 +291,10 @@ void Player::readEffect(int e) {
                 validEffect = false;
                 char c;
                 while(readChar) {
+                    if (!file.empty() && inFile->eof()) { // EOF in file
+                        file = "";
+                        inFile = nullptr;
+                    }
                     readChar = false;
                     if (inFile == nullptr) {
                         cout << "Please enter a block type: ";
